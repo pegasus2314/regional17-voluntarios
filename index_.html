@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro de Voluntarios · Regional 17 Monte Plata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+  :root {
+    --navy: #0B2545; --navy-2: #133366; --paper: #F6F7F9; --line: #E1E5EB;
+    --ink: #1B2430; --muted: #667085; --accent: #F2A93B;
+    --ok-bg: #E7F6EC; --ok-fg: #1E7A3D; --ok-dot:#2FA84F;
+    --wait-bg:#FFF4E1; --wait-fg:#95610A; --wait-dot:#F2A93B;
+    --off-bg:#FBEAEA; --off-fg:#B23A3A; --off-dot:#D64545;
+    --new-bg:#EEF0F3; --new-fg:#5A6472; --new-dot:#9AA4B2;
+    --err-bg:#FBEAEA; --err-fg:#B23A3A;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--ink); background: var(--paper); margin: 0; padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.rv-auth-active { padding: 0; }
+  a { color: inherit; }
+  ::selection { background: var(--accent); color: #3A2400; }
+  :focus-visible { outline: 2px solid var(--navy-2); outline-offset: 2px; }
+  #rv-root {
+    max-width: 1100px; margin: 0 auto; background: #fff; border-radius: 14px;
+    overflow: hidden; border: 1px solid var(--line);
+  }
+  .rv-head { background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%); color: #fff; padding: 22px 26px; }
+  .rv-head h1 { margin: 0 0 4px; font-size: 20px; letter-spacing: .2px; }
+  .rv-head p { margin: 0; font-size: 13px; color: #C9D6EA; }
+  .rv-head-row { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; }
+  .rv-me { text-align:right; font-size:12px; color:#C9D6EA; }
+  .rv-me .role { display:inline-block; margin-top:4px; padding:2px 9px; border-radius:999px; background:rgba(255,255,255,.15); font-weight:600; }
+  .rv-me button { margin-top:6px; background:none; border:1px solid rgba(255,255,255,.35); color:#fff; padding:4px 10px; border-radius:6px; font-size:11px; cursor:pointer; }
+  .rv-tabs { display: flex; gap: 6px; margin-top: 16px; flex-wrap: wrap; }
+  .rv-tab { padding: 8px 14px; border-radius: 999px; font-size: 13px; cursor: pointer; background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.2); transition: background .15s, transform .1s; }
+  .rv-tab:hover { background: rgba(255,255,255,.2); }
+  .rv-tab.active { background: var(--accent); color: #3A2400; border-color: var(--accent); font-weight: 600; }
+  .rv-body { padding: 20px 26px 26px; }
+  .rv-conn { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); margin-bottom:14px; }
+  .rv-conn .dot { width:7px; height:7px; border-radius:50%; background:var(--ok-dot); }
+  .rv-conn.off .dot { background: var(--off-dot); }
+
+  .rv-stats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .rv-stat { flex: 1; min-width: 110px; background: #fff; border: 1px solid var(--line); border-radius: 10px; padding: 10px 14px; }
+  .rv-stat .n { font-size: 22px; font-weight: 700; } .rv-stat .l { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; }
+  .rv-stat.ok .n { color: var(--ok-fg); } .rv-stat.wait .n { color: var(--wait-fg); } .rv-stat.off .n { color: var(--off-fg); } .rv-stat.new .n { color: var(--new-fg); }
+
+  .rv-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .rv-filters input, .rv-filters select { padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; background: #fff; color: var(--ink); }
+  .rv-filters input { flex: 1; min-width: 160px; }
+
+  table.rv-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+  .rv-table th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: var(--muted); padding: 10px 12px; background: #FAFBFC; border-bottom: 1px solid var(--line); }
+  .rv-table td { padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 13px; vertical-align: middle; }
+  .rv-table tr:last-child td { border-bottom: none; } .rv-table tr:hover td { background: #FAFBFC; }
+  .rv-name { font-weight: 600; } .rv-sub { font-size: 11px; color: var(--muted); }
+
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+  .badge .dot { width: 7px; height: 7px; border-radius: 50%; }
+  .badge.ok { background: var(--ok-bg); color: var(--ok-fg); } .badge.ok .dot { background: var(--ok-dot); }
+  .badge.wait { background: var(--wait-bg); color: var(--wait-fg); } .badge.wait .dot { background: var(--wait-dot); }
+  .badge.off { background: var(--off-bg); color: var(--off-fg); } .badge.off .dot { background: var(--off-dot); }
+  .badge.new { background: var(--new-bg); color: var(--new-fg); } .badge.new .dot { background: var(--new-dot); }
+  .role-pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:11px; font-weight:600; background:var(--new-bg); color:var(--new-fg); }
+  .role-pill.admin { background:#EAE3FB; color:#5B33B0; } .role-pill.coordinador { background:#DDEBFF; color:#1B4FA0; }
+
+  .rv-areas-cell { display: flex; flex-wrap: wrap; gap: 4px; max-width: 240px; }
+  .rv-chip { background: #EEF0F3; color: #445; font-size: 11px; padding: 2px 7px; border-radius: 6px; }
+
+  .rv-btn { padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: #fff; font-size: 12px; cursor: pointer; font-weight: 600; color: var(--navy-2); transition: background .15s, border-color .15s, transform .1s; }
+  .rv-btn:hover { border-color: var(--navy-2); } .rv-btn:disabled { opacity:.5; cursor:not-allowed; }
+  .rv-btn:active:not(:disabled) { transform: scale(.98); }
+  .rv-btn.primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .rv-btn.primary:hover { background: var(--navy-2); }
+  .rv-btn.danger { color: var(--off-fg); } .rv-btn.small { padding: 4px 8px; font-size: 11px; }
+
+  .rv-empty { text-align: center; padding: 30px; color: var(--muted); font-size: 13px; }
+  .rv-banner { background: #FFF4E1; border: 1px solid #F2D9A6; color: #7A5200; font-size: 12px; padding: 10px 14px; border-radius: 8px; margin-bottom: 16px; line-height: 1.5; }
+  .rv-banner a { color: #7A5200; }
+
+  .rv-overlay { position: fixed; inset: 0; background: rgba(11,37,69,.45); display: flex; align-items: center; justify-content: center; z-index: 50; padding: 16px; }
+  .rv-modal { background: #fff; border-radius: 14px; width: 100%; max-width: 460px; max-height: 88vh; overflow-y: auto; padding: 22px; }
+  .rv-modal h3 { margin: 0 0 2px; font-size: 16px; } .rv-modal .rv-sub { margin-bottom: 16px; }
+  .rv-field { margin-bottom: 14px; }
+  .rv-field label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .3px; }
+  .rv-field select, .rv-field textarea, .rv-field input[type=text], .rv-field input[type=email], .rv-field input[type=password] {
+    width: 100%; padding: 9px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 13px; font-family: inherit;
+  }
+  .rv-checks { display: flex; flex-wrap: wrap; gap: 8px; }
+  .rv-check { display: flex; align-items: center; gap: 6px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  .rv-check input { margin: 0; }
+  .rv-modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+  .rv-readonly-badge { display:flex; align-items:center; gap:8px; background: var(--paper); border:1px solid var(--line); border-radius:8px; padding:9px 10px; font-size:13px; }
+
+  .rv-self-search { position: relative; margin-bottom: 18px; }
+  .rv-self-list { position: absolute; top: 100%; left: 0; right: 0; background: #fff; border: 1px solid var(--line); border-radius: 8px; margin-top: 4px; max-height: 220px; overflow-y: auto; z-index: 10; box-shadow: 0 8px 20px rgba(11,37,69,.12); }
+  .rv-self-item { padding: 9px 12px; font-size: 13px; cursor: pointer; } .rv-self-item:hover { background: var(--paper); }
+  .rv-self-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 20px; }
+  .rv-self-card h3 { margin: 0 0 2px; }
+  .rv-saved-msg { font-size: 12px; color: var(--ok-fg); font-weight: 600; margin-top: 10px; min-height: 16px; }
+  .rv-empty-self { color: var(--muted); font-size: 13px; text-align: center; padding: 40px 0; }
+
+  .rv-district-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .rv-district-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  .rv-district-card h4 { margin: 0 0 2px; font-size: 14px; } .rv-district-card .rv-sub { margin-bottom: 10px; }
+  .rv-centro-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 13px; gap:8px; }
+  .rv-centro-row:last-child { border-bottom: none; }
+  .rv-add-centro { display: flex; gap: 6px; margin-top: 10px; }
+  .rv-add-centro input { flex: 1; padding: 7px 9px; border: 1px solid var(--line); border-radius: 6px; font-size: 12px; }
+  .rv-centro-count { font-size: 11px; color: var(--muted); }
+
+  .rv-auth-wrap { max-width: 380px; margin: 60px auto; padding: 0 16px; }
+  .rv-auth-card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:28px; }
+  .rv-auth-card h2 { margin:0 0 4px; font-size:18px; } .rv-auth-card p.rv-sub { margin:0 0 20px; }
+  .rv-auth-error { background:var(--err-bg); color:var(--err-fg); font-size:12.5px; padding:10px 12px; border-radius:8px; margin-bottom:16px; display:flex; align-items:flex-start; gap:8px; line-height:1.45; animation: rv-shake .32s ease; }
+  @keyframes rv-shake { 10%,90%{transform:translateX(-1px);} 20%,80%{transform:translateX(2px);} 30%,50%,70%{transform:translateX(-4px);} 40%,60%{transform:translateX(4px);} }
+
+  /* ---------- LOGIN: pantalla completa, dividida en desktop ---------- */
+  .rv-auth-page { min-height: 100vh; width: 100%; background: var(--paper); animation: rv-fade .35s ease-out; }
+  @keyframes rv-fade { from{opacity:0;} to{opacity:1;} }
+  .rv-auth-split { min-height: 100vh; display: flex; }
+  .rv-auth-brand {
+    flex: 1 1 46%; position: relative; overflow: hidden;
+    background: radial-gradient(1100px 620px at 12% 8%, rgba(242,169,59,.16), transparent 55%),
+                linear-gradient(150deg, var(--navy) 0%, var(--navy-2) 62%, #0D2C55 100%);
+    color: #fff; display: flex; align-items: center; padding: 60px;
+  }
+  .rv-auth-brand::before, .rv-auth-brand::after {
+    content: ''; position: absolute; border-radius: 50%; opacity: .10; background: var(--accent);
+  }
+  .rv-auth-brand::before { width: 420px; height: 420px; right: -140px; top: -160px; }
+  .rv-auth-brand::after { width: 300px; height: 300px; left: -110px; bottom: -120px; background: #fff; opacity: .06; }
+  .rv-auth-brand-inner { position: relative; z-index: 1; max-width: 440px; }
+  .rv-auth-logo {
+    width: 52px; height: 52px; border-radius: 12px; background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 16px; letter-spacing: .5px; color: var(--accent); margin-bottom: 28px;
+  }
+  .rv-auth-brand-inner h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: .2px; }
+  .rv-auth-brand-inner .rv-auth-tag { margin: 0 0 40px; color: #C9D6EA; font-size: 13.5px; }
+  .rv-auth-brand-text h2 { font-size: 28px; line-height: 1.25; margin: 0 0 14px; font-weight: 700; letter-spacing: -.2px; }
+  .rv-auth-brand-text p { font-size: 14.5px; line-height: 1.6; color: #C9D6EA; margin: 0; max-width: 380px; }
+  .rv-auth-formside { flex: 1 1 54%; display: flex; align-items: center; justify-content: center; padding: 40px 24px; background: var(--paper); }
+  .rv-auth-formside .rv-auth-card { width: 100%; max-width: 400px; padding: 34px 32px; border-radius: 16px; box-shadow: 0 20px 48px rgba(11,37,69,.08); animation: rv-card-in .4s cubic-bezier(.2,.8,.2,1); }
+  @keyframes rv-card-in { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform:none; } }
+  .rv-auth-logo-mobile { display: none; }
+  .rv-auth-card-head { margin-bottom: 22px; }
+  .rv-auth-card-head h2 { font-size: 20px; margin: 0 0 6px; font-weight: 700; }
+  .rv-auth-card-head p.rv-sub { margin: 0; }
+  .rv-auth-foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 18px; }
+
+  .rv-pass-wrap { position: relative; }
+  .rv-pass-wrap input { padding-right: 40px; }
+  .rv-pass-toggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: none; background: none;
+    cursor: pointer; padding: 6px; color: var(--muted); font-size: 15px; line-height: 1; border-radius: 6px;
+  }
+  .rv-pass-toggle:hover { color: var(--navy-2); background: var(--paper); }
+
+  .rv-field input:focus, .rv-field select:focus, .rv-field textarea:focus {
+    border-color: var(--navy-2); box-shadow: 0 0 0 3px rgba(19,51,102,.10); outline: none;
+  }
+  .rv-field input, .rv-field select, .rv-field textarea { transition: border-color .15s, box-shadow .15s; }
+
+  .rv-auth-submit { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s, transform .1s; }
+  .rv-auth-submit:active { transform: scale(.99); }
+  .rv-spinner { width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; animation: rv-spin .7s linear infinite; }
+  @keyframes rv-spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 860px) {
+    .rv-auth-brand { display: none; }
+    .rv-auth-formside { padding: 28px 18px; min-height: 100vh; }
+    .rv-auth-logo-mobile {
+      display: flex; width: 46px; height: 46px; border-radius: 12px; background: var(--navy);
+      color: var(--accent); align-items: center; justify-content: center; font-weight: 800; font-size: 14px; margin-bottom: 18px;
+    }
+  }
+
+  /* ---------- Perfil pendiente / errores de arranque ---------- */
+  .rv-status-page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; background: var(--paper); padding: 24px; animation: rv-fade .3s ease-out; }
+  .rv-status-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 34px 32px; max-width: 440px; width: 100%; box-shadow: 0 20px 48px rgba(11,37,69,.08); text-align: center; }
+  .rv-status-icon { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 24px; }
+  .rv-status-icon.wait { background: var(--wait-bg); color: var(--wait-fg); }
+  .rv-status-icon.err { background: var(--off-bg); color: var(--off-fg); }
+  .rv-status-card h2 { margin: 0 0 8px; font-size: 18px; }
+  .rv-status-card .rv-status-email { display: inline-block; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; margin: 6px 0 14px; }
+  .rv-status-card p { margin: 0 0 10px; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+  .rv-status-actions { display: flex; gap: 8px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .rv-status-tech { margin-top: 14px; font-size: 11px; color: var(--muted); background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: left; word-break: break-word; }
+
+  #rv-toasts { position: fixed; top: 16px; right: 16px; z-index: 100; display:flex; flex-direction:column; gap:8px; max-width:320px; }
+  .rv-toast { padding: 10px 14px; border-radius: 8px; font-size: 13px; box-shadow: 0 8px 20px rgba(11,37,69,.15); animation: rv-in .15s ease-out; }
+  .rv-toast.error { background: var(--off-bg); color: var(--off-fg); border:1px solid #F0BFBF; }
+  .rv-toast.success { background: var(--ok-bg); color: var(--ok-fg); border:1px solid #BEE6C9; }
+  .rv-toast.info { background: var(--new-bg); color: var(--new-fg); border:1px solid var(--line); }
+  @keyframes rv-in { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform:none; } }
+
+  .rv-loading { display:flex; align-items:center; justify-content:center; padding:60px; color:var(--muted); font-size:13px; }
+</style>
+</head>
+<body>
+
+<div id="rv-toasts"></div>
+
+<div id="rv-auth-mount"></div>
+<div id="rv-app-mount"></div>
+
+<script>
+/* ============================================================
+ * GUARDIA ANTI-DOBLE-EJECUCIÓN
+ * Si este bloque <script> llegara a quedar pegado dos veces en el
+ * HTML (por ejemplo al copiar una versión corregida encima de una
+ * vieja sin borrar la anterior), la segunda ejecución se detiene
+ * aquí en vez de lanzar "Identifier 'supabase' has already been
+ * declared". Además, TODO lo demás vive dentro de esta función,
+ * así que "supabase", "SUPABASE_URL", etc. nunca son variables
+ * globales — no pueden chocar con nada más que exista en la página.
+ * ============================================================ */
+(function(){
+  if (window.__RV17_APP_BOOTED) {
+    console.warn('[Registro de Voluntarios] Este script ya se había cargado una vez en esta página; se ignora esta segunda copia para evitar errores de "Identifier ya declarado". Si ves este aviso, revisa tu archivo: probablemente el bloque <script> de la app está pegado dos veces.');
+    return;
+  }
+  window.__RV17_APP_BOOTED = true;
+
+/* ============================================================
+ * CONFIGURACIÓN — reemplaza estos dos valores con los de TU
+ * proyecto de Supabase (Project Settings → API).
+ * La anon key es pública por diseño; la seguridad real la dan
+ * las políticas de RLS definidas en schema.sql, no esta clave.
+ * ============================================================ */
+const SUPABASE_URL = "https://ibsmrkwkmcjyekwllxic.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_9vAku5bk8kjr55NdrheYEQ_0R5daGfS";
+
+if(!window.supabase){
+  document.body.innerHTML = '<div style="max-width:480px;margin:60px auto;font-family:sans-serif;padding:20px;border:1px solid #E1E5EB;border-radius:12px;"><h2>No se pudo cargar la librería de Supabase</h2><p>El archivo <code>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;</code> no cargó. Revisa tu conexión a internet, o si estás dentro de un entorno que bloquea ese dominio (por ejemplo, un artifact de Claude.ai), abre este archivo directamente en tu navegador o desde un hosting real.</p></div>';
+  throw new Error('supabase-js no cargó');
+}
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  realtime: { params: { eventsPerSecond: 10 } }
+});
+
+(function(){
+  const DISPONIBILIDAD = ["Tiempo completo", "Fines de semana", "Solo eventos puntuales", "No disponible por ahora"];
+  const ESTATUS = [
+    {v:"Activo", cls:"ok"}, {v:"En espera", cls:"wait"}, {v:"Inactivo", cls:"off"}, {v:"Sin contactar", cls:"new"}
+  ];
+
+  // ---------------- STATE ----------------
+  let session = null;
+  let profile = null;         // { id, email, role, linked_voluntario_id }
+  let distritos = [];         // [{id, nombre, regional}]
+  let centros = [];           // [{id, distrito_id, nombre, nivel}]
+  let voluntarios = [];       // [{id, nombre, distrito_id, categoria, estatus, disponibilidad, notas, updated_at}]
+  let voluntarioCentros = []; // [{voluntario_id, centro_id}]
+  let profilesList = [];      // solo cargado para admin (tab Usuarios)
+  let realtimeChannels = [];
+  let currentTab = 'admin';
+  let filters = { q:'', distrito:'', categoria:'', estatus:'' };
+  let centrosQ = '';
+  let selfId = null;
+
+  const distritoName = id => (distritos.find(d=>d.id===id)||{}).nombre || id;
+  const isPrivileged = () => profile && (profile.role === 'admin' || profile.role === 'coordinador');
+  const isAdmin = () => profile && profile.role === 'admin';
+  const areasFor = volId => voluntarioCentros.filter(vc=>vc.voluntario_id===volId).map(vc=>vc.centro_id);
+  const centrosFor = distritoId => centros.filter(c=>c.distrito_id===distritoId);
+  const centroNombre = id => (centros.find(c=>c.id===id)||{}).nombre || '(centro eliminado)';
+
+  // ---------------- TOASTS / ERRORES ----------------
+  function toast(msg, type='info'){
+    const wrap = document.getElementById('rv-toasts');
+    const el = document.createElement('div');
+    el.className = `rv-toast ${type}`;
+    el.textContent = msg;
+    wrap.appendChild(el);
+    setTimeout(()=>{ el.remove(); }, 4500);
+  }
+  function friendlyError(e){
+    const msg = (e && e.message) || String(e);
+    if(/JWT|not authenticated|401/i.test(msg)) return "Tu sesión expiró. Vuelve a iniciar sesión.";
+    if(/row-level security|permission denied|new row violates/i.test(msg)) return "No tienes permiso para hacer esto.";
+    if(/duplicate key/i.test(msg)) return "Ya existe un registro con ese valor (posible duplicado).";
+    if(/network|fetch/i.test(msg)) return "No se pudo conectar con el servidor. Revisa tu conexión.";
+    return msg;
+  }
+  async function withErrors(fn, okMsg){
+    try{
+      const r = await fn();
+      if(r && r.error) throw r.error;
+      if(okMsg) toast(okMsg, 'success');
+      return r;
+    }catch(e){
+      console.error(e);
+      toast(friendlyError(e), 'error');
+      throw e;
+    }
+  }
+
+  function fmtDate(iso){
+    if(!iso) return "—";
+    return new Date(iso).toLocaleDateString('es-DO', {day:'2-digit', month:'short', year:'numeric'});
+  }
+  function statusInfo(v){ return ESTATUS.find(s=>s.v===v) || ESTATUS[3]; }
+function badge(v){ const info = statusInfo(v); return `<span class="badge ${info.cls}"><span class="dot"></span>${info.v}</span>`; }
+function rolePill(r){ return `<span class="role-pill ${r}">${r}</span>`; }
+
+  // ============================================================
+  // AUTENTICACIÓN
+  // ============================================================
+  // Solo login: las cuentas se crean en Supabase → Authentication → Users
+  // por un administrador. La aplicación NUNCA crea usuarios ni perfiles
+  // automáticamente (ver loadProfile / bootAuthenticated más abajo).
+  let authError = '';
+  let authLoading = false;
+  let passVisible = false;
+
+  function renderAuth(){
+    document.getElementById('rv-app-mount').innerHTML = '';
+    document.body.classList.add('rv-auth-active');
+    const mount = document.getElementById('rv-auth-mount');
+    mount.innerHTML = `
+      <div class="rv-auth-page">
+        <div class="rv-auth-split">
+          <div class="rv-auth-brand" aria-hidden="true">
+            <div class="rv-auth-brand-inner">
+              <div class="rv-auth-logo">R17</div>
+              <h1>Regional 17 · Monte Plata</h1>
+              <p class="rv-auth-tag">Registro y gestión de voluntarios</p>
+              <div class="rv-auth-brand-text">
+                <h2>Registro de Voluntarios</h2>
+                <p>Conectando personas, centros educativos y oportunidades de participación.</p>
+              </div>
+            </div>
+          </div>
+          <div class="rv-auth-formside">
+            <div class="rv-auth-card">
+              <div class="rv-auth-card-head">
+                <div class="rv-auth-logo-mobile">R17</div>
+                <h2>Iniciar sesión</h2>
+                <p class="rv-sub">Regional 17 Monte Plata · Registro y gestión de voluntarios</p>
+              </div>
+              ${authError ? `<div class="rv-auth-error" role="alert">⚠️ ${authError}</div>` : ''}
+              <form id="rv-auth-form" novalidate>
+                <div class="rv-field">
+                  <label for="rv-auth-email">Correo</label>
+                  <input type="email" id="rv-auth-email" autocomplete="email" inputmode="email" ${authLoading?'disabled':''}>
+                </div>
+                <div class="rv-field">
+                  <label for="rv-auth-pass">Contraseña</label>
+                  <div class="rv-pass-wrap">
+                    <input type="${passVisible?'text':'password'}" id="rv-auth-pass" autocomplete="current-password" ${authLoading?'disabled':''}>
+                    <button type="button" class="rv-pass-toggle" id="rv-pass-toggle" aria-label="${passVisible?'Ocultar contraseña':'Mostrar contraseña'}">${passVisible?'🙈':'👁'}</button>
+                  </div>
+                </div>
+                <button type="submit" class="rv-btn primary rv-auth-submit" id="rv-auth-submit" style="width:100%;" ${authLoading?'disabled':''}>
+                  ${authLoading ? `<span class="rv-spinner"></span><span>Iniciando sesión…</span>` : `<span>Iniciar sesión</span>`}
+                </button>
+              </form>
+              <div class="rv-auth-foot">¿No tienes acceso? Contacta a un administrador de Regional 17 para que active tu cuenta.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    const passInput = document.getElementById('rv-auth-pass');
+    document.getElementById('rv-pass-toggle').onclick = () => {
+      passVisible = !passVisible;
+      const focusEmail = document.activeElement === document.getElementById('rv-auth-email');
+      renderAuth();
+      const p = document.getElementById('rv-auth-pass');
+      if(!focusEmail){ p.focus(); const pos = p.value.length; p.setSelectionRange(pos,pos); }
+    };
+    document.getElementById('rv-auth-form').onsubmit = async (ev) => {
+      ev.preventDefault();
+      if(authLoading) return;
+      const email = document.getElementById('rv-auth-email').value.trim();
+      const password = document.getElementById('rv-auth-pass').value;
+      if(!email || !password){ authError = 'Completa correo y contraseña.'; renderAuth(); return; }
+      authLoading = true; authError = '';
+      renderAuth();
+      try{
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if(error) throw error;
+        // Si el login fue exitoso, onAuthStateChange se encarga de continuar.
+      }catch(e){
+        authLoading = false;
+        authError = friendlyError(e);
+        renderAuth();
+      }
+    };
+  }
+
+  async function signOut(){
+    await supabase.auth.signOut();
+  }
+
+  // ============================================================
+  // CUENTA SIN PERFIL CONFIGURAR (usuario existe en Auth pero no en `profiles`)
+  // ============================================================
+  function renderProfilePending(){
+    document.getElementById('rv-app-mount').innerHTML = '';
+    document.body.classList.add('rv-auth-active');
+    document.getElementById('rv-auth-mount').innerHTML = `
+      <div class="rv-status-page">
+        <div class="rv-status-card">
+          <div class="rv-status-icon wait">⏳</div>
+          <h2>Tu cuenta está creada, pero todavía no está configurada.</h2>
+          <div class="rv-status-email">${session.user.email}</div>
+          <p>Un administrador debe completar tu perfil antes de que puedas acceder al sistema. Cuando esté listo, vuelve a iniciar sesión.</p>
+          <div class="rv-status-actions">
+            <button class="rv-btn" id="rv-pending-signout">Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.getElementById('rv-pending-signout').onclick = signOut;
+  }
+
+  // ============================================================
+  // CARGA DE DATOS Y REALTIME
+  // ============================================================
+  async function loadProfile(userId){
+    let { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
+    if(error) throw error;
+    console.log('[RV17] Perfil cargado:', data);
+    if(!data){
+      // el trigger de la BD puede tardar un instante en crear el perfil tras el signup
+      await new Promise(r=>setTimeout(r, 800));
+      ({ data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle());
+      if(error) throw error;
+    }
+    return data;
+  }
+
+  async function loadAllData(){
+    const [dRes, cRes, vRes, vcRes] = await Promise.all([
+      supabase.from('distritos').select('*').order('id'),
+      supabase.from('centros_educativos').select('*').order('nombre'),
+      supabase.from('voluntarios').select('*').order('nombre'),
+      supabase.from('voluntario_centros').select('*'),
+    ]);
+    if(dRes.error) throw dRes.error;
+    if(cRes.error) throw cRes.error;
+    if(vRes.error) throw vRes.error;
+    if(vcRes.error) throw vcRes.error;
+    distritos = dRes.data || [];
+    centros = cRes.data || [];
+    voluntarios = vRes.data || [];
+    voluntarioCentros = vcRes.data || [];
+
+    if(isAdmin()){
+      const { data, error } = await supabase.from('profiles').select('*').order('email');
+      if(!error) profilesList = data || [];
+    }
+  }
+
+  function applyChange(arr, payload, keyFn){
+    if(payload.eventType === 'INSERT'){
+      if(!arr.some(x=>keyFn(x)===keyFn(payload.new))) arr.push(payload.new);
+    } else if(payload.eventType === 'UPDATE'){
+      const idx = arr.findIndex(x=>keyFn(x)===keyFn(payload.new));
+      if(idx>=0) arr[idx] = payload.new; else arr.push(payload.new);
+    } else if(payload.eventType === 'DELETE'){
+      const idx = arr.findIndex(x=>keyFn(x)===keyFn(payload.old));
+      if(idx>=0) arr.splice(idx,1);
+    }
+  }
+
+  function setConnBadge(connected){
+    const el = document.getElementById('rv-conn');
+    if(!el) return;
+    if(!navigator.onLine){
+      el.classList.add('off');
+      el.querySelector('span.txt').textContent = 'Sin conexión';
+      return;
+    }
+    el.classList.toggle('off', !connected);
+    el.querySelector('span.txt').textContent = connected ? 'Conectado en tiempo real' : 'Reconectando…';
+  }
+
+  let lastRealtimeStatus = false;
+  window.addEventListener('online', () => setConnBadge(lastRealtimeStatus));
+  window.addEventListener('offline', () => setConnBadge(lastRealtimeStatus));
+
+  function subscribeRealtime(){
+    realtimeChannels.forEach(ch => supabase.removeChannel(ch));
+    realtimeChannels = [];
+
+    const ch = supabase.channel('rv-regional17-changes')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'voluntarios' }, payload => {
+        applyChange(voluntarios, payload, x=>x.id);
+        rerenderCurrentTab();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'centros_educativos' }, payload => {
+        applyChange(centros, payload, x=>x.id);
+        rerenderCurrentTab();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'voluntario_centros' }, payload => {
+        applyChange(voluntarioCentros, payload, x=>x.voluntario_id+'|'+x.centro_id);
+        rerenderCurrentTab();
+      })
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'distritos' }, payload => {
+        applyChange(distritos, payload, x=>x.id);
+        rerenderCurrentTab();
+      })
+      .subscribe(status => {
+        lastRealtimeStatus = (status === 'SUBSCRIBED');
+        setConnBadge(lastRealtimeStatus);
+      });
+
+    realtimeChannels.push(ch);
+  }
+
+function rerenderCurrentTab(){
+  if(currentTab === 'admin') renderAdmin();
+  else if(currentTab === 'centros') renderCentros();
+  else if(currentTab === 'self') renderSelf();
+  else if(currentTab === 'usuarios') renderUsuarios();
+  }
+
+  // ============================================================
+  // SHELL DE LA APP (header, tabs)
+  // ============================================================
+  function renderShell(){
+    const mount = document.getElementById('rv-app-mount');
+    document.getElementById('rv-auth-mount').innerHTML = '';
+    document.body.classList.remove('rv-auth-active');
+    const tabs = [
+      {id:'admin', label:'Panel de coordinación'},
+      {id:'centros', label:'Centros educativos'},
+      {id:'self', label:'Actualizar mis datos'},
+    ];
+    if(isAdmin()) tabs.push({id:'usuarios', label:'Usuarios'});
+
+    mount.innerHTML = `
+      <div id="rv-root">
+        <div class="rv-head">
+          <div class="rv-head-row">
+            <div>
+              <h1>Registro de Voluntarios · Regional 17 Monte Plata</h1>
+              <p>Estatus y cobertura por centro educativo — PLE-RD MUN</p>
+            </div>
+            <div class="rv-me">
+              ${session.user.email}<br>
+              <span class="role">${profile.role}</span><br>
+              <button id="rv-signout">Cerrar sesión</button>
+            </div>
+          </div>
+          <div class="rv-tabs">
+            ${tabs.map(t=>`<div class="rv-tab ${t.id===currentTab?'active':''}" data-tab="${t.id}">${t.label}</div>`).join('')}
+          </div>
+        </div>
+        <div class="rv-body">
+          <div class="rv-conn" id="rv-conn"><span class="dot"></span><span class="txt">Conectando…</span></div>
+          <div id="rv-view-admin" style="display:${currentTab==='admin'?'block':'none'};"></div>
+          <div id="rv-view-centros" style="display:${currentTab==='centros'?'block':'none'};"></div>
+          <div id="rv-view-self" style="display:${currentTab==='self'?'block':'none'};"></div>
+          <div id="rv-view-usuarios" style="display:${currentTab==='usuarios'?'block':'none'};"></div>
+        </div>
+      </div>
+      <div id="rv-modal-mount"></div>
+    `;
+    document.getElementById('rv-signout').onclick = signOut;
+    mount.querySelectorAll('.rv-tab').forEach(tab=>{
+      tab.onclick = () => {
+        currentTab = tab.getAttribute('data-tab');
+        renderShell();
+        rerenderCurrentTab();
+      };
+    });
+  }
+
+  // ============================================================
+  // PANEL DE COORDINACIÓN (admin/coordinador editan; voluntario ve)
+  // ============================================================
+  function renderAdmin(){
+    const root = document.getElementById('rv-view-admin');
+    if(!root) return;
+    const counts = { Activo:0, 'En espera':0, Inactivo:0, 'Sin contactar':0 };
+    voluntarios.forEach(r => counts[r.estatus] = (counts[r.estatus]||0) + 1);
+
+    let rows = voluntarios.filter(r=>{
+      if(filters.q && !r.nombre.toLowerCase().includes(filters.q.toLowerCase())) return false;
+      if(filters.distrito && r.distrito_id !== filters.distrito) return false;
+      if(filters.categoria && r.categoria !== filters.categoria) return false;
+      if(filters.estatus && r.estatus !== filters.estatus) return false;
+      return true;
+    });
+
+    root.innerHTML = `
+      <div class="rv-stats">
+        <div class="rv-stat ok"><div class="n">${counts['Activo']}</div><div class="l">Activos</div></div>
+        <div class="rv-stat wait"><div class="n">${counts['En espera']}</div><div class="l">En espera</div></div>
+        <div class="rv-stat off"><div class="n">${counts['Inactivo']}</div><div class="l">Inactivos</div></div>
+        <div class="rv-stat new"><div class="n">${counts['Sin contactar']}</div><div class="l">Sin contactar</div></div>
+      </div>
+      <div class="rv-filters">
+        <input type="text" id="rv-search" placeholder="Buscar por nombre..." value="${filters.q}">
+        <select id="rv-f-distrito"><option value="">Todos los distritos</option>${distritos.map(d=>`<option value="${d.id}" ${filters.distrito===d.id?'selected':''}>${d.id} · ${d.nombre}</option>`).join('')}</select>
+        <select id="rv-f-categoria"><option value="">Toda categoría</option>${['Regional','Distrital','Nacional'].map(c=>`<option ${filters.categoria===c?'selected':''}>${c}</option>`).join('')}</select>
+        <select id="rv-f-estatus"><option value="">Todo estatus</option>${ESTATUS.map(s=>`<option ${filters.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
+      </div>
+      ${rows.length ? `
+      <table class="rv-table">
+        <thead><tr><th>Voluntario</th><th>Distrito</th><th>Categoría</th><th>Estatus</th><th>Centros que cubre</th><th>Disponibilidad</th><th>Actualizado</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map(r=>{
+            const areas = areasFor(r.id);
+            return `
+            <tr>
+              <td><div class="rv-name">${r.nombre}</div></td>
+              <td>${r.distrito_id}<div class="rv-sub">${distritoName(r.distrito_id)}</div></td>
+              <td>${r.categoria}</td>
+              <td>${badge(r.estatus)}</td>
+              <td><div class="rv-areas-cell">${areas.length ? areas.map(cid=>`<span class="rv-chip">${centroNombre(cid)}</span>`).join('') : '<span class="rv-sub">—</span>'}</div></td>
+              <td>${r.disponibilidad || '<span class="rv-sub">—</span>'}</td>
+              <td class="rv-sub">${fmtDate(r.updated_at)}</td>
+              <td>${isPrivileged() ? `<button class="rv-btn" data-edit="${r.id}">Editar</button>` : ''}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>` : `<div class="rv-empty">No hay voluntarios que coincidan con este filtro.</div>`}
+    `;
+
+    document.getElementById('rv-search').oninput = e => { filters.q = e.target.value; renderAdmin(); };
+    document.getElementById('rv-f-distrito').onchange = e => { filters.distrito = e.target.value; renderAdmin(); };
+    document.getElementById('rv-f-categoria').onchange = e => { filters.categoria = e.target.value; renderAdmin(); };
+    document.getElementById('rv-f-estatus').onchange = e => { filters.estatus = e.target.value; renderAdmin(); };
+    root.querySelectorAll('[data-edit]').forEach(btn=>{
+      btn.onclick = () => openEditModal(btn.getAttribute('data-edit'));
+    });
+  }
+
+  function openEditModal(id){
+    if(!isPrivileged()) return;
+    const r = voluntarios.find(v=>v.id===id);
+    if(!r) return;
+    const opts = centrosFor(r.distrito_id);
+    const myAreas = new Set(areasFor(r.id));
+    const mount = document.getElementById('rv-modal-mount');
+    mount.innerHTML = `
+      <div class="rv-overlay" id="rv-overlay">
+        <div class="rv-modal">
+          <h3>${r.nombre}</h3>
+          <div class="rv-sub">${r.distrito_id} · ${distritoName(r.distrito_id)} · ${r.categoria}</div>
+          <div class="rv-field">
+            <label>Estatus (lo define coordinación)</label>
+            <select id="rv-m-estatus">${ESTATUS.map(s=>`<option value="${s.v}" ${r.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
+          </div>
+          <div class="rv-field">
+            <label>Centros educativos que puede cubrir (${distritoName(r.distrito_id)})</label>
+            ${opts.length ? `<div class="rv-checks">${opts.map(c=>`<label class="rv-check"><input type="checkbox" value="${c.id}" ${myAreas.has(c.id)?'checked':''}> ${c.nombre}</label>`).join('')}</div>` : `<div class="rv-sub">Aún no hay centros educativos para ${distritoName(r.distrito_id)}. Agrégalos en la pestaña "Centros educativos".</div>`}
+          </div>
+          <div class="rv-field">
+            <label>Disponibilidad</label>
+            <select id="rv-m-disp"><option value="">Sin especificar</option>${DISPONIBILIDAD.map(d=>`<option value="${d}" ${r.disponibilidad===d?'selected':''}>${d}</option>`).join('')}</select>
+          </div>
+          <div class="rv-field">
+            <label>Notas internas</label>
+            <textarea id="rv-m-notas" rows="3" placeholder="Observaciones del equipo de coordinación...">${r.notas||''}</textarea>
+          </div>
+          <div class="rv-modal-actions">
+            <button class="rv-btn" id="rv-m-cancel">Cancelar</button>
+            <button class="rv-btn primary" id="rv-m-save">Guardar cambios</button>
+          </div>
+        </div>
+      </div>
+    `;
+    const close = () => { mount.innerHTML = ''; };
+    document.getElementById('rv-overlay').onclick = (e) => { if(e.target.id==='rv-overlay') close(); };
+    document.getElementById('rv-m-cancel').onclick = close;
+    document.getElementById('rv-m-save').onclick = async () => {
+      const saveBtn = document.getElementById('rv-m-save');
+      const saveBtnLabel = saveBtn.textContent;
+      saveBtn.disabled = true;
+      saveBtn.textContent = 'Guardando…';
+      try{
+        const newEstatus = document.getElementById('rv-m-estatus').value;
+        const newDisp = document.getElementById('rv-m-disp').value;
+        const newNotas = document.getElementById('rv-m-notas').value;
+        const checked = Array.from(mount.querySelectorAll('.rv-checks input:checked')).map(i=>i.value);
+
+        await withErrors(() => supabase.from('voluntarios').update({
+          estatus: newEstatus, disponibilidad: newDisp || null, notas: newNotas || null
+        }).eq('id', r.id));
+
+        const toAdd = checked.filter(cid => !myAreas.has(cid));
+        const toRemove = [...myAreas].filter(cid => !checked.includes(cid));
+        if(toAdd.length){
+          await withErrors(() => supabase.from('voluntario_centros').insert(toAdd.map(cid=>({voluntario_id:r.id, centro_id:cid}))));
+        }
+        for(const cid of toRemove){
+          await withErrors(() => supabase.from('voluntario_centros').delete().eq('voluntario_id', r.id).eq('centro_id', cid));
+        }
+        toast('Cambios guardados.', 'success');
+        close();
+      } catch(e){
+        saveBtn.disabled = false;
+        saveBtn.textContent = saveBtnLabel;
+      }
+    };
+  }
+
+  // ============================================================
+  // CENTROS EDUCATIVOS
+  // ============================================================
+  function renderCentros(){
+    const root = document.getElementById('rv-view-centros');
+    if(!root) return;
+    const totalCentros = centros.length;
+    const coveredSet = new Set(voluntarioCentros.map(vc=>vc.centro_id));
+    const q = centrosQ.trim().toLowerCase();
+
+    // Filtra distritos/centros por el término de búsqueda (nombre del centro o del distrito)
+    const visibleDistritos = distritos
+      .map(d => ({ d, list: centrosFor(d.id).filter(c => !q || c.nombre.toLowerCase().includes(q) || d.nombre.toLowerCase().includes(q)) }))
+      .filter(({d, list}) => !q || list.length > 0 || d.nombre.toLowerCase().includes(q));
+
+    const matchCount = visibleDistritos.reduce((n, {list}) => n + list.length, 0);
+
+    root.innerHTML = `
+      <div class="rv-banner">
+        Este listado alimenta las opciones que verán los voluntarios en "Actualizar mis datos". Todos los cambios se sincronizan en tiempo real con el resto del equipo.
+        <br><br><strong>Total de centros registrados: ${totalCentros}</strong> · Centros con al menos un voluntario asignado: ${coveredSet.size}
+      </div>
+      <div class="rv-filters">
+        <input type="text" id="rv-centros-q" placeholder="Buscar centro educativo por nombre o distrito..." value="${centrosQ.replace(/"/g,'&quot;')}">
+      </div>
+      ${q ? `<div class="rv-sub" style="margin-bottom:10px;">${matchCount} centro(s) encontrado(s) para "${centrosQ}"</div>` : ''}
+      <div class="rv-district-grid">
+        ${visibleDistritos.map(({d, list}) => `
+          <div class="rv-district-card">
+            <h4>${d.id} · ${d.nombre}</h4>
+            <div class="rv-sub rv-centro-count">${list.length} centro(s) ${q ? 'encontrado(s)' : 'registrado(s)'}</div>
+            ${list.map(c=>`
+              <div class="rv-centro-row">
+                <span>${c.nombre}</span>
+                ${isPrivileged() ? `<button class="rv-btn small danger" data-del-centro="${c.id}">Quitar</button>` : ''}
+              </div>
+            `).join('')}
+            ${isPrivileged() ? `
+            <div class="rv-add-centro">
+              <input type="text" placeholder="Nombre del centro educativo..." data-add-input="${d.id}">
+              <button class="rv-btn small primary" data-add-btn="${d.id}">Agregar</button>
+            </div>` : ''}
+          </div>`
+        ).join('') || `<div class="rv-empty">Ningún centro educativo coincide con "${centrosQ}".</div>`}
+      </div>
+    `;
+
+    const searchInput = document.getElementById('rv-centros-q');
+    searchInput.oninput = () => { centrosQ = searchInput.value; renderCentros(); };
+    // Mantiene el foco y la posición del cursor tras volver a dibujar la lista
+    searchInput.focus();
+    const pos = centrosQ.length;
+    searchInput.setSelectionRange(pos, pos);
+
+    if(!isPrivileged()) return;
+    root.querySelectorAll('[data-add-btn]').forEach(btn=>{
+      btn.onclick = async () => {
+        const d = btn.getAttribute('data-add-btn');
+        const input = root.querySelector(`[data-add-input="${d}"]`);
+        const val = input.value.trim();
+        if(!val) return;
+        btn.disabled = true;
+        const label = btn.textContent;
+        btn.textContent = 'Guardando…';
+        try{
+          await withErrors(() => supabase.from('centros_educativos').insert({ distrito_id: d, nombre: val, nivel: 'Secundario' }), 'Centro agregado.');
+          input.value = '';
+        }catch(e){ /* toast ya mostrado */ }
+        btn.disabled = false;
+        btn.textContent = label;
+      };
+    });
+    root.querySelectorAll('[data-del-centro]').forEach(btn=>{
+      btn.onclick = async () => {
+        const cid = btn.getAttribute('data-del-centro');
+        if(!confirm('¿Quitar este centro? Se eliminará también de las asignaciones de voluntarios.')) return;
+        btn.disabled = true;
+        try{
+          await withErrors(() => supabase.from('centros_educativos').delete().eq('id', cid), 'Centro eliminado.');
+        }catch(e){}
+        btn.disabled = false;
+      };
+    });
+  }
+
+  // ============================================================
+  // AUTOSERVICIO ("Actualizar mis datos")
+  // ============================================================
+  function renderSelf(){
+    const root = document.getElementById('rv-view-self');
+    if(!root) return;
+
+    // Si el perfil ya está vinculado a un voluntario, saltar la búsqueda
+    if(!selfId && profile.linked_voluntario_id){
+      selfId = profile.linked_voluntario_id;
+    }
+
+    if(!selfId){
+      root.innerHTML = `
+        <div class="rv-self-search">
+          <input type="text" id="rv-self-q" placeholder="Escribe tu nombre para buscarlo en la lista..." autocomplete="off">
+          <div id="rv-self-results"></div>
+        </div>
+        <div class="rv-empty-self">Busca tu nombre arriba para indicar en qué centro(s) educativos de tu distrito puedes apoyar y tu disponibilidad. El estatus lo asigna el equipo de coordinación.</div>
+      `;
+      const input = document.getElementById('rv-self-q');
+      input.oninput = () => {
+        const q = input.value.trim().toLowerCase();
+        const resultsBox = document.getElementById('rv-self-results');
+        if(q.length < 2){ resultsBox.innerHTML=''; return; }
+        const matches = voluntarios.filter(r=>r.nombre.toLowerCase().includes(q)).slice(0,8);
+        resultsBox.innerHTML = matches.length
+          ? `<div class="rv-self-list">${matches.map(m=>`<div class="rv-self-item" data-id="${m.id}">${m.nombre} <span class="rv-sub">· ${m.distrito_id}</span></div>`).join('')}</div>`
+          : `<div class="rv-self-list"><div class="rv-self-item rv-sub">Sin resultados</div></div>`;
+        resultsBox.querySelectorAll('[data-id]').forEach(el=>{
+          el.onclick = async () => {
+            selfId = el.getAttribute('data-id');
+            // vincular este perfil a ese voluntario para que la próxima vez sea automático
+            try{ await supabase.from('profiles').update({ linked_voluntario_id: selfId }).eq('id', profile.id); profile.linked_voluntario_id = selfId; }catch(e){}
+            renderSelf();
+          };
+        });
+      };
+      return;
+    }
+
+    const r = voluntarios.find(v=>v.id===selfId);
+    if(!r){
+      selfId = null;
+      root.innerHTML = `<div class="rv-empty-self">No se encontró ese registro. Búscalo de nuevo.</div>`;
+      return;
+    }
+    const opts = centrosFor(r.distrito_id);
+    const myAreas = new Set(areasFor(r.id));
+    root.innerHTML = `
+      <button class="rv-btn" id="rv-self-back" style="margin-bottom:14px;">← Buscar otra persona</button>
+      <div class="rv-self-card">
+        <h3>${r.nombre}</h3>
+        <div class="rv-sub" style="margin-bottom:16px;">${r.distrito_id} · ${distritoName(r.distrito_id)} · ${r.categoria}</div>
+        <div class="rv-field">
+          <label>Tu estatus</label>
+          <select id="rv-s-estatus">${ESTATUS.map(s=>`<option value="${s.v}" ${r.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
+        </div>
+        <div class="rv-field">
+          <label>¿En qué centro(s) educativos de ${distritoName(r.distrito_id)} puedes apoyar?</label>
+          ${opts.length ? `<div class="rv-checks">${opts.map(c=>`<label class="rv-check"><input type="checkbox" value="${c.id}" ${myAreas.has(c.id)?'checked':''}> ${c.nombre}</label>`).join('')}</div>` : `<div class="rv-sub">Coordinación todavía no ha registrado los centros educativos de tu distrito. Vuelve a intentarlo más adelante.</div>`}
+        </div>
+        <div class="rv-field">
+          <label>Disponibilidad</label>
+          <select id="rv-s-disp"><option value="">Sin especificar</option>${DISPONIBILIDAD.map(d=>`<option value="${d}" ${r.disponibilidad===d?'selected':''}>${d}</option>`).join('')}</select>
+        </div>
+        <div class="rv-field">
+          <label>¿Algo más que quieras decirle al equipo de coordinación?</label>
+          <textarea id="rv-s-notas" rows="3" placeholder="Opcional">${r.notas||''}</textarea>
+        </div>
+        <button class="rv-btn primary" id="rv-s-save">Guardar mis datos</button>
+        <div class="rv-saved-msg" id="rv-s-msg"></div>
+      </div>
+    `;
+    document.getElementById('rv-self-back').onclick = () => { selfId = null; renderSelf(); };
+    document.getElementById('rv-s-save').onclick = async () => {
+      const btn = document.getElementById('rv-s-save');
+      const label = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Guardando…';
+      document.getElementById('rv-s-msg').textContent = '';
+      try{
+        const newEstatus = document.getElementById('rv-s-estatus').value;
+        const newDisp = document.getElementById('rv-s-disp').value;
+        const newNotas = document.getElementById('rv-s-notas').value;
+        const checked = Array.from(document.querySelectorAll('#rv-view-self .rv-checks input:checked')).map(i=>i.value);
+
+        await withErrors(() => supabase.from('voluntarios').update({
+          estatus: newEstatus, disponibilidad: newDisp || null, notas: newNotas || null
+        }).eq('id', r.id));
+
+        const toAdd = checked.filter(cid => !myAreas.has(cid));
+        const toRemove = [...myAreas].filter(cid => !checked.includes(cid));
+        if(toAdd.length) await withErrors(() => supabase.from('voluntario_centros').insert(toAdd.map(cid=>({voluntario_id:r.id, centro_id:cid}))));
+        for(const cid of toRemove) await withErrors(() => supabase.from('voluntario_centros').delete().eq('voluntario_id', r.id).eq('centro_id', cid));
+
+        document.getElementById('rv-s-msg').textContent = "✓ Guardado. Gracias por actualizar tus datos.";
+      }catch(e){}
+      btn.disabled = false;
+      btn.textContent = label;
+    };
+  }
+
+  // ============================================================
+  // USUARIOS (solo admin): asigna roles y vincula cuentas a voluntarios
+  // ============================================================
+  function renderUsuarios(){
+    const root = document.getElementById('rv-view-usuarios');
+    if(!root || !isAdmin()) return;
+    root.innerHTML = `
+      <div class="rv-banner">Gestiona quién puede coordinar (crear/editar voluntarios y centros) y vincula cuentas de acceso a registros de voluntarios existentes para su autoservicio.</div>
+      <table class="rv-table">
+        <thead><tr><th>Correo</th><th>Rol</th><th>Vinculado a voluntario</th><th></th></tr></thead>
+        <tbody>
+          ${profilesList.map(p=>`
+            <tr>
+              <td>${p.email || p.id}</td>
+              <td>${rolePill(p.role)}<select data-role-for="${p.id}" style="margin-left:8px;">
+                ${['voluntario','coordinador','admin'].map(r=>`<option value="${r}" ${p.role===r?'selected':''}>${r}</option>`).join('')}
+              </select></td>
+              <td>${p.linked_voluntario_id ? (voluntarios.find(v=>v.id===p.linked_voluntario_id)||{}).nombre || '—' : '<span class="rv-sub">Sin vincular</span>'}</td>
+              <td><button class="rv-btn small" data-unlink="${p.id}" ${p.linked_voluntario_id?'':'disabled'}>Desvincular</button></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+    root.querySelectorAll('[data-role-for]').forEach(sel=>{
+      sel.onchange = async () => {
+        const pid = sel.getAttribute('data-role-for');
+        const newRole = sel.value;
+        try{
+          await withErrors(() => supabase.from('profiles').update({ role: newRole }).eq('id', pid), 'Rol actualizado.');
+        }catch(e){}
+      };
+    });
+    root.querySelectorAll('[data-unlink]').forEach(btn=>{
+      btn.onclick = async () => {
+        const pid = btn.getAttribute('data-unlink');
+        try{
+          await withErrors(() => supabase.from('profiles').update({ linked_voluntario_id: null }).eq('id', pid), 'Vínculo removido.');
+        }catch(e){}
+      };
+    });
+  }
+
+  // ============================================================
+  // ARRANQUE
+  // ============================================================
+  async function bootAuthenticated(){
+    document.getElementById('rv-auth-mount').innerHTML = '';
+    document.body.classList.remove('rv-auth-active');
+    document.getElementById('rv-app-mount').innerHTML = `<div class="rv-loading">Cargando registro…</div>`;
+    try{
+      // 1) Buscar el UUID de la sesión en `profiles`. NUNCA se crea nada aquí.
+      profile = await loadProfile(session.user.id);
+      if(!profile){
+        // 2) El usuario existe en Supabase Auth pero aún no tiene fila en `profiles`.
+        //    No se inserta nada: se muestra la pantalla de "cuenta pendiente".
+        renderProfilePending();
+        return;
+      }
+      await loadAllData();
+      renderShell();
+      rerenderCurrentTab();
+      subscribeRealtime();
+    }catch(e){
+      console.error(e);
+      renderAppError(e);
+    }
+  }
+
+  // Pantalla de error genérica de la aplicación (nunca pantalla en blanco).
+  function renderAppError(e){
+    realtimeChannels.forEach(ch => { try{ supabase.removeChannel(ch); }catch(_){} });
+    realtimeChannels = [];
+    document.getElementById('rv-app-mount').innerHTML = '';
+    document.body.classList.add('rv-auth-active');
+    document.getElementById('rv-auth-mount').innerHTML = `
+      <div class="rv-status-page">
+        <div class="rv-status-card">
+          <div class="rv-status-icon err">⚠️</div>
+          <h2>Algo salió mal</h2>
+          <p>Estamos teniendo problemas para cargar tu información. Puedes intentarlo de nuevo o cerrar sesión.</p>
+          <div class="rv-status-actions">
+            <button class="rv-btn primary" id="rv-error-retry">Reintentar</button>
+            <button class="rv-btn" id="rv-error-signout">Cerrar sesión</button>
+          </div>
+          <div class="rv-status-tech">Detalle técnico: ${friendlyError(e)}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('rv-error-retry').onclick = () => {
+      if(session) bootAuthenticated(); else renderAuth();
+    };
+    document.getElementById('rv-error-signout').onclick = signOut;
+  }
+
+  supabase.auth.onAuthStateChange((event, newSession) => {
+    session = newSession;
+    if(session){
+      bootAuthenticated();
+    } else {
+      realtimeChannels.forEach(ch => { try{ supabase.removeChannel(ch); }catch(_){} });
+      realtimeChannels = [];
+      profile = null; selfId = null; currentTab = 'admin';
+      authError = ''; authLoading = false; passVisible = false;
+      renderAuth();
+    }
+  });
+
+  function renderConfigNeeded(){
+    document.getElementById('rv-app-mount').innerHTML = '';
+    document.body.classList.add('rv-auth-active');
+    document.getElementById('rv-auth-mount').innerHTML = `
+      <div class="rv-status-page">
+        <div class="rv-status-card">
+          <div class="rv-status-icon err">⚙️</div>
+          <h2>Falta conectar tu proyecto de Supabase</h2>
+          <p>Este archivo todavía tiene los valores de ejemplo (SUPABASE_URL / SUPABASE_ANON_KEY). Ábrelo con un editor de texto, busca esas dos líneas cerca del inicio del &lt;script&gt; y reemplázalas con el Project URL y la anon key de tu proyecto (Project Settings → API en Supabase), luego guarda y vuelve a abrir esta página.</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderStartupError(e){
+    document.getElementById('rv-app-mount').innerHTML = '';
+    document.body.classList.add('rv-auth-active');
+    document.getElementById('rv-auth-mount').innerHTML = `
+      <div class="rv-status-page">
+        <div class="rv-status-card">
+          <div class="rv-status-icon err">⚠️</div>
+          <h2>No se pudo cargar la aplicación</h2>
+          <p>Revisa que el Project URL y la anon key sean correctos, que tu proyecto de Supabase esté activo, y que tengas conexión a internet.</p>
+          <div class="rv-status-actions">
+            <button class="rv-btn primary" id="rv-startup-retry">Reintentar</button>
+          </div>
+          <div class="rv-status-tech">Detalle técnico: ${(e && e.message) || String(e)}</div>
+        </div>
+      </div>
+    `;
+    document.getElementById('rv-startup-retry').onclick = () => init();
+  }
+
+  // Red de seguridad: cualquier error no controlado se muestra de forma
+  // visible y profesional en vez de dejar una pantalla en blanco.
+  window.addEventListener('error', (ev) => {
+    console.error('Error no controlado:', ev.error || ev.message);
+  });
+  window.addEventListener('unhandledrejection', (ev) => {
+    console.error('Promesa rechazada sin controlar:', ev.reason);
+  });
+
+  function init(){
+    if(SUPABASE_URL.includes('TU-PROYECTO') || SUPABASE_ANON_KEY.includes('TU-ANON-KEY')){
+      renderConfigNeeded();
+      return;
+    }
+    document.body.classList.add('rv-auth-active');
+    document.getElementById('rv-auth-mount').innerHTML = `<div class="rv-status-page"><div class="rv-loading">Cargando…</div></div>`;
+    supabase.auth.getSession().then(({ data, error }) => {
+      if(error) throw error;
+      session = data.session;
+      if(session) bootAuthenticated(); else renderAuth();
+    }).catch(e => {
+      console.error(e);
+      renderStartupError(e);
+    });
+  }
+  init();
+})();
+})();
+</script>
+</body>
+</html>

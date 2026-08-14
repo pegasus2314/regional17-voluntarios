@@ -532,15 +532,12 @@ function rerenderCurrentTab(){
   // ============================================================
   // SHELL DE LA APP (header, tabs)
   // ============================================================
-  function renderShell(){
-    const mount = document.getElementById('rv-app-mount');
-    document.getElementById('rv-auth-mount').innerHTML = '';
-    document.body.classList.remove('rv-auth-active');
-    const tabs = [
-      {id:'admin', label:'Panel de coordinación'},
-      {id:'centros', label:'Centros educativos'},
-      {id:'self', label:'Actualizar mis datos'},
-    ];
+  const tabs = [
+  {id:'admin', label:'Panel de coordinación'},
+  {id:'centros', label:'Centros educativos'},
+  {id:'mapa', label:'🗺️ Mapa Regional'},
+  {id:'self', label:'Actualizar mis datos'},
+];
     if(isAdmin()) tabs.push({id:'usuarios', label:'Usuarios'});
 
     mount.innerHTML = `
@@ -1081,7 +1078,6 @@ function rerenderCurrentTab(){
   }
 
   init();
-})();
 })();
 </script>
 </body>

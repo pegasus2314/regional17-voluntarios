@@ -530,70 +530,81 @@ function rerenderCurrentTab(){
   }
 
   // ============================================================
-  // SHELL DE LA APP (header, tabs)
-  // ============================================================
-  const tabs = [
-  {id:'admin', label:'Panel de coordinación'},
-  {id:'centros', label:'Centros educativos'},
-  {id:'mapa', label:'🗺️ Mapa Regional'},
-  {id:'self', label:'Actualizar mis datos'},
-];
-    if(isAdmin()) tabs.push({id:'usuarios', label:'Usuarios'});
+// SHELL DE LA APP (header, tabs)
+// ============================================================
+function renderShell(){
+  const mount = document.getElementById('rv-app-mount');
+  document.getElementById('rv-auth-mount').innerHTML = '';
+  document.body.classList.remove('rv-auth-active');
 
-    mount.innerHTML = `
-      <div id="rv-root">
-        <div class="rv-head">
-          <div class="rv-head-row">
-            <div>
-              <h1>Registro de Voluntarios · Regional 17 Monte Plata</h1>
-              <p>Estatus y cobertura por centro educativo — PLE-RD MUN</p>
-            </div>
-            <div class="rv-me">
-              ${session.user.email}<br>
-              <span class="role">${profile.role}</span><br>
-              <button id="rv-signout">Cerrar sesión</button>
-            </div>
-          </div>
-          <div class="rv-tabs">
-            ${tabs.map(t=>`<div class="rv-tab ${t.id===currentTab?'active':''}" data-tab="${t.id}">${t.label}</div>`).join('')}
-          </div>
-        </div>
-        <div class="rv-body">
-          <div class="rv-conn" id="rv-conn"><span class="dot"></span><span class="txt">Conectando…</span></div>
-          <div id="rv-view-admin" style="display:${currentTab==='admin'?'block':'none'};"></div>
-          <div id="rv-view-centros" style="display:${currentTab==='centros'?'block':'none'};"></div>
-          <div id="rv-view-self" style="display:${currentTab==='self'?'block':'none'};"></div>
-          <div id="rv-view-usuarios" style="display:${currentTab==='usuarios'?'block':'none'};"></div>
-        </div>
-      </div>
-      <div id="rv-modal-mount"></div>
-    `;
-    document.getElementById('rv-signout').onclick = signOut;
-    mount.querySelectorAll('.rv-tab').forEach(tab=>{
-      tab.onclick = () => {
-        currentTab = tab.getAttribute('data-tab');
-        renderShell();
-        rerenderCurrentTab();
-      };
-    });
+  const tabs = [
+    {id:'admin', label:'Panel de coordinación'},
+    {id:'centros', label:'Centros educativos'},
+    {id:'mapa', label:'🗺️ Mapa Regional'},
+    {id:'self', label:'Actualizar mis datos'},
+  ];
+
+  if(isAdmin()) {
+    tabs.push({id:'usuarios', label:'Usuarios'});
   }
 
-  // ============================================================
-  // PANEL DE COORDINACIÓN (admin/coordinador editan; voluntario ve)
-  // ============================================================
-  function renderAdmin(){
-    const root = document.getElementById('rv-view-admin');
-    if(!root) return;
-    const counts = { Activo:0, 'En espera':0, Inactivo:0, 'Sin contactar':0 };
-    voluntarios.forEach(r => counts[r.estatus] = (counts[r.estatus]||0) + 1);
+  mount.innerHTML = `
+    <div id="rv-root">
+      <div class="rv-head">
+        <div class="rv-head-row">
+          <div>
+            <h1>Registro de Voluntarios · Regional 17 Monte Plata</h1>
+            <p>Estatus y cobertura por centro educativo — PLE-RD MUN</p>
+          </div>
 
-    let rows = voluntarios.filter(r=>{
-      if(filters.q && !r.nombre.toLowerCase().includes(filters.q.toLowerCase())) return false;
-      if(filters.distrito && r.distrito_id !== filters.distrito) return false;
-      if(filters.categoria && r.categoria !== filters.categoria) return false;
-      if(filters.estatus && r.estatus !== filters.estatus) return false;
-      return true;
-    });
+          <div class="rv-me">
+            ${session.user.email}<br>
+            <span class="role">${profile.role}</span><br>
+            <button id="rv-signout">Cerrar sesión</button>
+          </div>
+        </div>
+
+        <div class="rv-tabs">
+          ${tabs.map(t => `
+            <div class="rv-tab ${t.id===currentTab?'active':''}" data-tab="${t.id}">
+              ${t.label}
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="rv-body">
+        <div class="rv-conn" id="rv-conn">
+          <span class="dot"></span>
+          <span class="txt">Conectando…</span>
+        </div>
+
+        <div id="rv-view-admin" style="display:${currentTab==='admin'?'block':'none'};"></div>
+        <div id="rv-view-centros" style="display:${currentTab==='centros'?'block':'none'};"></div>
+        <div id="rv-view-mapa" style="display:${currentTab==='mapa'?'block':'none'};"></div>
+        <div id="rv-view-self" style="display:${currentTab==='self'?'block':'none'};"></div>
+        <div id="rv-view-usuarios" style="display:${currentTab==='usuarios'?'block':'none'};"></div>
+      </div>
+    </div>
+
+    <div id="rv-modal-mount"></div>
+  `;
+
+  document.getElementById('rv-signout').onclick = signOut;
+
+  mount.querySelectorAll('.rv-tab').forEach(tab => {
+    tab.onclick = () => {
+      currentTab = tab.getAttribute('data-tab');
+      renderShell();
+      rerenderCurrentTab();
+    };
+  });
+}
+
+// ============================================================
+// PANEL DE COORDINACIÓN (admin/coordinador editan; voluntario ve)
+// ============================================================
+function renderAdmin(){
 
     root.innerHTML = `
       <div class="rv-stats">

@@ -137,1093 +137,493 @@
   .rv-auth-brand::before, .rv-auth-brand::after {
     content: ''; position: absolute; border-radius: 50%; opacity: .10; background: var(--accent);
   }
-  .rv-auth-brand::before { width: 420px; height: 420px; right: -140px; top: -160px; }
-  .rv-auth-brand::after { width: 300px; height: 300px; left: -110px; bottom: -120px; background: #fff; opacity: .06; }
-  .rv-auth-brand-inner { position: relative; z-index: 1; max-width: 440px; }
-  .rv-auth-logo {
-    width: 52px; height: 52px; border-radius: 12px; background: rgba(255,255,255,.12);
-    border: 1px solid rgba(255,255,255,.22); display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 16px; letter-spacing: .5px; color: var(--accent); margin-bottom: 28px;
+  .rv-auth-brand::before { width: 420px; height: 420px; right:-180px; top:-180px; }
+  .rv-auth-brand::after { width: 300px; height: 300px; left:-180px; bottom:-150px; }
+  .rv-auth-brand-inner { max-width: 520px; position: relative; z-index: 1; }
+  .rv-brand-mark { width: 64px; height: 64px; border-radius: 16px; display:flex; align-items:center; justify-content:center; background: rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); font-size:30px; margin-bottom:24px; }
+  .rv-auth-brand h1 { font-size: 38px; line-height: 1.08; margin:0 0 12px; letter-spacing:-.7px; }
+  .rv-auth-brand p { font-size:15px; line-height:1.65; color:#D5E0F0; margin:0; max-width:470px; }
+  .rv-brand-points { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; margin-top:28px; }
+  .rv-brand-point { background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); border-radius:10px; padding:10px 12px; font-size:12px; color:#E8EEF7; }
+  .rv-auth-form-side { flex: 0 0 470px; display:flex; align-items:center; justify-content:center; padding:38px; background:#fff; }
+  .rv-auth-form { width:100%; max-width:360px; }
+  .rv-auth-form .eyebrow { font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted); font-weight:700; margin-bottom:7px; }
+  .rv-auth-form h2 { font-size:26px; letter-spacing:-.3px; margin:0 0 6px; }
+  .rv-auth-form > p { font-size:13px; color:var(--muted); margin:0 0 22px; line-height:1.5; }
+  .rv-auth-form .rv-field { margin-bottom:13px; }
+  .rv-auth-form .rv-field label { color:#475467; }
+  .rv-auth-form .rv-field input { min-height:42px; }
+  .rv-auth-submit { width:100%; min-height:44px; margin-top:4px; }
+  .rv-auth-note { text-align:center; font-size:11px; color:var(--muted); margin-top:16px; line-height:1.5; }
+  .rv-auth-footer { text-align:center; font-size:10px; color:#98A2B3; margin-top:26px; }
+
+  .rv-status-page { min-height: 100vh; display:flex; align-items:center; justify-content:center; background:var(--paper); padding:24px; }
+  .rv-loading { color:var(--muted); font-size:13px; }
+
+  @media (max-width: 800px) {
+    body { padding: 0; }
+    .rv-auth-split { flex-direction:column; }
+    .rv-auth-brand { flex:none; min-height:38vh; padding:38px 26px; }
+    .rv-auth-brand h1 { font-size:30px; }
+    .rv-brand-points { grid-template-columns:1fr; }
+    .rv-auth-form-side { flex:1; padding:30px 22px 36px; }
+    .rv-auth-form { max-width:420px; }
+    .rv-body { padding:16px; }
+    .rv-head { padding:18px 16px; }
+    .rv-table { display:block; overflow-x:auto; }
   }
-  .rv-auth-brand-inner h1 { font-size: 22px; margin: 0 0 6px; letter-spacing: .2px; }
-  .rv-auth-brand-inner .rv-auth-tag { margin: 0 0 40px; color: #C9D6EA; font-size: 13.5px; }
-  .rv-auth-brand-text h2 { font-size: 28px; line-height: 1.25; margin: 0 0 14px; font-weight: 700; letter-spacing: -.2px; }
-  .rv-auth-brand-text p { font-size: 14.5px; line-height: 1.6; color: #C9D6EA; margin: 0; max-width: 380px; }
-  .rv-auth-formside { flex: 1 1 54%; display: flex; align-items: center; justify-content: center; padding: 40px 24px; background: var(--paper); }
-  .rv-auth-formside .rv-auth-card { width: 100%; max-width: 400px; padding: 34px 32px; border-radius: 16px; box-shadow: 0 20px 48px rgba(11,37,69,.08); animation: rv-card-in .4s cubic-bezier(.2,.8,.2,1); }
-  @keyframes rv-card-in { from { opacity:0; transform: translateY(10px);} to { opacity:1; transform:none; } }
-  .rv-auth-logo-mobile { display: none; }
-  .rv-auth-card-head { margin-bottom: 22px; }
-  .rv-auth-card-head h2 { font-size: 20px; margin: 0 0 6px; font-weight: 700; }
-  .rv-auth-card-head p.rv-sub { margin: 0; }
-  .rv-auth-foot { text-align: center; font-size: 12px; color: var(--muted); margin-top: 18px; }
-
-  .rv-pass-wrap { position: relative; }
-  .rv-pass-wrap input { padding-right: 40px; }
-  .rv-pass-toggle {
-    position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: none; background: none;
-    cursor: pointer; padding: 6px; color: var(--muted); font-size: 15px; line-height: 1; border-radius: 6px;
-  }
-  .rv-pass-toggle:hover { color: var(--navy-2); background: var(--paper); }
-
-  .rv-field input:focus, .rv-field select:focus, .rv-field textarea:focus {
-    border-color: var(--navy-2); box-shadow: 0 0 0 3px rgba(19,51,102,.10); outline: none;
-  }
-  .rv-field input, .rv-field select, .rv-field textarea { transition: border-color .15s, box-shadow .15s; }
-
-  .rv-auth-submit { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background .15s, transform .1s; }
-  .rv-auth-submit:active { transform: scale(.99); }
-  .rv-spinner { width: 15px; height: 15px; border-radius: 50%; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; animation: rv-spin .7s linear infinite; }
-  @keyframes rv-spin { to { transform: rotate(360deg); } }
-
-  @media (max-width: 860px) {
-    .rv-auth-brand { display: none; }
-    .rv-auth-formside { padding: 28px 18px; min-height: 100vh; }
-    .rv-auth-logo-mobile {
-      display: flex; width: 46px; height: 46px; border-radius: 12px; background: var(--navy);
-      color: var(--accent); align-items: center; justify-content: center; font-weight: 800; font-size: 14px; margin-bottom: 18px;
-    }
-  }
-
-  /* ---------- Perfil pendiente / errores de arranque ---------- */
-  .rv-status-page { min-height: 100vh; width: 100%; display: flex; align-items: center; justify-content: center; background: var(--paper); padding: 24px; animation: rv-fade .3s ease-out; }
-  .rv-status-card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 34px 32px; max-width: 440px; width: 100%; box-shadow: 0 20px 48px rgba(11,37,69,.08); text-align: center; }
-  .rv-status-icon { width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; font-size: 24px; }
-  .rv-status-icon.wait { background: var(--wait-bg); color: var(--wait-fg); }
-  .rv-status-icon.err { background: var(--off-bg); color: var(--off-fg); }
-  .rv-status-card h2 { margin: 0 0 8px; font-size: 18px; }
-  .rv-status-card .rv-status-email { display: inline-block; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 5px 12px; font-size: 12.5px; font-weight: 600; margin: 6px 0 14px; }
-  .rv-status-card p { margin: 0 0 10px; font-size: 13.5px; color: var(--muted); line-height: 1.55; }
-  .rv-status-actions { display: flex; gap: 8px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
-  .rv-status-tech { margin-top: 14px; font-size: 11px; color: var(--muted); background: var(--paper); border-radius: 8px; padding: 8px 10px; text-align: left; word-break: break-word; }
-
-  #rv-toasts { position: fixed; top: 16px; right: 16px; z-index: 100; display:flex; flex-direction:column; gap:8px; max-width:320px; }
-  .rv-toast { padding: 10px 14px; border-radius: 8px; font-size: 13px; box-shadow: 0 8px 20px rgba(11,37,69,.15); animation: rv-in .15s ease-out; }
-  .rv-toast.error { background: var(--off-bg); color: var(--off-fg); border:1px solid #F0BFBF; }
-  .rv-toast.success { background: var(--ok-bg); color: var(--ok-fg); border:1px solid #BEE6C9; }
-  .rv-toast.info { background: var(--new-bg); color: var(--new-fg); border:1px solid var(--line); }
-  @keyframes rv-in { from { opacity:0; transform: translateY(-6px);} to { opacity:1; transform:none; } }
-
-  .rv-loading { display:flex; align-items:center; justify-content:center; padding:60px; color:var(--muted); font-size:13px; }
 </style>
 </head>
 <body>
-
-<div id="rv-toasts"></div>
-
 <div id="rv-auth-mount"></div>
-<div id="rv-app-mount"></div>
 
 <script>
-/* ============================================================
- * GUARDIA ANTI-DOBLE-EJECUCIÓN
- * Si este bloque <script> llegara a quedar pegado dos veces en el
- * HTML (por ejemplo al copiar una versión corregida encima de una
- * vieja sin borrar la anterior), la segunda ejecución se detiene
- * aquí en vez de lanzar "Identifier 'supabase' has already been
- * declared". Además, TODO lo demás vive dentro de esta función,
- * así que "supabase", "SUPABASE_URL", etc. nunca son variables
- * globales — no pueden chocar con nada más que exista en la página.
- * ============================================================ */
+/*
+ * Registro de Voluntarios · Regional 17 Monte Plata
+ * Versión reparada
+ *
+ * La protección externa evita que el bloque de aplicación se evalúe dos veces
+ * en entornos donde la página/preview pueda inyectarse o ejecutarse nuevamente.
+ */
 (function(){
-  if (window.__RV17_APP_BOOTED) {
-    console.warn('[Registro de Voluntarios] Este script ya se había cargado una vez en esta página; se ignora esta segunda copia para evitar errores de "Identifier ya declarado". Si ves este aviso, revisa tu archivo: probablemente el bloque <script> de la app está pegado dos veces.');
+  if (window.__RV_APP_LOADED__) {
+    console.warn('Regional 17: la aplicación ya estaba cargada; se evita una segunda ejecución.');
     return;
   }
-  window.__RV17_APP_BOOTED = true;
+  window.__RV_APP_LOADED__ = true;
 
-/* ============================================================
- * CONFIGURACIÓN — reemplaza estos dos valores con los de TU
- * proyecto de Supabase (Project Settings → API).
- * La anon key es pública por diseño; la seguridad real la dan
- * las políticas de RLS definidas en schema.sql, no esta clave.
- * ============================================================ */
-const SUPABASE_URL = "https://ibsmrkwkmcjyekwllxic.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_9vAku5bk8kjr55NdrheYEQ_0R5daGfS";
+  (function(){
+    'use strict';
 
-if(!window.supabase){
-  document.body.innerHTML = '<div style="max-width:480px;margin:60px auto;font-family:sans-serif;padding:20px;border:1px solid #E1E5EB;border-radius:12px;"><h2>No se pudo cargar la librería de Supabase</h2><p>El archivo <code>&lt;script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"&gt;</code> no cargó. Revisa tu conexión a internet, o si estás dentro de un entorno que bloquea ese dominio (por ejemplo, un artifact de Claude.ai), abre este archivo directamente en tu navegador o desde un hosting real.</p></div>';
-  throw new Error('supabase-js no cargó');
-}
+    const SUPABASE_URL = 'TU-PROYECTO';
+    const SUPABASE_ANON_KEY = 'TU-ANON-KEY';
 
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  realtime: { params: { eventsPerSecond: 10 } }
-});
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-(function(){
-  const DISPONIBILIDAD = ["Tiempo completo", "Fines de semana", "Solo eventos puntuales", "No disponible por ahora"];
-  const ESTATUS = [
-    {v:"Activo", cls:"ok"}, {v:"En espera", cls:"wait"}, {v:"Inactivo", cls:"off"}, {v:"Sin contactar", cls:"new"}
-  ];
+    let session = null;
+    let currentUser = null;
+    let volunteers = [];
+    let districts = [];
+    let activeTab = 'volunteers';
+    let searchTerm = '';
+    let statusFilter = 'all';
+    let districtFilter = 'all';
+    let roleFilter = 'all';
 
-  // ---------------- STATE ----------------
-  let session = null;
-  let profile = null;         // { id, email, role, linked_voluntario_id }
-  let distritos = [];         // [{id, nombre, regional}]
-  let centros = [];           // [{id, distrito_id, nombre, nivel}]
-  let voluntarios = [];       // [{id, nombre, distrito_id, categoria, estatus, disponibilidad, notas, updated_at}]
-  let voluntarioCentros = []; // [{voluntario_id, centro_id}]
-  let profilesList = [];      // solo cargado para admin (tab Usuarios)
-  let realtimeChannels = [];
-  let currentTab = 'admin';
-  let filters = { q:'', distrito:'', categoria:'', estatus:'' };
-  let centrosQ = '';
-  let selfId = null;
+    const $ = (id) => document.getElementById(id);
+    const esc = (value) => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
 
-  const distritoName = id => (distritos.find(d=>d.id===id)||{}).nombre || id;
-  const isPrivileged = () => profile && (profile.role === 'admin' || profile.role === 'coordinador');
-  const isAdmin = () => profile && profile.role === 'admin';
-  const areasFor = volId => voluntarioCentros.filter(vc=>vc.voluntario_id===volId).map(vc=>vc.centro_id);
-  const centrosFor = distritoId => centros.filter(c=>c.distrito_id===distritoId);
-  const centroNombre = id => (centros.find(c=>c.id===id)||{}).nombre || '(centro eliminado)';
-
-  // ---------------- TOASTS / ERRORES ----------------
-  function toast(msg, type='info'){
-    const wrap = document.getElementById('rv-toasts');
-    const el = document.createElement('div');
-    el.className = `rv-toast ${type}`;
-    el.textContent = msg;
-    wrap.appendChild(el);
-    setTimeout(()=>{ el.remove(); }, 4500);
-  }
-  function friendlyError(e){
-    const msg = (e && e.message) || String(e);
-    if(/JWT|not authenticated|401/i.test(msg)) return "Tu sesión expiró. Vuelve a iniciar sesión.";
-    if(/row-level security|permission denied|new row violates/i.test(msg)) return "No tienes permiso para hacer esto.";
-    if(/duplicate key/i.test(msg)) return "Ya existe un registro con ese valor (posible duplicado).";
-    if(/network|fetch/i.test(msg)) return "No se pudo conectar con el servidor. Revisa tu conexión.";
-    return msg;
-  }
-  async function withErrors(fn, okMsg){
-    try{
-      const r = await fn();
-      if(r && r.error) throw r.error;
-      if(okMsg) toast(okMsg, 'success');
-      return r;
-    }catch(e){
-      console.error(e);
-      toast(friendlyError(e), 'error');
-      throw e;
-    }
-  }
-
-  function fmtDate(iso){
-    if(!iso) return "—";
-    return new Date(iso).toLocaleDateString('es-DO', {day:'2-digit', month:'short', year:'numeric'});
-  }
-  function statusInfo(v){ return ESTATUS.find(s=>s.v===v) || ESTATUS[3]; }
-function badge(v){ const info = statusInfo(v); return `<span class="badge ${info.cls}"><span class="dot"></span>${info.v}</span>`; }
-function rolePill(r){ return `<span class="role-pill ${r}">${r}</span>`; }
-
-  // ============================================================
-  // AUTENTICACIÓN
-  // ============================================================
-  // Solo login: las cuentas se crean en Supabase → Authentication → Users
-  // por un administrador. La aplicación NUNCA crea usuarios ni perfiles
-  // automáticamente (ver loadProfile / bootAuthenticated más abajo).
-  let authError = '';
-  let authLoading = false;
-  let passVisible = false;
-
-  function renderAuth(){
-    document.getElementById('rv-app-mount').innerHTML = '';
-    document.body.classList.add('rv-auth-active');
-    const mount = document.getElementById('rv-auth-mount');
-    mount.innerHTML = `
-      <div class="rv-auth-page">
-        <div class="rv-auth-split">
-          <div class="rv-auth-brand" aria-hidden="true">
-            <div class="rv-auth-brand-inner">
-              <div class="rv-auth-logo">R17</div>
-              <h1>Regional 17 · Monte Plata</h1>
-              <p class="rv-auth-tag">Registro y gestión de voluntarios</p>
-              <div class="rv-auth-brand-text">
-                <h2>Registro de Voluntarios</h2>
-                <p>Conectando personas, centros educativos y oportunidades de participación.</p>
-              </div>
-            </div>
+    function renderConfigNeeded(){
+      document.body.classList.add('rv-auth-active');
+      $('rv-auth-mount').innerHTML = `
+        <div class="rv-status-page">
+          <div class="rv-auth-card" style="max-width:520px;width:100%">
+            <h2>Configuración pendiente</h2>
+            <p class="rv-sub">La aplicación está cargada, pero todavía necesita las credenciales de Supabase en el código.</p>
+            <div class="rv-banner">Reemplaza <strong>TU-PROYECTO</strong> y <strong>TU-ANON-KEY</strong> por los valores correspondientes de tu proyecto Supabase.</div>
           </div>
-          <div class="rv-auth-formside">
-            <div class="rv-auth-card">
-              <div class="rv-auth-card-head">
-                <div class="rv-auth-logo-mobile">R17</div>
+        </div>`;
+    }
+
+    function renderStartupError(error){
+      $('rv-auth-mount').innerHTML = `
+        <div class="rv-status-page">
+          <div class="rv-auth-card" style="max-width:520px;width:100%">
+            <h2>No se pudo iniciar la aplicación</h2>
+            <p class="rv-sub">Ocurrió un error al conectar con el servicio.</p>
+            <div class="rv-auth-error">${esc(error?.message || error || 'Error desconocido')}</div>
+            <button class="rv-btn primary" onclick="location.reload()">Reintentar</button>
+          </div>
+        </div>`;
+    }
+
+    function renderAuth(errorMessage=''){
+      document.body.classList.add('rv-auth-active');
+      $('rv-auth-mount').innerHTML = `
+        <div class="rv-auth-page">
+          <div class="rv-auth-split">
+            <section class="rv-auth-brand">
+              <div class="rv-auth-brand-inner">
+                <div class="rv-brand-mark">🤝</div>
+                <h1>Registro de Voluntarios</h1>
+                <p>Plataforma de gestión y coordinación de voluntarios de la Regional 17 Monte Plata.</p>
+                <div class="rv-brand-points">
+                  <div class="rv-brand-point">✓ Gestión centralizada</div>
+                  <div class="rv-brand-point">✓ Seguimiento de estados</div>
+                  <div class="rv-brand-point">✓ Organización por distritos</div>
+                  <div class="rv-brand-point">✓ Acceso por roles</div>
+                </div>
+              </div>
+            </section>
+            <section class="rv-auth-form-side">
+              <form class="rv-auth-form" id="rv-login-form">
+                <div class="eyebrow">Regional 17 · Monte Plata</div>
                 <h2>Iniciar sesión</h2>
-                <p class="rv-sub">Regional 17 Monte Plata · Registro y gestión de voluntarios</p>
-              </div>
-              ${authError ? `<div class="rv-auth-error" role="alert">⚠️ ${authError}</div>` : ''}
-              <form id="rv-auth-form" novalidate>
+                <p>Accede con las credenciales autorizadas para administrar el registro.</p>
+                ${errorMessage ? `<div class="rv-auth-error">${esc(errorMessage)}</div>` : ''}
                 <div class="rv-field">
-                  <label for="rv-auth-email">Correo</label>
-                  <input type="email" id="rv-auth-email" autocomplete="email" inputmode="email" ${authLoading?'disabled':''}>
+                  <label for="rv-email">Correo electrónico</label>
+                  <input id="rv-email" type="email" autocomplete="email" required placeholder="correo@ejemplo.com">
                 </div>
                 <div class="rv-field">
-                  <label for="rv-auth-pass">Contraseña</label>
-                  <div class="rv-pass-wrap">
-                    <input type="${passVisible?'text':'password'}" id="rv-auth-pass" autocomplete="current-password" ${authLoading?'disabled':''}>
-                    <button type="button" class="rv-pass-toggle" id="rv-pass-toggle" aria-label="${passVisible?'Ocultar contraseña':'Mostrar contraseña'}">${passVisible?'🙈':'👁'}</button>
-                  </div>
+                  <label for="rv-password">Contraseña</label>
+                  <input id="rv-password" type="password" autocomplete="current-password" required placeholder="••••••••">
                 </div>
-                <button type="submit" class="rv-btn primary rv-auth-submit" id="rv-auth-submit" style="width:100%;" ${authLoading?'disabled':''}>
-                  ${authLoading ? `<span class="rv-spinner"></span><span>Iniciando sesión…</span>` : `<span>Iniciar sesión</span>`}
-                </button>
+                <button class="rv-btn primary rv-auth-submit" type="submit">Entrar</button>
+                <div class="rv-auth-note">Si no tienes acceso, solicita las credenciales al administrador del sistema.</div>
+                <div class="rv-auth-footer">Regional 17 Monte Plata</div>
               </form>
-              <div class="rv-auth-foot">¿No tienes acceso? Contacta a un administrador de Regional 17 para que active tu cuenta.</div>
-            </div>
+            </section>
           </div>
-        </div>
-      </div>
-    `;
-    const passInput = document.getElementById('rv-auth-pass');
-    document.getElementById('rv-pass-toggle').onclick = () => {
-      passVisible = !passVisible;
-      const focusEmail = document.activeElement === document.getElementById('rv-auth-email');
-      renderAuth();
-      const p = document.getElementById('rv-auth-pass');
-      if(!focusEmail){ p.focus(); const pos = p.value.length; p.setSelectionRange(pos,pos); }
-    };
-    document.getElementById('rv-auth-form').onsubmit = async (ev) => {
-      ev.preventDefault();
-      if(authLoading) return;
-      const email = document.getElementById('rv-auth-email').value.trim();
-      const password = document.getElementById('rv-auth-pass').value;
-      if(!email || !password){ authError = 'Completa correo y contraseña.'; renderAuth(); return; }
-      authLoading = true; authError = '';
-      renderAuth();
-      try{
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if(error) throw error;
-        // Si el login fue exitoso, onAuthStateChange se encarga de continuar.
-      }catch(e){
-        authLoading = false;
-        authError = friendlyError(e);
-        renderAuth();
-      }
-    };
-  }
+        </div>`;
 
-  async function signOut(){
-    await supabase.auth.signOut();
-  }
-
-  // ============================================================
-  // CUENTA SIN PERFIL CONFIGURAR (usuario existe en Auth pero no en `profiles`)
-  // ============================================================
-  function renderProfilePending(){
-    document.getElementById('rv-app-mount').innerHTML = '';
-    document.body.classList.add('rv-auth-active');
-    document.getElementById('rv-auth-mount').innerHTML = `
-      <div class="rv-status-page">
-        <div class="rv-status-card">
-          <div class="rv-status-icon wait">⏳</div>
-          <h2>Tu cuenta está creada, pero todavía no está configurada.</h2>
-          <div class="rv-status-email">${session.user.email}</div>
-          <p>Un administrador debe completar tu perfil antes de que puedas acceder al sistema. Cuando esté listo, vuelve a iniciar sesión.</p>
-          <div class="rv-status-actions">
-            <button class="rv-btn" id="rv-pending-signout">Cerrar sesión</button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.getElementById('rv-pending-signout').onclick = signOut;
-  }
-
-  // ============================================================
-  // CARGA DE DATOS Y REALTIME
-  // ============================================================
-  async function loadProfile(userId){
-    let { data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle();
-    if(error) throw error;
-    console.log('[RV17] Perfil cargado:', data);
-    if(!data){
-      // el trigger de la BD puede tardar un instante en crear el perfil tras el signup
-      await new Promise(r=>setTimeout(r, 800));
-      ({ data, error } = await supabase.from('profiles').select('*').eq('id', userId).maybeSingle());
-      if(error) throw error;
-    }
-    return data;
-  }
-
-  async function loadAllData(){
-    const [dRes, cRes, vRes, vcRes] = await Promise.all([
-      supabase.from('distritos').select('*').order('id'),
-      supabase.from('centros_educativos').select('*').order('nombre'),
-      supabase.from('voluntarios').select('*').order('nombre'),
-      supabase.from('voluntario_centros').select('*'),
-    ]);
-    if(dRes.error) throw dRes.error;
-    if(cRes.error) throw cRes.error;
-    if(vRes.error) throw vRes.error;
-    if(vcRes.error) throw vcRes.error;
-    distritos = dRes.data || [];
-    centros = cRes.data || [];
-    voluntarios = vRes.data || [];
-    voluntarioCentros = vcRes.data || [];
-
-    if(isAdmin()){
-      const { data, error } = await supabase.from('profiles').select('*').order('email');
-      if(!error) profilesList = data || [];
-    }
-  }
-
-  function applyChange(arr, payload, keyFn){
-    if(payload.eventType === 'INSERT'){
-      if(!arr.some(x=>keyFn(x)===keyFn(payload.new))) arr.push(payload.new);
-    } else if(payload.eventType === 'UPDATE'){
-      const idx = arr.findIndex(x=>keyFn(x)===keyFn(payload.new));
-      if(idx>=0) arr[idx] = payload.new; else arr.push(payload.new);
-    } else if(payload.eventType === 'DELETE'){
-      const idx = arr.findIndex(x=>keyFn(x)===keyFn(payload.old));
-      if(idx>=0) arr.splice(idx,1);
-    }
-  }
-
-  function setConnBadge(connected){
-    const el = document.getElementById('rv-conn');
-    if(!el) return;
-    if(!navigator.onLine){
-      el.classList.add('off');
-      el.querySelector('span.txt').textContent = 'Sin conexión';
-      return;
-    }
-    el.classList.toggle('off', !connected);
-    el.querySelector('span.txt').textContent = connected ? 'Conectado en tiempo real' : 'Reconectando…';
-  }
-
-  let lastRealtimeStatus = false;
-  window.addEventListener('online', () => setConnBadge(lastRealtimeStatus));
-  window.addEventListener('offline', () => setConnBadge(lastRealtimeStatus));
-
-  function subscribeRealtime(){
-    realtimeChannels.forEach(ch => supabase.removeChannel(ch));
-    realtimeChannels = [];
-
-    const ch = supabase.channel('rv-regional17-changes')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'voluntarios' }, payload => {
-        applyChange(voluntarios, payload, x=>x.id);
-        rerenderCurrentTab();
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'centros_educativos' }, payload => {
-        applyChange(centros, payload, x=>x.id);
-        rerenderCurrentTab();
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'voluntario_centros' }, payload => {
-        applyChange(voluntarioCentros, payload, x=>x.voluntario_id+'|'+x.centro_id);
-        rerenderCurrentTab();
-      })
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'distritos' }, payload => {
-        applyChange(distritos, payload, x=>x.id);
-        rerenderCurrentTab();
-      })
-      .subscribe(status => {
-        lastRealtimeStatus = (status === 'SUBSCRIBED');
-        setConnBadge(lastRealtimeStatus);
+      $('rv-login-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const email = $('rv-email').value.trim();
+        const password = $('rv-password').value;
+        const button = event.submitter || $('rv-login-form').querySelector('button[type=submit]');
+        button.disabled = true;
+        button.textContent = 'Entrando…';
+        try {
+          const { error } = await supabase.auth.signInWithPassword({ email, password });
+          if (error) throw error;
+        } catch (error) {
+          renderAuth(error.message || 'No se pudo iniciar sesión.');
+        }
       });
-
-    realtimeChannels.push(ch);
-  }
-
-function rerenderCurrentTab(){
-  if(currentTab === 'admin') renderAdmin();
-  else if(currentTab === 'centros') renderCentros();
-  else if(currentTab === 'self') renderSelf();
-  else if(currentTab === 'usuarios') renderUsuarios();
-  }
-
-  // ============================================================
-// SHELL DE LA APP (header, tabs)
-// ============================================================
-function renderShell(){
-  const mount = document.getElementById('rv-app-mount');
-  document.getElementById('rv-auth-mount').innerHTML = '';
-  document.body.classList.remove('rv-auth-active');
-
-  const tabs = [
-    {id:'admin', label:'Panel de coordinación'},
-    {id:'centros', label:'Centros educativos'},
-    {id:'mapa', label:'🗺️ Mapa Regional'},
-    {id:'self', label:'Actualizar mis datos'},
-  ];
-
-  if(isAdmin()) {
-    tabs.push({id:'usuarios', label:'Usuarios'});
-  }
-
-  mount.innerHTML = `
-    <div id="rv-root">
-      <div class="rv-head">
-        <div class="rv-head-row">
-          <div>
-            <h1>Registro de Voluntarios · Regional 17 Monte Plata</h1>
-            <p>Estatus y cobertura por centro educativo — PLE-RD MUN</p>
-          </div>
-
-          <div class="rv-me">
-            ${session.user.email}<br>
-            <span class="role">${profile.role}</span><br>
-            <button id="rv-signout">Cerrar sesión</button>
-          </div>
-        </div>
-
-        <div class="rv-tabs">
-          ${tabs.map(t => `
-            <div class="rv-tab ${t.id===currentTab?'active':''}" data-tab="${t.id}">
-              ${t.label}
-            </div>
-          `).join('')}
-        </div>
-      </div>
-
-      <div class="rv-body">
-        <div class="rv-conn" id="rv-conn">
-          <span class="dot"></span>
-          <span class="txt">Conectando…</span>
-        </div>
-
-        <div id="rv-view-admin" style="display:${currentTab==='admin'?'block':'none'};"></div>
-        <div id="rv-view-centros" style="display:${currentTab==='centros'?'block':'none'};"></div>
-        <div id="rv-view-mapa" style="display:${currentTab==='mapa'?'block':'none'};"></div>
-        <div id="rv-view-self" style="display:${currentTab==='self'?'block':'none'};"></div>
-        <div id="rv-view-usuarios" style="display:${currentTab==='usuarios'?'block':'none'};"></div>
-      </div>
-    </div>
-
-    <div id="rv-modal-mount"></div>
-  `;
-
-  document.getElementById('rv-signout').onclick = signOut;
-
-  mount.querySelectorAll('.rv-tab').forEach(tab => {
-    tab.onclick = () => {
-      currentTab = tab.getAttribute('data-tab');
-      renderShell();
-      rerenderCurrentTab();
-    };
-  });
-}
-
-// ============================================================
-// PANEL DE COORDINACIÓN
-// ============================================================
-function renderAdmin(){
-  const root = document.getElementById('rv-view-admin');
-  if(!root) return;
-
-  const counts = {
-    Activo: 0,
-    'En espera': 0,
-    Inactivo: 0,
-    'Sin contactar': 0
-  };
-
-  voluntarios.forEach(r => {
-    counts[r.estatus] = (counts[r.estatus] || 0) + 1;
-  });
-
-  const rows = voluntarios.filter(r => {
-    if(
-      filters.q &&
-      !r.nombre.toLowerCase().includes(filters.q.toLowerCase())
-    ) return false;
-
-    if(
-      filters.distrito &&
-      r.distrito_id !== filters.distrito
-    ) return false;
-
-    if(
-      filters.categoria &&
-      r.categoria !== filters.categoria
-    ) return false;
-
-    if(
-      filters.estatus &&
-      r.estatus !== filters.estatus
-    ) return false;
-
-    return true;
-  });
-
-  root.innerHTML = `
-    <div class="rv-stats">
-      <div class="rv-stat ok">
-        <div class="n">${counts['Activo']}</div>
-        <div class="l">Activos</div>
-      </div>
-
-      <div class="rv-stat wait">
-        <div class="n">${counts['En espera']}</div>
-        <div class="l">En espera</div>
-      </div>
-
-      <div class="rv-stat off">
-        <div class="n">${counts['Inactivo']}</div>
-        <div class="l">Inactivos</div>
-      </div>
-
-      <div class="rv-stat new">
-        <div class="n">${counts['Sin contactar']}</div>
-        <div class="l">Sin contactar</div>
-      </div>
-    </div>
-
-    <div class="rv-filters">
-      <input
-        type="text"
-        id="rv-search"
-        placeholder="Buscar por nombre..."
-        value="${filters.q || ''}"
-      >
-
-      <select id="rv-f-distrito">
-        <option value="">Todos los distritos</option>
-        ${distritos.map(d => `
-          <option
-            value="${d.id}"
-            ${filters.distrito === d.id ? 'selected' : ''}
-          >
-            ${d.id} · ${d.nombre}
-          </option>
-        `).join('')}
-      </select>
-
-      <select id="rv-f-categoria">
-        <option value="">Toda categoría</option>
-        ${['Regional','Distrital','Nacional'].map(c => `
-          <option
-            value="${c}"
-            ${filters.categoria === c ? 'selected' : ''}
-          >
-            ${c}
-          </option>
-        `).join('')}
-      </select>
-
-      <select id="rv-f-estatus">
-        <option value="">Todo estatus</option>
-        ${ESTATUS.map(s => `
-          <option
-            value="${s.v}"
-            ${filters.estatus === s.v ? 'selected' : ''}
-          >
-            ${s.v}
-          </option>
-        `).join('')}
-      </select>
-    </div>
-
-    ${
-      rows.length
-      ? `
-        <table class="rv-table">
-          <thead>
-            <tr>
-              <th>Voluntario</th>
-              <th>Distrito</th>
-              <th>Categoría</th>
-              <th>Estatus</th>
-              <th>Centros que cubre</th>
-              <th>Disponibilidad</th>
-              <th>Actualizado</th>
-              <th></th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${rows.map(r => {
-              const areas = areasFor(r.id);
-
-              return `
-                <tr>
-                  <td>
-                    <div class="rv-name">
-                      ${r.nombre}
-                    </div>
-                  </td>
-
-                  <td>
-                    ${r.distrito_id}
-                    <div class="rv-sub">
-                      ${distritoName(r.distrito_id)}
-                    </div>
-                  </td>
-
-                  <td>
-                    ${r.categoria}
-                  </td>
-
-                  <td>
-                    ${badge(r.estatus)}
-                  </td>
-
-                  <td>
-                    <div class="rv-areas-cell">
-                      ${
-                        areas.length
-                        ? areas.map(cid => `
-                            <span class="rv-chip">
-                              ${centroNombre(cid)}
-                            </span>
-                          `).join('')
-                        : '<span class="rv-sub">—</span>'
-                      }
-                    </div>
-                  </td>
-
-                  <td>
-                    ${
-                      r.disponibilidad ||
-                      '<span class="rv-sub">—</span>'
-                    }
-                  </td>
-
-                  <td class="rv-sub">
-                    ${fmtDate(r.updated_at)}
-                  </td>
-
-                  <td>
-                    ${
-                      isPrivileged()
-                      ? `
-                        <button
-                          class="rv-btn"
-                          data-edit="${r.id}"
-                        >
-                          Editar
-                        </button>
-                      `
-                      : ''
-                    }
-                  </td>
-                </tr>
-              `;
-            }).join('')}
-          </tbody>
-        </table>
-      `
-      : `
-        <div class="rv-empty">
-          No hay voluntarios que coincidan con este filtro.
-        </div>
-      `
-    }
-  `;
-
-  // ============================================================
-  // FILTROS
-  // ============================================================
-
-  const search = document.getElementById('rv-search');
-  const distrito = document.getElementById('rv-f-distrito');
-  const categoria = document.getElementById('rv-f-categoria');
-  const estatus = document.getElementById('rv-f-estatus');
-
-  if(search){
-    search.oninput = e => {
-      filters.q = e.target.value;
-      renderAdmin();
-    };
-  }
-
-  if(distrito){
-    distrito.onchange = e => {
-      filters.distrito = e.target.value;
-      renderAdmin();
-    };
-  }
-
-  if(categoria){
-    categoria.onchange = e => {
-      filters.categoria = e.target.value;
-      renderAdmin();
-    };
-  }
-
-  if(estatus){
-    estatus.onchange = e => {
-      filters.estatus = e.target.value;
-      renderAdmin();
-    };
-  }
-
-  // ============================================================
-  // BOTONES EDITAR
-  // ============================================================
-
-  root.querySelectorAll('[data-edit]').forEach(btn => {
-    btn.onclick = () => {
-      openEditModal(btn.getAttribute('data-edit'));
-    };
-  });
-}
-  // ============================================================
-  // CENTROS EDUCATIVOS
-  // ============================================================
-  function renderCentros(){
-    const root = document.getElementById('rv-view-centros');
-    if(!root) return;
-    const totalCentros = centros.length;
-    const coveredSet = new Set(voluntarioCentros.map(vc=>vc.centro_id));
-    const q = centrosQ.trim().toLowerCase();
-
-    // Filtra distritos/centros por el término de búsqueda (nombre del centro o del distrito)
-    const visibleDistritos = distritos
-      .map(d => ({ d, list: centrosFor(d.id).filter(c => !q || c.nombre.toLowerCase().includes(q) || d.nombre.toLowerCase().includes(q)) }))
-      .filter(({d, list}) => !q || list.length > 0 || d.nombre.toLowerCase().includes(q));
-
-    const matchCount = visibleDistritos.reduce((n, {list}) => n + list.length, 0);
-
-    root.innerHTML = `
-      <div class="rv-banner">
-        Este listado alimenta las opciones que verán los voluntarios en "Actualizar mis datos". Todos los cambios se sincronizan en tiempo real con el resto del equipo.
-        <br><br><strong>Total de centros registrados: ${totalCentros}</strong> · Centros con al menos un voluntario asignado: ${coveredSet.size}
-      </div>
-      <div class="rv-filters">
-        <input type="text" id="rv-centros-q" placeholder="Buscar centro educativo por nombre o distrito..." value="${centrosQ.replace(/"/g,'&quot;')}">
-      </div>
-      ${q ? `<div class="rv-sub" style="margin-bottom:10px;">${matchCount} centro(s) encontrado(s) para "${centrosQ}"</div>` : ''}
-      <div class="rv-district-grid">
-        ${visibleDistritos.map(({d, list}) => `
-          <div class="rv-district-card">
-            <h4>${d.id} · ${d.nombre}</h4>
-            <div class="rv-sub rv-centro-count">${list.length} centro(s) ${q ? 'encontrado(s)' : 'registrado(s)'}</div>
-            ${list.map(c=>`
-              <div class="rv-centro-row">
-                <span>${c.nombre}</span>
-                ${isPrivileged() ? `<button class="rv-btn small danger" data-del-centro="${c.id}">Quitar</button>` : ''}
-              </div>
-            `).join('')}
-            ${isPrivileged() ? `
-            <div class="rv-add-centro">
-              <input type="text" placeholder="Nombre del centro educativo..." data-add-input="${d.id}">
-              <button class="rv-btn small primary" data-add-btn="${d.id}">Agregar</button>
-            </div>` : ''}
-          </div>`
-        ).join('') || `<div class="rv-empty">Ningún centro educativo coincide con "${centrosQ}".</div>`}
-      </div>
-    `;
-
-    const searchInput = document.getElementById('rv-centros-q');
-    searchInput.oninput = () => { centrosQ = searchInput.value; renderCentros(); };
-    // Mantiene el foco y la posición del cursor tras volver a dibujar la lista
-    searchInput.focus();
-    const pos = centrosQ.length;
-    searchInput.setSelectionRange(pos, pos);
-
-    if(!isPrivileged()) return;
-    root.querySelectorAll('[data-add-btn]').forEach(btn=>{
-      btn.onclick = async () => {
-        const d = btn.getAttribute('data-add-btn');
-        const input = root.querySelector(`[data-add-input="${d}"]`);
-        const val = input.value.trim();
-        if(!val) return;
-        btn.disabled = true;
-        const label = btn.textContent;
-        btn.textContent = 'Guardando…';
-        try{
-          await withErrors(() => supabase.from('centros_educativos').insert({ distrito_id: d, nombre: val, nivel: 'Secundario' }), 'Centro agregado.');
-          input.value = '';
-        }catch(e){ /* toast ya mostrado */ }
-        btn.disabled = false;
-        btn.textContent = label;
-      };
-    });
-    root.querySelectorAll('[data-del-centro]').forEach(btn=>{
-      btn.onclick = async () => {
-        const cid = btn.getAttribute('data-del-centro');
-        if(!confirm('¿Quitar este centro? Se eliminará también de las asignaciones de voluntarios.')) return;
-        btn.disabled = true;
-        try{
-          await withErrors(() => supabase.from('centros_educativos').delete().eq('id', cid), 'Centro eliminado.');
-        }catch(e){}
-        btn.disabled = false;
-      };
-    });
-  }
-
-  // ============================================================
-  // AUTOSERVICIO ("Actualizar mis datos")
-  // ============================================================
-  function renderSelf(){
-    const root = document.getElementById('rv-view-self');
-    if(!root) return;
-
-    // Si el perfil ya está vinculado a un voluntario, saltar la búsqueda
-    if(!selfId && profile.linked_voluntario_id){
-      selfId = profile.linked_voluntario_id;
     }
 
-    if(!selfId){
-      root.innerHTML = `
-        <div class="rv-self-search">
-          <input type="text" id="rv-self-q" placeholder="Escribe tu nombre para buscarlo en la lista..." autocomplete="off">
-          <div id="rv-self-results"></div>
-        </div>
-        <div class="rv-empty-self">Busca tu nombre arriba para indicar en qué centro(s) educativos de tu distrito puedes apoyar y tu disponibilidad. El estatus lo asigna el equipo de coordinación.</div>
-      `;
-      const input = document.getElementById('rv-self-q');
-      input.oninput = () => {
-        const q = input.value.trim().toLowerCase();
-        const resultsBox = document.getElementById('rv-self-results');
-        if(q.length < 2){ resultsBox.innerHTML=''; return; }
-        const matches = voluntarios.filter(r=>r.nombre.toLowerCase().includes(q)).slice(0,8);
-        resultsBox.innerHTML = matches.length
-          ? `<div class="rv-self-list">${matches.map(m=>`<div class="rv-self-item" data-id="${m.id}">${m.nombre} <span class="rv-sub">· ${m.distrito_id}</span></div>`).join('')}</div>`
-          : `<div class="rv-self-list"><div class="rv-self-item rv-sub">Sin resultados</div></div>`;
-        resultsBox.querySelectorAll('[data-id]').forEach(el=>{
-          el.onclick = async () => {
-            selfId = el.getAttribute('data-id');
-            // vincular este perfil a ese voluntario para que la próxima vez sea automático
-            try{ await supabase.from('profiles').update({ linked_voluntario_id: selfId }).eq('id', profile.id); profile.linked_voluntario_id = selfId; }catch(e){}
-            renderSelf();
-          };
-        });
-      };
-      return;
+    async function loadProfile(){
+      if(!session) return;
+      currentUser = null;
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', session.user.id).maybeSingle();
+      if(error) console.warn('No se pudo cargar el perfil:', error.message);
+      currentUser = data || { id: session.user.id, email: session.user.email, role: 'voluntario' };
     }
 
-    const r = voluntarios.find(v=>v.id===selfId);
-    if(!r){
-      selfId = null;
-      root.innerHTML = `<div class="rv-empty-self">No se encontró ese registro. Búscalo de nuevo.</div>`;
-      return;
+    async function loadVolunteers(){
+      const { data, error } = await supabase.from('volunteers').select('*').order('created_at', { ascending:false });
+      if(error) throw error;
+      volunteers = data || [];
     }
-    const opts = centrosFor(r.distrito_id);
-    const myAreas = new Set(areasFor(r.id));
-    root.innerHTML = `
-      <button class="rv-btn" id="rv-self-back" style="margin-bottom:14px;">← Buscar otra persona</button>
-      <div class="rv-self-card">
-        <h3>${r.nombre}</h3>
-        <div class="rv-sub" style="margin-bottom:16px;">${r.distrito_id} · ${distritoName(r.distrito_id)} · ${r.categoria}</div>
-        <div class="rv-field">
-          <label>Tu estatus</label>
-          <select id="rv-s-estatus">${ESTATUS.map(s=>`<option value="${s.v}" ${r.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
-        </div>
-        <div class="rv-field">
-          <label>¿En qué centro(s) educativos de ${distritoName(r.distrito_id)} puedes apoyar?</label>
-          ${opts.length ? `<div class="rv-checks">${opts.map(c=>`<label class="rv-check"><input type="checkbox" value="${c.id}" ${myAreas.has(c.id)?'checked':''}> ${c.nombre}</label>`).join('')}</div>` : `<div class="rv-sub">Coordinación todavía no ha registrado los centros educativos de tu distrito. Vuelve a intentarlo más adelante.</div>`}
-        </div>
-        <div class="rv-field">
-          <label>Disponibilidad</label>
-          <select id="rv-s-disp"><option value="">Sin especificar</option>${DISPONIBILIDAD.map(d=>`<option value="${d}" ${r.disponibilidad===d?'selected':''}>${d}</option>`).join('')}</select>
-        </div>
-        <div class="rv-field">
-          <label>¿Algo más que quieras decirle al equipo de coordinación?</label>
-          <textarea id="rv-s-notas" rows="3" placeholder="Opcional">${r.notas||''}</textarea>
-        </div>
-        <button class="rv-btn primary" id="rv-s-save">Guardar mis datos</button>
-        <div class="rv-saved-msg" id="rv-s-msg"></div>
-      </div>
-    `;
-    document.getElementById('rv-self-back').onclick = () => { selfId = null; renderSelf(); };
-    document.getElementById('rv-s-save').onclick = async () => {
-      const btn = document.getElementById('rv-s-save');
-      const label = btn.textContent;
-      btn.disabled = true;
-      btn.textContent = 'Guardando…';
-      document.getElementById('rv-s-msg').textContent = '';
-      try{
-        const newEstatus = document.getElementById('rv-s-estatus').value;
-        const newDisp = document.getElementById('rv-s-disp').value;
-        const newNotas = document.getElementById('rv-s-notas').value;
-        const checked = Array.from(document.querySelectorAll('#rv-view-self .rv-checks input:checked')).map(i=>i.value);
 
-        await withErrors(() => supabase.from('voluntarios').update({
-          estatus: newEstatus, disponibilidad: newDisp || null, notas: newNotas || null
-        }).eq('id', r.id));
-
-        const toAdd = checked.filter(cid => !myAreas.has(cid));
-        const toRemove = [...myAreas].filter(cid => !checked.includes(cid));
-        if(toAdd.length) await withErrors(() => supabase.from('voluntario_centros').insert(toAdd.map(cid=>({voluntario_id:r.id, centro_id:cid}))));
-        for(const cid of toRemove) await withErrors(() => supabase.from('voluntario_centros').delete().eq('voluntario_id', r.id).eq('centro_id', cid));
-
-        document.getElementById('rv-s-msg').textContent = "✓ Guardado. Gracias por actualizar tus datos.";
-      }catch(e){}
-      btn.disabled = false;
-      btn.textContent = label;
-    };
-  }
-
-  // ============================================================
-  // USUARIOS (solo admin): asigna roles y vincula cuentas a voluntarios
-  // ============================================================
-  function renderUsuarios(){
-    const root = document.getElementById('rv-view-usuarios');
-    if(!root || !isAdmin()) return;
-    root.innerHTML = `
-      <div class="rv-banner">Gestiona quién puede coordinar (crear/editar voluntarios y centros) y vincula cuentas de acceso a registros de voluntarios existentes para su autoservicio.</div>
-      <table class="rv-table">
-        <thead><tr><th>Correo</th><th>Rol</th><th>Vinculado a voluntario</th><th></th></tr></thead>
-        <tbody>
-          ${profilesList.map(p=>`
-            <tr>
-              <td>${p.email || p.id}</td>
-              <td>${rolePill(p.role)}<select data-role-for="${p.id}" style="margin-left:8px;">
-                ${['voluntario','coordinador','admin'].map(r=>`<option value="${r}" ${p.role===r?'selected':''}>${r}</option>`).join('')}
-              </select></td>
-              <td>${p.linked_voluntario_id ? (voluntarios.find(v=>v.id===p.linked_voluntario_id)||{}).nombre || '—' : '<span class="rv-sub">Sin vincular</span>'}</td>
-              <td><button class="rv-btn small" data-unlink="${p.id}" ${p.linked_voluntario_id?'':'disabled'}>Desvincular</button></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-    root.querySelectorAll('[data-role-for]').forEach(sel=>{
-      sel.onchange = async () => {
-        const pid = sel.getAttribute('data-role-for');
-        const newRole = sel.value;
-        try{
-          await withErrors(() => supabase.from('profiles').update({ role: newRole }).eq('id', pid), 'Rol actualizado.');
-        }catch(e){}
-      };
-    });
-    root.querySelectorAll('[data-unlink]').forEach(btn=>{
-      btn.onclick = async () => {
-        const pid = btn.getAttribute('data-unlink');
-        try{
-          await withErrors(() => supabase.from('profiles').update({ linked_voluntario_id: null }).eq('id', pid), 'Vínculo removido.');
-        }catch(e){}
-      };
-    });
-  }
-
-  // ============================================================
-  // ARRANQUE
-  // ============================================================
-  async function bootAuthenticated(){
-    document.getElementById('rv-auth-mount').innerHTML = '';
-    document.body.classList.remove('rv-auth-active');
-    document.getElementById('rv-app-mount').innerHTML = `<div class="rv-loading">Cargando registro…</div>`;
-    try{
-      // 1) Buscar el UUID de la sesión en `profiles`. NUNCA se crea nada aquí.
-      profile = await loadProfile(session.user.id);
-      if(!profile){
-        // 2) El usuario existe en Supabase Auth pero aún no tiene fila en `profiles`.
-        //    No se inserta nada: se muestra la pantalla de "cuenta pendiente".
-        renderProfilePending();
+    async function loadDistricts(){
+      const { data, error } = await supabase.from('districts').select('*').order('name');
+      if(error){
+        console.warn('No se pudieron cargar los distritos:', error.message);
+        districts = [];
         return;
       }
-      await loadAllData();
-      renderShell();
-      rerenderCurrentTab();
-      subscribeRealtime();
-    }catch(e){
-      console.error(e);
-      renderAppError(e);
-    }
-  }
-
-  // Pantalla de error genérica de la aplicación (nunca pantalla en blanco).
-  function renderAppError(e){
-    realtimeChannels.forEach(ch => { try{ supabase.removeChannel(ch); }catch(_){} });
-    realtimeChannels = [];
-    document.getElementById('rv-app-mount').innerHTML = '';
-    document.body.classList.add('rv-auth-active');
-    document.getElementById('rv-auth-mount').innerHTML = `
-      <div class="rv-status-page">
-        <div class="rv-status-card">
-          <div class="rv-status-icon err">⚠️</div>
-          <h2>Algo salió mal</h2>
-          <p>Estamos teniendo problemas para cargar tu información. Puedes intentarlo de nuevo o cerrar sesión.</p>
-          <div class="rv-status-actions">
-            <button class="rv-btn primary" id="rv-error-retry">Reintentar</button>
-            <button class="rv-btn" id="rv-error-signout">Cerrar sesión</button>
-          </div>
-          <div class="rv-status-tech">Detalle técnico: ${friendlyError(e)}</div>
-        </div>
-      </div>
-    `;
-    document.getElementById('rv-error-retry').onclick = () => {
-      if(session) bootAuthenticated(); else renderAuth();
-    };
-    document.getElementById('rv-error-signout').onclick = signOut;
-  }
-
-  supabase.auth.onAuthStateChange((event, newSession) => {
-    session = newSession;
-    if(session){
-      bootAuthenticated();
-    } else {
-      realtimeChannels.forEach(ch => { try{ supabase.removeChannel(ch); }catch(_){} });
-      realtimeChannels = [];
-      profile = null; selfId = null; currentTab = 'admin';
-      authError = ''; authLoading = false; passVisible = false;
-      renderAuth();
-    }
-  });
-
-  function renderConfigNeeded(){
-    document.getElementById('rv-app-mount').innerHTML = '';
-    document.body.classList.add('rv-auth-active');
-    document.getElementById('rv-auth-mount').innerHTML = `
-      <div class="rv-status-page">
-        <div class="rv-status-card">
-          <div class="rv-status-icon err">⚙️</div>
-          <h2>Falta conectar tu proyecto de Supabase</h2>
-          <p>Este archivo todavía tiene los valores de ejemplo (SUPABASE_URL / SUPABASE_ANON_KEY). Ábrelo con un editor de texto, busca esas dos líneas cerca del inicio del &lt;script&gt; y reemplázalas con el Project URL y la anon key de tu proyecto (Project Settings → API en Supabase), luego guarda y vuelve a abrir esta página.</p>
-        </div>
-      </div>
-    `;
-  }
-
-  function renderStartupError(e){
-    document.getElementById('rv-app-mount').innerHTML = '';
-    document.body.classList.add('rv-auth-active');
-    document.getElementById('rv-auth-mount').innerHTML = `
-      <div class="rv-status-page">
-        <div class="rv-status-card">
-          <div class="rv-status-icon err">⚠️</div>
-          <h2>No se pudo cargar la aplicación</h2>
-          <p>Revisa que el Project URL y la anon key sean correctos, que tu proyecto de Supabase esté activo, y que tengas conexión a internet.</p>
-          <div class="rv-status-actions">
-            <button class="rv-btn primary" id="rv-startup-retry">Reintentar</button>
-          </div>
-          <div class="rv-status-tech">Detalle técnico: ${(e && e.message) || String(e)}</div>
-        </div>
-      </div>
-    `;
-    document.getElementById('rv-startup-retry').onclick = () => init();
-  }
-
-  // Red de seguridad: cualquier error no controlado se muestra de forma
-  // visible y profesional en vez de dejar una pantalla en blanco.
-  window.addEventListener('error', (ev) => {
-    console.error('Error no controlado:', ev.error || ev.message);
-  });
-  window.addEventListener('unhandledrejection', (ev) => {
-    console.error('Promesa rechazada sin controlar:', ev.reason);
-  });
-
-    function init(){
-    if(SUPABASE_URL.includes('TU-PROYECTO') || SUPABASE_ANON_KEY.includes('TU-ANON-KEY')){
-      renderConfigNeeded();
-      return;
+      districts = data || [];
     }
 
-    document.body.classList.add('rv-auth-active');
+    function roleLabel(role){
+      const map = { admin:'Administrador', coordinador:'Coordinador', voluntario:'Voluntario' };
+      return map[role] || role || 'Voluntario';
+    }
 
-    document.getElementById('rv-auth-mount').innerHTML =
-      `<div class="rv-status-page">
-        <div class="rv-loading">Cargando…</div>
+    function statusLabel(status){
+      const map = { activo:'Activo', pendiente:'Pendiente', inactivo:'Inactivo', nuevo:'Nuevo' };
+      return map[status] || status || 'Nuevo';
+    }
+
+    function statusClass(status){
+      return ({activo:'ok',pendiente:'wait',inactivo:'off',nuevo:'new'})[status] || 'new';
+    }
+
+    function canManage(){
+      return ['admin','coordinador'].includes(currentUser?.role);
+    }
+
+    function canAdmin(){ return currentUser?.role === 'admin'; }
+
+    function filteredVolunteers(){
+      const term = searchTerm.toLowerCase();
+      return volunteers.filter(v => {
+        const haystack = [v.name,v.full_name,v.email,v.phone,v.district,v.centro,v.role,v.status].join(' ').toLowerCase();
+        const matchesTerm = !term || haystack.includes(term);
+        const matchesStatus = statusFilter === 'all' || (v.status || 'nuevo') === statusFilter;
+        const matchesDistrict = districtFilter === 'all' || v.district === districtFilter;
+        const matchesRole = roleFilter === 'all' || (v.role || 'voluntario') === roleFilter;
+        return matchesTerm && matchesStatus && matchesDistrict && matchesRole;
+      });
+    }
+
+    function renderApp(){
+      document.body.classList.remove('rv-auth-active');
+      $('rv-auth-mount').innerHTML = `
+        <div id="rv-root">
+          <header class="rv-head">
+            <div class="rv-head-row">
+              <div>
+                <h1>Registro de Voluntarios · Regional 17 Monte Plata</h1>
+                <p>Gestión y coordinación de voluntarios</p>
+              </div>
+              <div class="rv-me">
+                <div>${esc(currentUser?.email || session?.user?.email || '')}</div>
+                <span class="role">${esc(roleLabel(currentUser?.role))}</span><br>
+                <button id="rv-signout">Cerrar sesión</button>
+              </div>
+            </div>
+            <div class="rv-tabs">
+              <button class="rv-tab ${activeTab==='volunteers'?'active':''}" data-tab="volunteers">Voluntarios</button>
+              <button class="rv-tab ${activeTab==='self'?'active':''}" data-tab="self">Mi registro</button>
+              <button class="rv-tab ${activeTab==='districts'?'active':''}" data-tab="districts">Distritos</button>
+            </div>
+          </header>
+          <main class="rv-body" id="rv-content"></main>
+        </div>`;
+
+      $('rv-signout').onclick = async () => { await supabase.auth.signOut(); };
+      document.querySelectorAll('.rv-tab').forEach(btn => btn.addEventListener('click', () => {
+        activeTab = btn.dataset.tab;
+        renderApp();
+      }));
+
+      if(activeTab === 'volunteers') renderVolunteersTab();
+      else if(activeTab === 'self') renderSelfTab();
+      else renderDistrictsTab();
+    }
+
+    function renderVolunteersTab(){
+      const rows = filteredVolunteers();
+      const counts = {
+        total: volunteers.length,
+        activo: volunteers.filter(v => v.status === 'activo').length,
+        pendiente: volunteers.filter(v => v.status === 'pendiente').length,
+        inactivo: volunteers.filter(v => v.status === 'inactivo').length,
+        nuevo: volunteers.filter(v => !v.status || v.status === 'nuevo').length
+      };
+      $('rv-content').innerHTML = `
+        <div class="rv-conn"><span class="dot"></span> Conectado a Supabase</div>
+        <div class="rv-stats">
+          <div class="rv-stat"><div class="n">${counts.total}</div><div class="l">Total</div></div>
+          <div class="rv-stat ok"><div class="n">${counts.activo}</div><div class="l">Activos</div></div>
+          <div class="rv-stat wait"><div class="n">${counts.pendiente}</div><div class="l">Pendientes</div></div>
+          <div class="rv-stat off"><div class="n">${counts.inactivo}</div><div class="l">Inactivos</div></div>
+          <div class="rv-stat new"><div class="n">${counts.nuevo}</div><div class="l">Nuevos</div></div>
+        </div>
+        <div class="rv-filters">
+          <input id="rv-search" type="text" placeholder="Buscar por nombre, correo, teléfono, distrito…" value="${esc(searchTerm)}">
+          <select id="rv-status-filter">
+            <option value="all">Todos los estados</option>
+            <option value="activo" ${statusFilter==='activo'?'selected':''}>Activo</option>
+            <option value="pendiente" ${statusFilter==='pendiente'?'selected':''}>Pendiente</option>
+            <option value="inactivo" ${statusFilter==='inactivo'?'selected':''}>Inactivo</option>
+            <option value="nuevo" ${statusFilter==='nuevo'?'selected':''}>Nuevo</option>
+          </select>
+          <select id="rv-district-filter"><option value="all">Todos los distritos</option>${districts.map(d=>`<option value="${esc(d.name)}" ${districtFilter===d.name?'selected':''}>${esc(d.name)}</option>`).join('')}</select>
+          <select id="rv-role-filter">
+            <option value="all">Todos los roles</option>
+            <option value="admin" ${roleFilter==='admin'?'selected':''}>Administrador</option>
+            <option value="coordinador" ${roleFilter==='coordinador'?'selected':''}>Coordinador</option>
+            <option value="voluntario" ${roleFilter==='voluntario'?'selected':''}>Voluntario</option>
+          </select>
+          ${canManage() ? '<button class="rv-btn primary" id="rv-add-vol">+ Agregar</button>' : ''}
+        </div>
+        <div style="overflow-x:auto">
+          <table class="rv-table">
+            <thead><tr><th>Voluntario</th><th>Contacto</th><th>Distrito</th><th>Áreas</th><th>Estado</th><th>Rol</th><th>Acciones</th></tr></thead>
+            <tbody>${rows.length ? rows.map(volunteerRow).join('') : '<tr><td colspan="7"><div class="rv-empty">No se encontraron voluntarios.</div></td></tr>'}</tbody>
+          </table>
+        </div>`;
+
+      $('rv-search').addEventListener('input', e => { searchTerm=e.target.value; renderVolunteersTab(); });
+      $('rv-status-filter').addEventListener('change', e => { statusFilter=e.target.value; renderVolunteersTab(); });
+      $('rv-district-filter').addEventListener('change', e => { districtFilter=e.target.value; renderVolunteersTab(); });
+      $('rv-role-filter').addEventListener('change', e => { roleFilter=e.target.value; renderVolunteersTab(); });
+      $('rv-add-vol')?.addEventListener('click', () => openVolunteerModal());
+      document.querySelectorAll('[data-edit-vol]').forEach(b => b.addEventListener('click', () => openVolunteerModal(b.dataset.editVol)));
+      document.querySelectorAll('[data-delete-vol]').forEach(b => b.addEventListener('click', () => deleteVolunteer(b.dataset.deleteVol)));
+    }
+
+    function volunteerRow(v){
+      const id = v.id;
+      const name = v.name || v.full_name || 'Sin nombre';
+      const areas = Array.isArray(v.areas) ? v.areas : (typeof v.areas === 'string' ? v.areas.split(',').map(x=>x.trim()).filter(Boolean) : []);
+      return `<tr>
+        <td><div class="rv-name">${esc(name)}</div><div class="rv-sub">${esc(v.cedula || '')}</div></td>
+        <td><div>${esc(v.email || '—')}</div><div class="rv-sub">${esc(v.phone || v.telefono || '—')}</div></td>
+        <td><div>${esc(v.district || '—')}</div><div class="rv-sub">${esc(v.centro || '—')}</div></td>
+        <td><div class="rv-areas-cell">${areas.length ? areas.map(a=>`<span class="rv-chip">${esc(a)}</span>`).join('') : '<span class="rv-sub">—</span>'}</div></td>
+        <td><span class="badge ${statusClass(v.status)}"><span class="dot"></span>${esc(statusLabel(v.status))}</span></td>
+        <td><span class="role-pill ${esc(v.role || 'voluntario')}">${esc(roleLabel(v.role || 'voluntario'))}</span></td>
+        <td>${canManage() ? `<button class="rv-btn small" data-edit-vol="${esc(id)}">Editar</button> ${canAdmin() ? `<button class="rv-btn small danger" data-delete-vol="${esc(id)}">Eliminar</button>` : ''}` : '<span class="rv-sub">Solo lectura</span>'}</td>
+      </tr>`;
+    }
+
+    function openVolunteerModal(id=null){
+      const v = id ? volunteers.find(x => String(x.id) === String(id)) : {};
+      const existingAreas = Array.isArray(v?.areas) ? v.areas : (typeof v?.areas === 'string' ? v.areas.split(',').map(x=>x.trim()).filter(Boolean) : []);
+      const overlay = document.createElement('div');
+      overlay.className='rv-overlay';
+      overlay.innerHTML=`<div class="rv-modal">
+        <h3>${id?'Editar voluntario':'Nuevo voluntario'}</h3><div class="rv-sub">Completa la información del registro.</div>
+        <form id="rv-vol-form">
+          <div class="rv-field"><label>Nombre completo</label><input name="name" type="text" required value="${esc(v?.name || v?.full_name || '')}"></div>
+          <div class="rv-field"><label>Correo</label><input name="email" type="email" value="${esc(v?.email || '')}"></div>
+          <div class="rv-field"><label>Teléfono</label><input name="phone" type="text" value="${esc(v?.phone || v?.telefono || '')}"></div>
+          <div class="rv-field"><label>Cédula</label><input name="cedula" type="text" value="${esc(v?.cedula || '')}"></div>
+          <div class="rv-field"><label>Distrito</label><select name="district"><option value="">Selecciona</option>${districts.map(d=>`<option value="${esc(d.name)}" ${v?.district===d.name?'selected':''}>${esc(d.name)}</option>`).join('')}</select></div>
+          <div class="rv-field"><label>Centro</label><input name="centro" type="text" value="${esc(v?.centro || '')}"></div>
+          <div class="rv-field"><label>Estado</label><select name="status"><option value="nuevo" ${(v?.status||'nuevo')==='nuevo'?'selected':''}>Nuevo</option><option value="activo" ${v?.status==='activo'?'selected':''}>Activo</option><option value="pendiente" ${v?.status==='pendiente'?'selected':''}>Pendiente</option><option value="inactivo" ${v?.status==='inactivo'?'selected':''}>Inactivo</option></select></div>
+          <div class="rv-field"><label>Rol</label><select name="role"><option value="voluntario" ${(v?.role||'voluntario')==='voluntario'?'selected':''}>Voluntario</option><option value="coordinador" ${v?.role==='coordinador'?'selected':''}>Coordinador</option>${canAdmin()?`<option value="admin" ${v?.role==='admin'?'selected':''}>Administrador</option>`:''}</select></div>
+          <div class="rv-field"><label>Áreas (separadas por coma)</label><input name="areas" type="text" value="${esc(existingAreas.join(', '))}"></div>
+          <div class="rv-modal-actions"><button type="button" class="rv-btn" id="rv-cancel">Cancelar</button><button type="submit" class="rv-btn primary">Guardar</button></div>
+        </form>
       </div>`;
+      document.body.appendChild(overlay);
+      overlay.querySelector('#rv-cancel').onclick=()=>overlay.remove();
+      overlay.querySelector('#rv-vol-form').onsubmit=async e=>{
+        e.preventDefault();
+        const fd=new FormData(e.currentTarget);
+        const payload={name:fd.get('name').trim(),email:fd.get('email').trim()||null,phone:fd.get('phone').trim()||null,cedula:fd.get('cedula').trim()||null,district:fd.get('district')||null,centro:fd.get('centro').trim()||null,status:fd.get('status'),role:fd.get('role'),areas:fd.get('areas').split(',').map(x=>x.trim()).filter(Boolean)};
+        try{
+          const result = id ? await supabase.from('volunteers').update(payload).eq('id',id) : await supabase.from('volunteers').insert(payload);
+          if(result.error) throw result.error;
+          overlay.remove(); await refreshData();
+        }catch(err){ alert(err.message || 'No se pudo guardar el voluntario.'); }
+      };
+    }
 
-    supabase.auth.getSession().then(({ data, error }) => {
-      if(error) throw error;
+    async function deleteVolunteer(id){
+      if(!confirm('¿Seguro que deseas eliminar este voluntario? Esta acción no se puede deshacer.')) return;
+      const { error } = await supabase.from('volunteers').delete().eq('id',id);
+      if(error){ alert(error.message || 'No se pudo eliminar.'); return; }
+      await refreshData();
+    }
 
-      session = data.session;
+    function renderSelfTab(){
+      const own = volunteers.find(v => v.user_id === session?.user?.id || v.email === session?.user?.email);
+      $('rv-content').innerHTML = `
+        <div class="rv-conn"><span class="dot"></span> Conectado a Supabase</div>
+        <div class="rv-self-search">
+          <div class="rv-sub" style="margin-bottom:6px">Busca tu registro por nombre o correo si todavía no está vinculado a tu cuenta.</div>
+          <input id="rv-self-search" class="rv-filters" style="width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px" placeholder="Buscar tu registro…">
+          <div id="rv-self-list" class="rv-self-list" style="display:none"></div>
+        </div>
+        <div id="rv-self-card">${own ? selfCard(own) : '<div class="rv-empty-self">No encontramos un registro vinculado a esta cuenta. Usa el buscador de arriba para localizarlo.</div>'}</div>`;
+      const input=$('rv-self-search'), list=$('rv-self-list');
+      input.addEventListener('input',()=>{
+        const q=input.value.toLowerCase().trim();
+        if(!q){list.style.display='none';return;}
+        const matches=volunteers.filter(v=>[v.name,v.full_name,v.email].join(' ').toLowerCase().includes(q)).slice(0,8);
+        list.innerHTML=matches.length?matches.map(v=>`<div class="rv-self-item" data-self-id="${esc(v.id)}"><strong>${esc(v.name||v.full_name||'Sin nombre')}</strong><div class="rv-sub">${esc(v.email||'')}</div></div>`).join(''):'<div class="rv-self-item">Sin resultados</div>';
+        list.style.display='block';
+        list.querySelectorAll('[data-self-id]').forEach(item=>item.onclick=()=>{ const selected=volunteers.find(v=>String(v.id)===item.dataset.selfId); $('rv-self-card').innerHTML=selfCard(selected); list.style.display='none'; });
+      });
+    }
 
+    function selfCard(v){
+      const areas=Array.isArray(v?.areas)?v.areas:(typeof v?.areas==='string'?v.areas.split(',').map(x=>x.trim()).filter(Boolean):[]);
+      return `<div class="rv-self-card"><h3>${esc(v?.name||v?.full_name||'Sin nombre')}</h3><div class="rv-sub">${esc(v?.email||'')}</div><div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px"><div><div class="rv-sub">Teléfono</div><strong>${esc(v?.phone||v?.telefono||'—')}</strong></div><div><div class="rv-sub">Distrito</div><strong>${esc(v?.district||'—')}</strong></div><div><div class="rv-sub">Centro</div><strong>${esc(v?.centro||'—')}</strong></div><div><div class="rv-sub">Estado</div><span class="badge ${statusClass(v?.status)}"><span class="dot"></span>${esc(statusLabel(v?.status))}</span></div></div><div style="margin-top:18px"><div class="rv-sub" style="margin-bottom:6px">Áreas</div><div class="rv-areas-cell">${areas.length?areas.map(a=>`<span class="rv-chip">${esc(a)}</span>`).join(''):'<span class="rv-sub">Sin áreas registradas</span>'}</div></div><div class="rv-saved-msg" id="rv-self-saved"></div>${canManage()?`<div style="margin-top:16px"><button class="rv-btn primary" onclick="window.__rvEditSelf('${esc(v?.id)}')">Editar registro</button></div>`:''}</div>`;
+    }
+
+    window.__rvEditSelf = (id) => openVolunteerModal(id);
+
+    function renderDistrictsTab(){
+      $('rv-content').innerHTML = `
+        <div class="rv-conn"><span class="dot"></span> Conectado a Supabase</div>
+        <div class="rv-district-grid">
+          ${districts.length ? districts.map(d=>districtCard(d)).join('') : '<div class="rv-empty">No hay distritos configurados.</div>'}
+        </div>`;
+      document.querySelectorAll('[data-add-centro]').forEach(form=>form.addEventListener('submit',async e=>{
+        e.preventDefault();
+        if(!canManage()) return;
+        const districtId=e.currentTarget.dataset.addCentro;
+        const input=e.currentTarget.querySelector('input');
+        const name=input.value.trim(); if(!name) return;
+        try{
+          const {error}=await supabase.from('centros').insert({district_id:districtId,name});
+          if(error) throw error;
+          input.value=''; await refreshData();
+        }catch(err){alert(err.message||'No se pudo agregar el centro.');}
+      }));
+    }
+
+    function districtCard(d){
+      const centros = Array.isArray(d.centros) ? d.centros : [];
+      return `<div class="rv-district-card"><h4>${esc(d.name)}</h4><div class="rv-sub">${esc(d.code||'')} · ${centros.length} centro(s)</div>${centros.length?centros.map(c=>`<div class="rv-centro-row"><span>${esc(c.name||c)}</span>${canAdmin()&&c.id?`<button class="rv-btn small danger" onclick="window.__rvDeleteCentro('${esc(c.id)}')">Eliminar</button>`:''}</div>`).join(''):'<div class="rv-sub">Sin centros registrados.</div>'}${canManage()?`<form class="rv-add-centro" data-add-centro="${esc(d.id)}"><input placeholder="Nuevo centro"><button class="rv-btn small" type="submit">Agregar</button></form>`:''}</div>`;
+    }
+
+    window.__rvDeleteCentro = async (id) => {
+      if(!confirm('¿Eliminar este centro?')) return;
+      const {error}=await supabase.from('centros').delete().eq('id',id);
+      if(error){alert(error.message||'No se pudo eliminar.');return;}
+      await refreshData();
+    };
+
+    async function refreshData(){
+      try{
+        await Promise.all([loadVolunteers(),loadDistricts()]);
+        renderApp();
+      }catch(error){
+        console.error(error);
+        $('rv-content') && ($('rv-content').innerHTML=`<div class="rv-banner">No se pudieron actualizar los datos: ${esc(error.message||error)}</div>`);
+      }
+    }
+
+    async function bootAuthenticated(){
+      await loadProfile();
+      try{
+        await Promise.all([loadVolunteers(),loadDistricts()]);
+      }catch(error){
+        console.error('Error cargando datos:',error);
+      }
+      renderApp();
+    }
+
+    supabase.auth.onAuthStateChange((_event, newSession) => {
+      session = newSession;
       if(session){
         bootAuthenticated();
       } else {
+        currentUser = null;
+        volunteers = [];
+        districts = [];
         renderAuth();
       }
-
-    }).catch(e => {
-      console.error(e);
-      renderStartupError(e);
     });
-  }
 
-  init();
+    window.addEventListener('error', (ev) => {
+      console.error('Error no controlado:', ev.error || ev.message);
+    });
+    window.addEventListener('unhandledrejection', (ev) => {
+      console.error('Promesa rechazada sin controlar:', ev.reason);
+    });
+
+    function init(){
+      if(SUPABASE_URL.includes('TU-PROYECTO') || SUPABASE_ANON_KEY.includes('TU-ANON-KEY')){
+        renderConfigNeeded();
+        return;
+      }
+
+      document.body.classList.add('rv-auth-active');
+
+      document.getElementById('rv-auth-mount').innerHTML =
+        `<div class="rv-status-page">
+          <div class="rv-loading">Cargando…</div>
+        </div>`;
+
+      supabase.auth.getSession().then(({ data, error }) => {
+        if(error) throw error;
+
+        session = data.session;
+
+        if(session){
+          bootAuthenticated();
+        } else {
+          renderAuth();
+        }
+
+      }).catch(e => {
+        console.error(e);
+        renderStartupError(e);
+      });
+    }
+
+    init();
+  })();
 })();
 </script>
 </body>

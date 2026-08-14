@@ -602,124 +602,259 @@ function renderShell(){
 }
 
 // ============================================================
-// PANEL DE COORDINACIÓN (admin/coordinador editan; voluntario ve)
+// PANEL DE COORDINACIÓN
 // ============================================================
 function renderAdmin(){
+  const root = document.getElementById('rv-view-admin');
+  if(!root) return;
 
-    root.innerHTML = `
-      <div class="rv-stats">
-        <div class="rv-stat ok"><div class="n">${counts['Activo']}</div><div class="l">Activos</div></div>
-        <div class="rv-stat wait"><div class="n">${counts['En espera']}</div><div class="l">En espera</div></div>
-        <div class="rv-stat off"><div class="n">${counts['Inactivo']}</div><div class="l">Inactivos</div></div>
-        <div class="rv-stat new"><div class="n">${counts['Sin contactar']}</div><div class="l">Sin contactar</div></div>
+  const counts = {
+    Activo: 0,
+    'En espera': 0,
+    Inactivo: 0,
+    'Sin contactar': 0
+  };
+
+  voluntarios.forEach(r => {
+    counts[r.estatus] = (counts[r.estatus] || 0) + 1;
+  });
+
+  const rows = voluntarios.filter(r => {
+    if(
+      filters.q &&
+      !r.nombre.toLowerCase().includes(filters.q.toLowerCase())
+    ) return false;
+
+    if(
+      filters.distrito &&
+      r.distrito_id !== filters.distrito
+    ) return false;
+
+    if(
+      filters.categoria &&
+      r.categoria !== filters.categoria
+    ) return false;
+
+    if(
+      filters.estatus &&
+      r.estatus !== filters.estatus
+    ) return false;
+
+    return true;
+  });
+
+  root.innerHTML = `
+    <div class="rv-stats">
+      <div class="rv-stat ok">
+        <div class="n">${counts['Activo']}</div>
+        <div class="l">Activos</div>
       </div>
-      <div class="rv-filters">
-        <input type="text" id="rv-search" placeholder="Buscar por nombre..." value="${filters.q}">
-        <select id="rv-f-distrito"><option value="">Todos los distritos</option>${distritos.map(d=>`<option value="${d.id}" ${filters.distrito===d.id?'selected':''}>${d.id} · ${d.nombre}</option>`).join('')}</select>
-        <select id="rv-f-categoria"><option value="">Toda categoría</option>${['Regional','Distrital','Nacional'].map(c=>`<option ${filters.categoria===c?'selected':''}>${c}</option>`).join('')}</select>
-        <select id="rv-f-estatus"><option value="">Todo estatus</option>${ESTATUS.map(s=>`<option ${filters.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
+
+      <div class="rv-stat wait">
+        <div class="n">${counts['En espera']}</div>
+        <div class="l">En espera</div>
       </div>
-      ${rows.length ? `
-      <table class="rv-table">
-        <thead><tr><th>Voluntario</th><th>Distrito</th><th>Categoría</th><th>Estatus</th><th>Centros que cubre</th><th>Disponibilidad</th><th>Actualizado</th><th></th></tr></thead>
-        <tbody>
-          ${rows.map(r=>{
-            const areas = areasFor(r.id);
-            return `
+
+      <div class="rv-stat off">
+        <div class="n">${counts['Inactivo']}</div>
+        <div class="l">Inactivos</div>
+      </div>
+
+      <div class="rv-stat new">
+        <div class="n">${counts['Sin contactar']}</div>
+        <div class="l">Sin contactar</div>
+      </div>
+    </div>
+
+    <div class="rv-filters">
+      <input
+        type="text"
+        id="rv-search"
+        placeholder="Buscar por nombre..."
+        value="${filters.q || ''}"
+      >
+
+      <select id="rv-f-distrito">
+        <option value="">Todos los distritos</option>
+        ${distritos.map(d => `
+          <option
+            value="${d.id}"
+            ${filters.distrito === d.id ? 'selected' : ''}
+          >
+            ${d.id} · ${d.nombre}
+          </option>
+        `).join('')}
+      </select>
+
+      <select id="rv-f-categoria">
+        <option value="">Toda categoría</option>
+        ${['Regional','Distrital','Nacional'].map(c => `
+          <option
+            value="${c}"
+            ${filters.categoria === c ? 'selected' : ''}
+          >
+            ${c}
+          </option>
+        `).join('')}
+      </select>
+
+      <select id="rv-f-estatus">
+        <option value="">Todo estatus</option>
+        ${ESTATUS.map(s => `
+          <option
+            value="${s.v}"
+            ${filters.estatus === s.v ? 'selected' : ''}
+          >
+            ${s.v}
+          </option>
+        `).join('')}
+      </select>
+    </div>
+
+    ${
+      rows.length
+      ? `
+        <table class="rv-table">
+          <thead>
             <tr>
-              <td><div class="rv-name">${r.nombre}</div></td>
-              <td>${r.distrito_id}<div class="rv-sub">${distritoName(r.distrito_id)}</div></td>
-              <td>${r.categoria}</td>
-              <td>${badge(r.estatus)}</td>
-              <td><div class="rv-areas-cell">${areas.length ? areas.map(cid=>`<span class="rv-chip">${centroNombre(cid)}</span>`).join('') : '<span class="rv-sub">—</span>'}</div></td>
-              <td>${r.disponibilidad || '<span class="rv-sub">—</span>'}</td>
-              <td class="rv-sub">${fmtDate(r.updated_at)}</td>
-              <td>${isPrivileged() ? `<button class="rv-btn" data-edit="${r.id}">Editar</button>` : ''}</td>
-            </tr>`;
-          }).join('')}
-        </tbody>
-      </table>` : `<div class="rv-empty">No hay voluntarios que coincidan con este filtro.</div>`}
-    `;
+              <th>Voluntario</th>
+              <th>Distrito</th>
+              <th>Categoría</th>
+              <th>Estatus</th>
+              <th>Centros que cubre</th>
+              <th>Disponibilidad</th>
+              <th>Actualizado</th>
+              <th></th>
+            </tr>
+          </thead>
 
-    document.getElementById('rv-search').oninput = e => { filters.q = e.target.value; renderAdmin(); };
-    document.getElementById('rv-f-distrito').onchange = e => { filters.distrito = e.target.value; renderAdmin(); };
-    document.getElementById('rv-f-categoria').onchange = e => { filters.categoria = e.target.value; renderAdmin(); };
-    document.getElementById('rv-f-estatus').onchange = e => { filters.estatus = e.target.value; renderAdmin(); };
-    root.querySelectorAll('[data-edit]').forEach(btn=>{
-      btn.onclick = () => openEditModal(btn.getAttribute('data-edit'));
-    });
-  }
+          <tbody>
+            ${rows.map(r => {
+              const areas = areasFor(r.id);
 
-  function openEditModal(id){
-    if(!isPrivileged()) return;
-    const r = voluntarios.find(v=>v.id===id);
-    if(!r) return;
-    const opts = centrosFor(r.distrito_id);
-    const myAreas = new Set(areasFor(r.id));
-    const mount = document.getElementById('rv-modal-mount');
-    mount.innerHTML = `
-      <div class="rv-overlay" id="rv-overlay">
-        <div class="rv-modal">
-          <h3>${r.nombre}</h3>
-          <div class="rv-sub">${r.distrito_id} · ${distritoName(r.distrito_id)} · ${r.categoria}</div>
-          <div class="rv-field">
-            <label>Estatus (lo define coordinación)</label>
-            <select id="rv-m-estatus">${ESTATUS.map(s=>`<option value="${s.v}" ${r.estatus===s.v?'selected':''}>${s.v}</option>`).join('')}</select>
-          </div>
-          <div class="rv-field">
-            <label>Centros educativos que puede cubrir (${distritoName(r.distrito_id)})</label>
-            ${opts.length ? `<div class="rv-checks">${opts.map(c=>`<label class="rv-check"><input type="checkbox" value="${c.id}" ${myAreas.has(c.id)?'checked':''}> ${c.nombre}</label>`).join('')}</div>` : `<div class="rv-sub">Aún no hay centros educativos para ${distritoName(r.distrito_id)}. Agrégalos en la pestaña "Centros educativos".</div>`}
-          </div>
-          <div class="rv-field">
-            <label>Disponibilidad</label>
-            <select id="rv-m-disp"><option value="">Sin especificar</option>${DISPONIBILIDAD.map(d=>`<option value="${d}" ${r.disponibilidad===d?'selected':''}>${d}</option>`).join('')}</select>
-          </div>
-          <div class="rv-field">
-            <label>Notas internas</label>
-            <textarea id="rv-m-notas" rows="3" placeholder="Observaciones del equipo de coordinación...">${r.notas||''}</textarea>
-          </div>
-          <div class="rv-modal-actions">
-            <button class="rv-btn" id="rv-m-cancel">Cancelar</button>
-            <button class="rv-btn primary" id="rv-m-save">Guardar cambios</button>
-          </div>
+              return `
+                <tr>
+                  <td>
+                    <div class="rv-name">
+                      ${r.nombre}
+                    </div>
+                  </td>
+
+                  <td>
+                    ${r.distrito_id}
+                    <div class="rv-sub">
+                      ${distritoName(r.distrito_id)}
+                    </div>
+                  </td>
+
+                  <td>
+                    ${r.categoria}
+                  </td>
+
+                  <td>
+                    ${badge(r.estatus)}
+                  </td>
+
+                  <td>
+                    <div class="rv-areas-cell">
+                      ${
+                        areas.length
+                        ? areas.map(cid => `
+                            <span class="rv-chip">
+                              ${centroNombre(cid)}
+                            </span>
+                          `).join('')
+                        : '<span class="rv-sub">—</span>'
+                      }
+                    </div>
+                  </td>
+
+                  <td>
+                    ${
+                      r.disponibilidad ||
+                      '<span class="rv-sub">—</span>'
+                    }
+                  </td>
+
+                  <td class="rv-sub">
+                    ${fmtDate(r.updated_at)}
+                  </td>
+
+                  <td>
+                    ${
+                      isPrivileged()
+                      ? `
+                        <button
+                          class="rv-btn"
+                          data-edit="${r.id}"
+                        >
+                          Editar
+                        </button>
+                      `
+                      : ''
+                    }
+                  </td>
+                </tr>
+              `;
+            }).join('')}
+          </tbody>
+        </table>
+      `
+      : `
+        <div class="rv-empty">
+          No hay voluntarios que coincidan con este filtro.
         </div>
-      </div>
-    `;
-    const close = () => { mount.innerHTML = ''; };
-    document.getElementById('rv-overlay').onclick = (e) => { if(e.target.id==='rv-overlay') close(); };
-    document.getElementById('rv-m-cancel').onclick = close;
-    document.getElementById('rv-m-save').onclick = async () => {
-      const saveBtn = document.getElementById('rv-m-save');
-      const saveBtnLabel = saveBtn.textContent;
-      saveBtn.disabled = true;
-      saveBtn.textContent = 'Guardando…';
-      try{
-        const newEstatus = document.getElementById('rv-m-estatus').value;
-        const newDisp = document.getElementById('rv-m-disp').value;
-        const newNotas = document.getElementById('rv-m-notas').value;
-        const checked = Array.from(mount.querySelectorAll('.rv-checks input:checked')).map(i=>i.value);
+      `
+    }
+  `;
 
-        await withErrors(() => supabase.from('voluntarios').update({
-          estatus: newEstatus, disponibilidad: newDisp || null, notas: newNotas || null
-        }).eq('id', r.id));
+  // ============================================================
+  // FILTROS
+  // ============================================================
 
-        const toAdd = checked.filter(cid => !myAreas.has(cid));
-        const toRemove = [...myAreas].filter(cid => !checked.includes(cid));
-        if(toAdd.length){
-          await withErrors(() => supabase.from('voluntario_centros').insert(toAdd.map(cid=>({voluntario_id:r.id, centro_id:cid}))));
-        }
-        for(const cid of toRemove){
-          await withErrors(() => supabase.from('voluntario_centros').delete().eq('voluntario_id', r.id).eq('centro_id', cid));
-        }
-        toast('Cambios guardados.', 'success');
-        close();
-      } catch(e){
-        saveBtn.disabled = false;
-        saveBtn.textContent = saveBtnLabel;
-      }
+  const search = document.getElementById('rv-search');
+  const distrito = document.getElementById('rv-f-distrito');
+  const categoria = document.getElementById('rv-f-categoria');
+  const estatus = document.getElementById('rv-f-estatus');
+
+  if(search){
+    search.oninput = e => {
+      filters.q = e.target.value;
+      renderAdmin();
     };
   }
 
+  if(distrito){
+    distrito.onchange = e => {
+      filters.distrito = e.target.value;
+      renderAdmin();
+    };
+  }
+
+  if(categoria){
+    categoria.onchange = e => {
+      filters.categoria = e.target.value;
+      renderAdmin();
+    };
+  }
+
+  if(estatus){
+    estatus.onchange = e => {
+      filters.estatus = e.target.value;
+      renderAdmin();
+    };
+  }
+
+  // ============================================================
+  // BOTONES EDITAR
+  // ============================================================
+
+  root.querySelectorAll('[data-edit]').forEach(btn => {
+    btn.onclick = () => {
+      openEditModal(btn.getAttribute('data-edit'));
+    };
+  });
+}
   // ============================================================
   // CENTROS EDUCATIVOS
   // ============================================================

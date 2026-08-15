@@ -1,0 +1,1 @@
+The visual redesign preview was reverted to the stable application base. Do not replace index.html with CSS-only content; index.html must remain a complete HTML document with the existing application markup, styles, and scripts.

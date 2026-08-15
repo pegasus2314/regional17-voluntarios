@@ -4,6 +4,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   load('stable-navigation.js');
   load('admin.js');
   load('management-overrides.js');
+  load('navigation-fix.js');
   document.addEventListener('input',e=>{
     const el=e.target;
     if(!(el instanceof HTMLInputElement)||!el.closest('.search'))return;

@@ -16,3 +16,6 @@
   }
   const old=window.addEventListener('load',wait);setTimeout(wait,500);
 })();
+
+// Carga la capa visual digital del mapa sin alterar la lógica de Leaflet/Supabase.
+(() => { if (!document.querySelector('script[data-rv-digital-map]')) { const s=document.createElement('script'); s.src='digital-map.js'; s.dataset.rvDigitalMap='1'; document.body.appendChild(s); } })();

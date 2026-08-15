@@ -16,3 +16,6 @@
   }
   const old=window.addEventListener('load',wait);setTimeout(wait,500);
 })();
+
+// Load the master-administration module once the main app has initialized.
+(()=>{const load=()=>{if(document.querySelector('script[data-r17-admin-loader]'))return;const s=document.createElement('script');s.src='admin.js?v=master-admin-1';s.dataset.r17AdminLoader='1';s.async=false;document.head.appendChild(s)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();})();

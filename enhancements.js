@@ -1,5 +1,10 @@
 (() => {
   'use strict';
+  // The existing application loads this enhancement layer after the core UI.
+  // Load optional modules here so Preview keeps the original index structure intact.
+  const loadModule=src=>{if(document.querySelector(`script[data-rv-module="${src}"]`))return;const s=document.createElement('script');s.src=src;s.dataset.rvModule=src;s.defer=true;document.head.appendChild(s)};
+  loadModule('digital-map.js');
+  loadModule('chat.js');
   const esc=v=>String(v??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]));
   let sb=null,session=null,profile=null,lastAnnouncementIds=new Set(),notificationOpen=false;
   if(window.supabase?.createClient){const original=window.supabase.createClient.bind(window.supabase);window.supabase.createClient=(...args)=>{const client=original(...args);sb=client;window.__RV_SB=client;return client}}

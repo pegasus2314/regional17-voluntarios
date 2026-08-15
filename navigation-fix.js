@@ -1,0 +1,3 @@
+(()=>{'use strict';
+function install(){const nav=document.querySelector('.sidebar nav');if(!nav)return;const items=[...nav.querySelectorAll('[data-rv-chat],[data-r17-chat-persistent]')];if(items.length>1)items.slice(1).forEach(x=>x.remove());const chat=items[0];if(chat){chat.style.display='flex';chat.dataset.r17Persistent='1'}}
+const observer=new MutationObserver(install);document.addEventListener('DOMContentLoaded',install);setTimeout(install,100);setTimeout(install,500);setTimeout(install,1200);observer.observe(document.documentElement,{childList:true,subtree:true});})();

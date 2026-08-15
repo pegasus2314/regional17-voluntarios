@@ -3,7 +3,30 @@ const css=document.createElement('style');css.textContent='[data-view="map"]{dis
 const cfg=window.RV_CONFIG||{};let sb=null;
 function client(){if(sb)return sb;if(!cfg.SUPABASE_URL||!cfg.SUPABASE_ANON_KEY||!window.supabase)return null;sb=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY);return sb}
 async function removeActivity(id,card){if(!id)return;const ok=window.confirm('¿Eliminar esta actividad?\n\nLa actividad se archivará y dejará de aparecer en la aplicación, conservando su información.');if(!ok)return;const s=client();if(!s){alert('No se pudo conectar con Supabase.');return}const {data:{user}}=await s.auth.getUser();if(!user){alert('Debes iniciar sesión.');return}const {error}=await s.from('actividades').update({is_active:false,deleted_at:new Date().toISOString(),deleted_by:user.id}).eq('id',id);if(error){console.error(error);alert(error.message||'No se pudo eliminar la actividad.');return}card?.remove();window.dispatchEvent(new CustomEvent('r17:activity-deleted',{detail:{id}}));}
-async function removeVolunteer(id,row){if(!id)return;const ok=window.confirm('¿Eliminar definitivamente este voluntario?\n\nSe eliminará el registro y sus participaciones relacionadas. Esta acción no se puede deshacer.');if(!ok)return;const s=client();if(!s){alert('No se pudo conectar con Supabase.');return}const {data:{user}}=await s.auth.getUser();if(!user){alert('Debes iniciar sesión.');return}const {error}=await s.from('voluntarios').delete().eq('id',id);if(error){console.error(error);alert(error.message||'No se pudo eliminar el voluntario.');return}row?.remove();window.dispatchEvent(new CustomEvent('r17:volunteer-deleted',{detail:{id}}));window.location.reload();}
+async function removeVolunteer(id,row){
+ if(!id)return;
+ const ok=window.confirm('¿Eliminar definitivamente este voluntario?\n\nSe eliminará el registro y sus participaciones relacionadas. Esta acción no se puede deshacer.');
+ if(!ok)return;
+ const s=client();
+ if(!s){alert('No se pudo conectar con Supabase.');return}
+ const {data:{user}}=await s.auth.getUser();
+ if(!user){alert('Debes iniciar sesión.');return}
+ try{
+   const {data:deleted,error}=await s.from('voluntarios').delete().eq('id',id).select('id');
+   if(error)throw error;
+   if(!deleted||deleted.length===0){
+     alert('No se eliminó ningún registro. Verifica que tu cuenta tenga permisos de administrador y que el voluntario exista.');
+     return;
+   }
+   row?.remove();
+   window.dispatchEvent(new CustomEvent('r17:volunteer-deleted',{detail:{id}}));
+   alert('Voluntario eliminado correctamente.');
+   window.location.reload();
+ }catch(error){
+   console.error('Error eliminando voluntario:',error);
+   alert(error?.message||'No se pudo eliminar el voluntario.');
+ }
+}
 function patch(){document.querySelectorAll('[data-view="map"]').forEach(el=>{el.style.display='none';el.onclick=e=>{e.preventDefault();e.stopImmediatePropagation();document.querySelector('[data-view="dashboard"]')?.click()}});document.querySelectorAll('[data-edit-a]').forEach(edit=>{const card=edit.closest('.activity-card');if(!card||card.querySelector('.activity-delete'))return;const id=edit.getAttribute('data-edit-a');const del=document.createElement('button');del.type='button';del.className='btn small activity-delete';del.textContent='Eliminar';del.addEventListener('click',()=>removeActivity(id,card));edit.parentElement.appendChild(del)});document.querySelectorAll('[data-del-v]').forEach(btn=>{if(btn.dataset.r17DeleteBound)return;btn.dataset.r17DeleteBound='1';btn.classList.add('volunteer-delete');btn.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();removeVolunteer(btn.getAttribute('data-del-v'),btn.closest('tr'))},true)});if(location.hash==='#map'){history.replaceState(null,'','#dashboard');document.querySelector('[data-view="dashboard"]')?.click()}}
 new MutationObserver(patch).observe(document.documentElement,{subtree:true,childList:true});document.addEventListener('DOMContentLoaded',patch);setTimeout(patch,300);setTimeout(patch,1000);setTimeout(patch,2500);
 })();

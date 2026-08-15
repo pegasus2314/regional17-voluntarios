@@ -6,19 +6,15 @@ La aplicación conserva el enfoque estático de `index.html`, pero separa la ló
 
 ## Configuración
 
-1. Copia `config.example.js` como `config.js`.
-2. Define `SUPABASE_URL` y la clave pública/anon del proyecto.
-3. No cometas una clave secreta.
-4. Ejecuta en Supabase, en este orden, el esquema existente `schema.sql` y las migraciones de `migrations/`.
-
-La configuración actual de `config.js` contiene marcadores de posición y por eso la app muestra una pantalla de configuración hasta que se complete.
+`config.js` ya está configurado contra el proyecto Supabase real `Regional17-Voluntarios` usando su URL pública y una clave publishable/publica. No contiene `service_role`.
 
 ## Migraciones nuevas
 
+Se aplicaron directamente al proyecto de producción, de forma aditiva:
 - `20260815_volunteers_platform.sql`: centros geolocalizables, eventos, actividades, participaciones, roles, vista de desempeño, índices, RLS y Realtime.
 - `20260815_compatibility_fields.sql`: cédula, correo y teléfono opcionales en voluntarios para mantener compatibilidad con el buscador/formularios.
 
-Las migraciones son aditivas y no borran datos existentes. La eliminación de voluntarios, centros y eventos desde la UI se implementa como archivado lógico (`estatus=Inactivo` o `is_active=false`) para conservar historial.
+Las migraciones son aditivas y no borran datos existentes. La eliminación de voluntarios, centros y eventos desde la UI se implementa como archivado lógico para conservar historial.
 
 ## Funcionalidades
 
@@ -38,6 +34,6 @@ Las migraciones son aditivas y no borran datos existentes. La eliminación de vo
 
 ## Validación
 
-En este entorno se inspeccionó el árbol y el código de GitHub y se realizaron comprobaciones estructurales de los cambios. No fue posible ejecutar una sesión real contra tu proyecto Supabase ni levantar un navegador conectado a Internet desde el entorno de trabajo, por lo que la prueba E2E de Login/Supabase/Realtime debe hacerse después de aplicar las migraciones y configurar `config.js`.
+El proyecto Supabase está activo y las tablas nuevas (`roles_actividad`, `eventos`, `actividades`, `participaciones`) existen después de aplicar las migraciones. Se ejecutó el asesor de rendimiento/seguridad. Quedan advertencias heredadas y algunas recomendaciones de índices/políticas; no se modificaron automáticamente las funciones SECURITY DEFINER existentes porque pueden formar parte de la arquitectura actual de autenticación.
 
-La CDN de Supabase utilizada es la variante v2 documentada oficialmente. Leaflet 1.9.4 se utiliza para el mapa y OpenStreetMap como fuente de teselas, con atribución visible.
+La validación E2E de navegador (login, clicks, responsive y consola) todavía requiere ejecutar el sitio desplegado en un navegador real.

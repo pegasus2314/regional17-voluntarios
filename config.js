@@ -64,6 +64,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   load('library.js');
   load('library-styles.js');
   load('library-role.js');
+  load('library-nav.js');
 
   document.addEventListener('input',e=>{
     const el=e.target;

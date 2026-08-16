@@ -62,6 +62,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   load('announcements-enhancements.js');
   load('calendar.js');
   load('library.js');
+  load('library-styles.js');
 
   document.addEventListener('input',e=>{
     const el=e.target;

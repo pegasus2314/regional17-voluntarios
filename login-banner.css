@@ -2,9 +2,8 @@
 .login{grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr);background:#f4f7fb}
 .login-brand{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:0!important;justify-content:initial;background:#071b35;border-radius:0!important}
 .login-brand::after{content:'';position:absolute;inset:0;z-index:0;background:rgba(7,27,53,.10);pointer-events:none}
-.login-brand>*{position:relative;z-index:2}
+/* El login solo debe mostrar la imagen regional. Oculta cualquier elemento antiguo, incluido el círculo/foto anterior. */
+.login-brand>*:not(.regional-login-background){display:none!important}
 .regional-login-background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;padding:0!important;margin:0!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;z-index:1!important;display:block!important;opacity:1!important;pointer-events:none!important}
-/* Ocultar el contenido textual del panel: la imagen ocupa todo el espacio */
-.login-brand .brand-mark,.login-brand h1,.login-brand p,.login-brand .login-points{display:none!important}
 .login-form{position:relative;z-index:2}
 @media(max-width:900px){.login{grid-template-columns:1fr}.login-brand{min-height:44vh;padding:0!important}.regional-login-background{padding:0!important}.login-form{width:min(500px,calc(100% - 32px));margin:20px auto 30px}}

@@ -22,3 +22,6 @@
 
 // Load the calendar and visual schedule module after the main application.
 (()=>{const load=()=>{if(document.querySelector('script[data-r17-calendar-loader]'))return;const s=document.createElement('script');s.src='calendar.js?v=1';s.dataset.r17CalendarLoader='1';s.async=false;document.head.appendChild(s)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();})();
+
+// Load the navigation stability patch after the calendar module.
+(()=>{const load=()=>{if(document.querySelector('script[data-r17-calendar-fix-loader]'))return;const s=document.createElement('script');s.src='calendar-fix.js?v=1';s.dataset.r17CalendarFixLoader='1';s.async=false;document.head.appendChild(s)};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',load,{once:true});else load();})();

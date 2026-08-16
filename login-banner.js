@@ -1,29 +1,52 @@
-/* Banner del login: usa la foto regional compartida como imagen real para evitar problemas de background CSS. */
+/* Banner del login: espera a que app.js cree el login y luego aplica la foto regional. */
 (() => {
   'use strict';
   const AVATAR_URL = 'https://ibsmrkwkmcjyekwllxic.supabase.co/storage/v1/object/public/profile-avatars/regional/avatar.jpg';
+  let timer = null;
+  let observer = null;
 
   function applyLoginBanner() {
     const brand = document.querySelector('.login-brand');
-    if (!brand) return;
+    if (!brand) return false;
 
     brand.classList.add('regional-login-banner');
     let image = brand.querySelector('.regional-login-background');
+
     if (!image) {
       image = document.createElement('img');
       image.className = 'regional-login-background';
       image.alt = 'Regional 17';
-      image.src = `${AVATAR_URL}?v=2`;
-      brand.prepend(image);
+      image.decoding = 'async';
+      image.loading = 'eager';
+      image.src = `${AVATAR_URL}?v=3`;
+      brand.insertBefore(image, brand.firstChild);
+    } else if (!image.src) {
+      image.src = `${AVATAR_URL}?v=3`;
     }
+
+    return true;
   }
 
-  const start = () => {
-    applyLoginBanner();
-    const root = document.getElementById('app') || document.body;
-    new MutationObserver(applyLoginBanner).observe(root, { childList: true, subtree: true });
-  };
+  function watchLogin() {
+    if (applyLoginBanner()) return;
+    clearTimeout(timer);
+    timer = setTimeout(watchLogin, 150);
+  }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
-  else start();
+  function start() {
+    watchLogin();
+    const root = document.getElementById('app') || document.body;
+    if (observer) observer.disconnect();
+    observer = new MutationObserver(() => {
+      if (!document.querySelector('.login-brand')) return;
+      applyLoginBanner();
+    });
+    observer.observe(root, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', start, { once: true });
+  } else {
+    start();
+  }
 })();

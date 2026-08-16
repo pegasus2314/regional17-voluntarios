@@ -23,7 +23,7 @@
     control = document.createElement('label');
     control.className = 'rv-dashboard-upload';
     control.title = 'Cambiar imagen de perfil';
-    control.style.cssText = 'position:absolute!important;right:12px!important;bottom:12px!important;width:48px!important;height:48px!important;border-radius:50%!important;background:#fff!important;border:3px solid rgba(7,27,53,.9)!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;z-index:10000!important;box-shadow:0 6px 18px rgba(0,0,0,.35)!important;font-size:23px!important;line-height:1!important;color:#071b35!important;box-sizing:border-box!important;';
+    control.style.cssText = 'position:absolute!important;right:8px!important;bottom:8px!important;width:64px!important;height:64px!important;border-radius:50%!important;background:#fff!important;border:4px solid rgba(7,27,53,.95)!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;z-index:10000!important;box-shadow:0 7px 22px rgba(0,0,0,.4)!important;font-size:32px!important;line-height:1!important;color:#071b35!important;box-sizing:border-box!important;';
     control.textContent = '📷';
 
     const input = document.createElement('input');

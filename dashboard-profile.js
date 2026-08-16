@@ -16,34 +16,50 @@
     return !!userId;
   }
 
+  function createUploadControl(orb) {
+    let control = orb.querySelector('.rv-dashboard-upload');
+    if (control) return;
+
+    orb.style.position = 'relative';
+
+    control = document.createElement('label');
+    control.className = 'rv-dashboard-upload';
+    control.setAttribute('title', 'Cambiar imagen de perfil');
+    control.setAttribute('aria-label', 'Cambiar imagen de perfil');
+    control.style.cssText = [
+      'position:absolute','right:8px','bottom:8px','width:42px','height:42px',
+      'border-radius:50%','background:rgba(15,23,42,.92)','border:3px solid #fff',
+      'display:flex','align-items:center','justify-content:center','cursor:pointer',
+      'z-index:9999','box-shadow:0 5px 16px rgba(0,0,0,.28)','font-size:20px',
+      'line-height:1','color:#fff','box-sizing:border-box'
+    ].join(';');
+    control.textContent = '📷';
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/png,image/jpeg,image/webp';
+    input.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;';
+    input.setAttribute('aria-label', 'Seleccionar imagen de perfil');
+    input.addEventListener('change', e => {
+      const file = e.target.files?.[0];
+      e.target.value = '';
+      if (file) upload(file);
+    });
+
+    control.appendChild(input);
+    orb.appendChild(control);
+  }
+
   function addControl() {
     const orb = document.querySelector('.hero-orb');
     if (!orb) return;
     orb.classList.add('dashboard-profile-orb');
     orb.dataset.profileControl = '1';
-
-    let input = orb.querySelector('.dashboard-avatar-input');
-    if (!input) {
-      input = document.createElement('input');
-      input.type = 'file';
-      input.accept = 'image/png,image/jpeg,image/webp';
-      input.className = 'dashboard-avatar-input';
-      input.setAttribute('aria-label', 'Cambiar imagen de perfil');
-      input.addEventListener('change', e => upload(e.target.files?.[0]));
-      orb.appendChild(input);
+    createUploadControl(orb);
+    if (orb.dataset.profileLoaded !== '1') {
+      orb.dataset.profileLoaded = '1';
+      loadImage(orb);
     }
-
-    let camera = orb.querySelector('.dashboard-avatar-camera');
-    if (!camera) {
-      camera = document.createElement('span');
-      camera.className = 'dashboard-avatar-camera';
-      camera.textContent = '📷';
-      camera.title = 'Cambiar imagen de perfil';
-      camera.setAttribute('aria-hidden', 'true');
-      orb.appendChild(camera);
-    }
-
-    loadImage(orb);
   }
 
   async function loadImage(orb) {
@@ -56,20 +72,8 @@
       if (!document.contains(orb)) return;
       orb.style.backgroundImage = `url("${url}")`;
       orb.classList.add('has-profile-image');
-      orb.querySelectorAll(':scope > .dashboard-avatar-input, :scope > .dashboard-avatar-camera').forEach(el => el.remove());
-      const input = document.createElement('input');
-      input.type = 'file'; input.accept = 'image/png,image/jpeg,image/webp';
-      input.className = 'dashboard-avatar-input';
-      input.setAttribute('aria-label', 'Cambiar imagen de perfil');
-      input.addEventListener('change', e => upload(e.target.files?.[0]));
-      const camera = document.createElement('span');
-      camera.className = 'dashboard-avatar-camera';
-      camera.textContent = '📷';
-      camera.title = 'Cambiar imagen de perfil';
-      camera.setAttribute('aria-hidden', 'true');
-      orb.append(input, camera);
+      createUploadControl(orb);
     };
-    img.onerror = () => {};
     img.src = url;
   }
 
@@ -102,7 +106,7 @@
             const publicUrl = client.storage.from(BUCKET).getPublicUrl(`${userId}/avatar.jpg`).data.publicUrl;
             orb.style.backgroundImage = `url("${publicUrl}?v=${Date.now()}")`;
             orb.classList.add('has-profile-image');
-            addControl();
+            createUploadControl(orb);
           }
         }, 'image/jpeg', .84);
       };
@@ -117,7 +121,7 @@
     if (observer) return;
     observer = new MutationObserver(() => {
       clearTimeout(timer);
-      timer = setTimeout(addControl, 30);
+      timer = setTimeout(addControl, 50);
     });
     observer.observe(document.getElementById('app') || document.body, { childList: true, subtree: true });
   }

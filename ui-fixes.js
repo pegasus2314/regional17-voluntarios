@@ -1,0 +1,1 @@
+/* Deprecated: visual overrides were removed. The application now uses the native styles in index.html. */

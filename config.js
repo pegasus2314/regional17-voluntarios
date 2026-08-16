@@ -14,6 +14,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   }
 
   window.__R17_CALENDAR_VIEW=false;
+  window.__R17_LIBRARY_VIEW=false;
   const htmlDescriptor=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');
   if(htmlDescriptor?.set && !window.__R17_INNERHTML_PATCHED){
     const nativeSet=htmlDescriptor.set;
@@ -22,8 +23,13 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
       enumerable:htmlDescriptor.enumerable,
       get:htmlDescriptor.get,
       set(value){
-        if(this.id==='app' && typeof value==='string' && value.includes('<nav>') && !value.includes('data-view="calendar"')){
-          value=value.replace('</nav>','<button data-view="calendar" class="nav-item"><span>🗓</span>Calendario</button></nav>');
+        if(this.id==='app' && typeof value==='string' && value.includes('<nav>')){
+          if(!value.includes('data-view="calendar"')){
+            value=value.replace('</nav>','<button data-view="calendar" class="nav-item"><span>🗓</span>Calendario</button></nav>');
+          }
+          if(!value.includes('data-view="library"')){
+            value=value.replace('</nav>','<button data-view="library" class="nav-item"><span>📚</span>Biblioteca</button></nav>');
+          }
         }
         nativeSet.call(this,value);
       }
@@ -37,6 +43,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
     e.preventDefault();
     e.stopImmediatePropagation();
     window.__R17_CALENDAR_VIEW=true;
+    window.__R17_LIBRARY_VIEW=false;
     document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el===button));
     const title=document.querySelector('.topbar h1');
     if(title)title.textContent='Calendario';
@@ -51,8 +58,40 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
     }
   },true);
 
+  document.addEventListener('click',async e=>{
+    const button=e.target.closest?.('[data-view="library"]');
+    if(!button)return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    window.__R17_LIBRARY_VIEW=true;
+    window.__R17_CALENDAR_VIEW=false;
+    document.querySelectorAll('[data-view]').forEach(el=>el.classList.toggle('active',el===button));
+    const title=document.querySelector('.topbar h1');
+    if(title)title.textContent='Biblioteca';
+    document.querySelector('.sidebar')?.classList.remove('open');
+    try{
+      if(window.R17Library?.open) await window.R17Library.open();
+      else {
+        let attempts=0;
+        while(!window.R17Library?.open && attempts<30){
+          await new Promise(r=>setTimeout(r,100));
+          attempts++;
+        }
+        if(!window.R17Library?.open)throw new Error('El módulo de biblioteca no está disponible');
+        await window.R17Library.open();
+      }
+    }catch(err){
+      console.error('R17 library navigation:',err);
+      const c=document.getElementById('content');
+      if(c)c.innerHTML='<div class="error-box"><strong>No se pudo abrir la biblioteca.</strong><p>El módulo de recursos todavía está cargando. Intenta de nuevo.</p></div>';
+    }
+  },true);
+
   document.addEventListener('click',e=>{
-    if(e.target.closest?.('[data-view]:not([data-view="calendar"])'))window.__R17_CALENDAR_VIEW=false;
+    if(e.target.closest?.('[data-view]:not([data-view="calendar"]):not([data-view="library"])')){
+      window.__R17_CALENDAR_VIEW=false;
+      window.__R17_LIBRARY_VIEW=false;
+    }
   },true);
 
   const load=s=>{const e=document.createElement('script');e.src=s;e.defer=true;document.head.appendChild(e)};

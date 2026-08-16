@@ -4,7 +4,6 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   load('stable-navigation.js');
   load('admin.js');
   load('management-overrides.js');
-  load('navigation-fix.js');
   load('announcements-enhancements.js');
   load('calendar.js');
   load('calendar-router.js');
@@ -16,7 +15,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
       if(document.activeElement===el)return;
       el.focus({preventScroll:true});
       const pos=Math.min(start??el.value.length,el.value.length);
-      el.setSelectionRange(pos,Math.min(end??pos,el.value.length));
+      el.setSelectionRange(pos,Math.min(end??pos,end??pos));
     },0);
   },true);
 })();

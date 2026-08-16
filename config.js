@@ -13,9 +13,6 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
     window.__R17_SUPABASE_FACTORY_PATCHED=true;
   }
 
-  // Calendar is a real application view, but app.js is legacy and keeps its view state private.
-  // Bridge that one legacy boundary deterministically: inject one nav item whenever the app shell
-  // is rendered, then intercept only the Calendar click before the legacy router handles it.
   window.__R17_CALENDAR_VIEW=false;
   const htmlDescriptor=Object.getOwnPropertyDescriptor(Element.prototype,'innerHTML');
   if(htmlDescriptor?.set && !window.__R17_INNERHTML_PATCHED){
@@ -64,6 +61,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   load('management-overrides.js');
   load('announcements-enhancements.js');
   load('calendar.js');
+  load('library.js');
 
   document.addEventListener('input',e=>{
     const el=e.target;

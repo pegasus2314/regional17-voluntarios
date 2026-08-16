@@ -21,10 +21,7 @@
 
   function userInfo() {
     const el = document.querySelector('.user-mini');
-    return {
-      name: el?.querySelector('strong')?.textContent || 'Usuario',
-      role: el?.querySelector('small')?.textContent || 'Voluntario'
-    };
+    return { name: el?.querySelector('strong')?.textContent || 'Usuario', role: el?.querySelector('small')?.textContent || 'Voluntario' };
   }
 
   async function getAvatarUrl() {
@@ -38,13 +35,28 @@
     const src = await getAvatarUrl();
     document.querySelectorAll('.user-mini .avatar').forEach(a => {
       if (src) {
-        a.innerHTML = `<img src="${src}?v=${Date.now()}" alt="Foto de perfil">`;
+        a.innerHTML = `<img src="${src}?v=${Date.now()}" alt="Foto de perfil"><span class="avatar-camera">📷</span>`;
         a.classList.add('has-photo');
       } else {
-        a.textContent = initials(userInfo().name);
+        a.innerHTML = `${initials(userInfo().name)}<span class="avatar-camera">📷</span>`;
         a.classList.remove('has-photo');
       }
     });
+  }
+
+  async function quickChangePhoto(file) {
+    await savePhoto(file);
+  }
+
+  function addCircleUpload(el) {
+    if (el.querySelector('.avatar-upload-input')) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/png,image/jpeg,image/webp';
+    input.className = 'avatar-upload-input';
+    input.setAttribute('aria-label', 'Cambiar foto de perfil');
+    input.addEventListener('change', e => quickChangePhoto(e.target.files?.[0]));
+    el.appendChild(input);
   }
 
   async function profile() {
@@ -61,10 +73,7 @@
           <div class="profile-avatar ${photo ? 'has-photo' : ''}" id="profileAvatar">
             ${photo ? `<img src="${photo}?v=${Date.now()}" alt="Foto de perfil">` : initials(user)}
           </div>
-          <label class="profile-photo-btn" title="Cambiar foto">
-            <input id="profilePhoto" type="file" accept="image/png,image/jpeg,image/webp">
-            📷 Cambiar foto
-          </label>
+          <label class="profile-photo-btn" title="Cambiar foto"><input id="profilePhoto" type="file" accept="image/png,image/jpeg,image/webp">📷 Cambiar foto</label>
         </div>
         <div class="profile-identity"><span>MI PERFIL</span><h2>${esc(user)}</h2><p>${esc(role)}</p></div>
       </div>
@@ -80,9 +89,7 @@
       </div>
     </div>`;
 
-    content.querySelectorAll('#profilePhoto,#profilePhoto2').forEach(input => {
-      input.addEventListener('change', e => savePhoto(e.target.files?.[0]));
-    });
+    content.querySelectorAll('#profilePhoto,#profilePhoto2').forEach(input => input.addEventListener('change', e => savePhoto(e.target.files?.[0])));
     content.querySelector('#removeProfilePhoto')?.addEventListener('click', removePhoto);
   }
 
@@ -96,24 +103,18 @@
     reader.onload = () => {
       const img = new Image();
       img.onload = () => {
-        const max = 500;
-        const scale = Math.min(1, max / Math.max(img.width, img.height));
+        const max = 500, scale = Math.min(1, max / Math.max(img.width, img.height));
         const canvas = document.createElement('canvas');
         canvas.width = Math.max(1, Math.round(img.width * scale));
         canvas.height = Math.max(1, Math.round(img.height * scale));
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(async blob => {
           if (!blob) return alert('No se pudo procesar la imagen.');
-          const { error } = await client.storage.from(BUCKET).upload(`${uid}/avatar.jpg`, blob, {
-            contentType: 'image/jpeg', upsert: true, cacheControl: '3600'
-          });
-          if (error) {
-            console.error('Profile avatar upload:', error);
-            return alert(`No se pudo guardar la foto: ${error.message || 'error de Storage'}`);
-          }
+          const { error } = await client.storage.from(BUCKET).upload(`${uid}/avatar.jpg`, blob, { contentType:'image/jpeg', upsert:true, cacheControl:'3600' });
+          if (error) { console.error('Profile avatar upload:', error); return alert(`No se pudo guardar la foto: ${error.message || 'error de Storage'}`); }
           await applyAvatar();
-          await profile();
-        }, 'image/jpeg', 0.82);
+          if (document.getElementById('profileAvatar')) await profile();
+        }, 'image/jpeg', .82);
       };
       img.onerror = () => alert('No se pudo leer la imagen.');
       img.src = reader.result;
@@ -135,17 +136,14 @@
     if (!el || bound) return;
     bound = true;
     el.style.cursor = 'pointer';
-    el.title = 'Abrir mi perfil';
-    el.addEventListener('click', profile);
+    el.title = 'Abrir mi perfil · toca la cámara para cambiar la foto';
+    el.addEventListener('click', e => { if (!e.target.closest('.avatar-upload-input')) profile(); });
+    const avatar = el.querySelector('.avatar');
+    if (avatar) addCircleUpload(avatar);
     await initClient();
     await applyAvatar();
   }
 
-  function start() {
-    bind();
-    if (!bound) setTimeout(start, 700);
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true });
-  else start();
+  function start() { bind(); if (!bound) setTimeout(start, 700); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true }); else start();
 })();

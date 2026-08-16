@@ -1,5 +1,5 @@
 /* Login: panel regional limpio, solo imagen + formulario */
-.login{grid-template-columns:minmax(0,1.25fr) minmax(360px,.75fr);background:#f4f7fb}
+.login{grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);background:#f4f7fb}
 .login-brand{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:0!important;justify-content:initial;background:#071b35;border-radius:0!important}
 .login-brand::after{content:'';position:absolute;inset:0;z-index:0;background:rgba(7,27,53,.10);pointer-events:none}
 /* El login solo debe mostrar la imagen regional. Oculta cualquier elemento antiguo, incluido el círculo/foto anterior. */

@@ -1,89 +1,16 @@
 /* Regional 17 — UI stability, persistent navigation, map removal and visual polish */
 (() => {
   'use strict';
-  const DESCRIPTIONS = {
-    'Dashboard':'Resumen de la gestión regional',
-    'Voluntarios':'Registro y seguimiento del equipo',
-    'Actividades':'Planifica y controla actividades',
-    'Centros educativos':'Centros de la Regional 17',
-    'Eventos':'Eventos y compromisos programados',
-    'Estadísticas':'Indicadores y desempeño',
-    'Biblioteca':'Recursos académicos y documentos',
-    'Calendario':'Eventos y planificación regional',
-    'Mi líder':'Información y coordinación'
-  };
-  const MAP_RE = /^mapa$/i;
-  const dynamic = new Map();
-  let fixing = false;
-
-  const removeMap = () => {
-    document.querySelectorAll('[data-view="map"], [data-r17-map], .nav-item').forEach(el => {
-      if (el.matches('[data-view="map"], [data-r17-map]') || MAP_RE.test(el.textContent.trim())) el.remove();
-    });
-  };
-
-  const decorateNav = () => {
-    const nav = document.querySelector('.sidebar nav');
-    if (!nav) return;
-    [...nav.querySelectorAll('.nav-item')].forEach(btn => {
-      const labelNode = [...btn.childNodes].find(n => n.nodeType === Node.TEXT_NODE && n.textContent.trim());
-      const label = (labelNode?.textContent || btn.textContent || '').trim();
-      if (!label || MAP_RE.test(label)) return;
-      const clean = label.replace(/\s+/g,' ').trim();
-      if (!dynamic.has(btn.dataset.view || clean)) dynamic.set(btn.dataset.view || clean, btn.outerHTML);
-      btn.classList.add('r17-nav-enhanced');
-      btn.title = DESCRIPTIONS[clean] || clean;
-      if (!btn.querySelector('.r17-nav-copy')) {
-        const icon = btn.querySelector('span');
-        const copy = document.createElement('span');
-        copy.className = 'r17-nav-copy';
-        copy.innerHTML = `<strong>${clean}</strong><small>${DESCRIPTIONS[clean] || 'Acceso al módulo'}</small>`;
-        if (labelNode) labelNode.remove();
-        btn.appendChild(copy);
-      }
-    });
-  };
-
-  const restoreModules = () => {
-    const nav = document.querySelector('.sidebar nav');
-    if (!nav) return;
-    // El calendario y la biblioteca son módulos externos: los hacemos persistentes
-    // sin permitir que el render principal los duplique.
-    const ensure = (key, icon, label, description, handler) => {
-      if (nav.querySelector(`[data-r17-module="${key}"]`)) return;
-      const b = document.createElement('button');
-      b.type='button'; b.className='nav-item r17-nav-enhanced'; b.dataset.r17Module=key;
-      b.innerHTML=`<span>${icon}</span><span class="r17-nav-copy"><strong>${label}</strong><small>${description}</small></span>`;
-      b.title=description; b.addEventListener('click',handler);
-      nav.appendChild(b);
-    };
-    if (window.R17Calendar?.open) ensure('calendar','📅','Calendario','Eventos y planificación regional',e=>{e.preventDefault();window.R17Calendar.open()});
-    if (window.R17Library?.open) ensure('library','📚','Biblioteca','Recursos académicos y documentos',e=>{e.preventDefault();window.R17Library.open()});
-  };
-
-  const polishActions = () => {
-    document.querySelectorAll('.btn, .icon-action, .side-action').forEach(b=>{
-      if (!b.getAttribute('aria-label') && !b.title) {
-        const text=b.textContent.trim(); if(text) b.setAttribute('aria-label',text);
-      }
-    });
-    document.querySelectorAll('#quickAdd').forEach(b=>{
-      const t=b.textContent.trim();
-      const map={Centro:'Añadir un centro educativo',Actividad:'Registrar una actividad',Evento:'Programar un evento',Voluntario:'Registrar un voluntario'};
-      const key=Object.keys(map).find(k=>t.includes(k));
-      if(key) b.title=map[key];
-    });
-  };
-
-  const fix = () => {
-    if (fixing) return;
-    fixing=true;
-    try { removeMap(); decorateNav(); restoreModules(); polishActions(); } finally { fixing=false; }
-  };
-
-  const boot = () => {
-    fix();
-    new MutationObserver(() => fix()).observe(document.body,{childList:true,subtree:true});
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
+  const DESCRIPTIONS = {'Dashboard':'Resumen de la gestión regional','Voluntarios':'Registro y seguimiento del equipo','Actividades':'Planifica y controla actividades','Centros educativos':'Centros de la Regional 17','Eventos':'Eventos y compromisos programados','Estadísticas':'Indicadores y desempeño','Biblioteca':'Recursos académicos y documentos','Calendario':'Eventos y planificación regional','Mi líder':'Información y coordinación'};
+  const MAP_RE=/^mapa$/i; let fixing=false;
+  const css=`.r17-nav-enhanced{min-height:52px!important;padding:8px 11px!important;gap:10px!important;align-items:center!important}.r17-nav-enhanced>span:first-child{width:25px;height:25px;display:grid;place-items:center;flex:none;font-size:15px}.r17-nav-copy{display:flex!important;flex-direction:column!important;gap:2px!important;min-width:0}.r17-nav-copy strong{font-size:11px!important;font-weight:700!important;line-height:1.15!important;color:inherit!important}.r17-nav-copy small{font-size:8px!important;font-weight:500!important;line-height:1.15!important;color:#8fa5bf!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}.nav-item:hover .r17-nav-copy small,.nav-item.active .r17-nav-copy small{color:#d7e4f2!important}.sidebar{box-shadow:10px 0 35px #06172a18!important}.sidebar nav{gap:4px!important}.nav-item{transition:background .18s ease,transform .18s ease!important}.nav-item:hover{transform:translateX(2px)}.topbar{box-shadow:0 2px 18px #06172a0b!important}.panel,.stat-card,.activity-card,.center-card,.event-card,.table-wrap{box-shadow:0 3px 18px #06172a08!important}.hero{box-shadow:0 12px 30px #071b3520!important}.btn{transition:transform .15s ease,box-shadow .15s ease!important}.btn:hover{transform:translateY(-1px);box-shadow:0 5px 14px #071b3514}.quick-add-label{display:flex;flex-direction:column;align-items:flex-start}.r17-help{font-size:8px;color:var(--muted);display:block;margin-top:2px}`;
+  const addStyles=()=>{if(document.getElementById('r17-polish-css'))return;const s=document.createElement('style');s.id='r17-polish-css';s.textContent=css;document.head.appendChild(s)};
+  const removeMap=()=>document.querySelectorAll('[data-view="map"],[data-r17-map]').forEach(x=>x.remove());
+  const decorateNav=()=>{const nav=document.querySelector('.sidebar nav');if(!nav)return;[...nav.querySelectorAll('.nav-item')].forEach(btn=>{if(btn.matches('[data-view="map"]'))return;let label='';const text=[...btn.childNodes].find(n=>n.nodeType===Node.TEXT_NODE&&n.textContent.trim());if(text)label=text.textContent.trim();else{const strong=btn.querySelector('.r17-nav-copy strong');label=strong?.textContent.trim()||''}if(!label)return;label=label.replace(/\s+/g,' ').trim();if(MAP_RE.test(label)){btn.remove();return}btn.classList.add('r17-nav-enhanced');btn.title=DESCRIPTIONS[label]||label;if(!btn.querySelector('.r17-nav-copy')){const icon=btn.querySelector('span');const copy=document.createElement('span');copy.className='r17-nav-copy';copy.innerHTML=`<strong>${label}</strong><small>${DESCRIPTIONS[label]||'Acceso al módulo'}</small>`;if(text)text.remove();btn.appendChild(copy);}})};
+  const ensureModule=(nav,key,selector,icon,label,description,handler)=>{if(nav.querySelector(selector)||nav.querySelector(`[data-r17-module="${key}"]`))return;const b=document.createElement('button');b.type='button';b.className='nav-item r17-nav-enhanced';b.dataset.r17Module=key;b.innerHTML=`<span>${icon}</span><span class="r17-nav-copy"><strong>${label}</strong><small>${description}</small></span>`;b.title=description;b.addEventListener('click',handler);nav.appendChild(b)};
+  const restoreModules=()=>{const nav=document.querySelector('.sidebar nav');if(!nav)return;if(window.R17Calendar?.open)ensureModule(nav,'calendar','[data-r17-calendar]','📅','Calendario','Eventos y planificación regional',e=>{e.preventDefault();window.R17Calendar.open()});if(window.R17Library?.open)ensureModule(nav,'library','[data-r17-tool="library"]','📚','Biblioteca','Recursos académicos y documentos',e=>{e.preventDefault();window.R17Library.open()})};
+  const polishActions=()=>{document.querySelectorAll('.btn,.icon-action,.side-action').forEach(b=>{if(!b.getAttribute('aria-label')&&!b.title&&b.textContent.trim())b.setAttribute('aria-label',b.textContent.trim())});document.querySelectorAll('#quickAdd').forEach(b=>{const t=b.textContent.trim(),map={Centro:'Añadir un centro educativo',Actividad:'Registrar una actividad',Evento:'Programar un evento',Voluntario:'Registrar un voluntario'};const k=Object.keys(map).find(x=>t.includes(x));if(k)b.title=map[k]})};
+  const fix=()=>{if(fixing)return;fixing=true;try{addStyles();removeMap();decorateNav();restoreModules();polishActions()}finally{fixing=false}};
+  const boot=()=>{fix();new MutationObserver(fix).observe(document.body,{childList:true,subtree:true})};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

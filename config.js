@@ -80,6 +80,14 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
         if(!window.R17Library?.open)throw new Error('El módulo de biblioteca no está disponible');
         await window.R17Library.open();
       }
+
+      // El botón de carga debe quedar visible y con una acción clara.
+      const addDocumentButton=document.getElementById('libraryUpload');
+      if(addDocumentButton){
+        addDocumentButton.textContent='＋ Añadir documento';
+        addDocumentButton.setAttribute('aria-label','Añadir documento a la Biblioteca');
+        addDocumentButton.title='Aquí puedes añadir un documento o recurso educativo';
+      }
     }catch(err){
       console.error('R17 library navigation:',err);
       const c=document.getElementById('content');

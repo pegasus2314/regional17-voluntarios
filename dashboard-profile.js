@@ -1,4 +1,4 @@
-/* Perfil del círculo principal del Dashboard */
+/* Perfil del logo R17 de la barra lateral */
 (() => {
   'use strict';
   const BUCKET = 'profile-avatars';
@@ -13,78 +13,101 @@
     return !!userId;
   }
 
-  function createUploadControl(orb) {
-    let control = orb.querySelector('.rv-dashboard-upload');
-    if (control) return;
-    orb.style.position = 'relative';
-    orb.style.overflow = 'hidden';
-    orb.style.isolation = 'isolate';
+  function ensureProfileLogo() {
+    const logo = document.querySelector('.brand-mark');
+    if (!logo) return;
 
-    control = document.createElement('label');
-    control.className = 'rv-dashboard-upload';
-    control.title = 'Cambiar imagen de perfil';
-    control.style.cssText = 'position:absolute!important;right:8px!important;bottom:8px!important;width:64px!important;height:64px!important;border-radius:50%!important;background:#fff!important;border:4px solid rgba(7,27,53,.95)!important;display:flex!important;align-items:center!important;justify-content:center!important;cursor:pointer!important;z-index:10000!important;box-shadow:0 7px 22px rgba(0,0,0,.4)!important;font-size:32px!important;line-height:1!important;color:#071b35!important;box-sizing:border-box!important;';
-    control.textContent = '📷';
+    logo.style.cssText += ';position:relative!important;width:76px!important;height:76px!important;min-width:76px!important;min-height:76px!important;border-radius:50%!important;overflow:hidden!important;display:grid!important;place-items:center!important;background:var(--gold)!important;color:#3c2b05!important;font-weight:900!important;font-size:20px!important;cursor:pointer!important;box-shadow:0 5px 18px rgba(0,0,0,.24)!important;';
+    logo.title = 'Cambiar imagen de perfil';
 
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/png,image/jpeg,image/webp';
-    input.style.cssText = 'position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;';
-    input.addEventListener('change', e => {
-      const file = e.target.files?.[0]; e.target.value = ''; if (file) upload(file);
-    });
-    control.appendChild(input);
-    orb.appendChild(control);
+    let input = logo.querySelector('.r17-profile-input');
+    if (!input) {
+      input = document.createElement('input');
+      input.className = 'r17-profile-input';
+      input.type = 'file';
+      input.accept = 'image/png,image/jpeg,image/webp';
+      input.style.cssText = 'position:absolute!important;inset:0!important;width:100%!important;height:100%!important;opacity:0!important;cursor:pointer!important;z-index:20!important;';
+      input.addEventListener('change', e => {
+        const file = e.target.files?.[0]; e.target.value = ''; if (file) upload(file);
+      });
+      logo.appendChild(input);
+    }
+
+    let camera = logo.querySelector('.r17-profile-camera');
+    if (!camera) {
+      camera = document.createElement('span');
+      camera.className = 'r17-profile-camera';
+      camera.textContent = '📷';
+      camera.style.cssText = 'position:absolute!important;right:3px!important;bottom:3px!important;width:30px!important;height:30px!important;border-radius:50%!important;background:#fff!important;border:2px solid #071b35!important;display:grid!important;place-items:center!important;font-size:15px!important;line-height:1!important;z-index:10!important;pointer-events:none!important;box-shadow:0 3px 10px rgba(0,0,0,.35)!important;';
+      logo.appendChild(camera);
+    }
+
+    if (logo.dataset.avatarLoaded !== '1') {
+      logo.dataset.avatarLoaded = '1';
+      loadAvatar(logo);
+    }
   }
 
-  function addControl() {
-    const orb = document.querySelector('.hero-orb');
-    if (!orb) return;
-    orb.classList.add('dashboard-profile-orb');
-    createUploadControl(orb);
-    if (orb.dataset.profileLoaded !== '1') { orb.dataset.profileLoaded = '1'; loadImage(orb); }
-  }
-
-  async function loadImage(orb) {
+  async function loadAvatar(logo) {
     if (!await init()) return;
-    const { data } = client.storage.from(BUCKET).getPublicUrl(`${userId}/avatar.jpg`);
-    if (!data?.publicUrl) return;
-    const url = `${data.publicUrl}?v=${Date.now()}`;
+    const publicUrl = client.storage.from(BUCKET).getPublicUrl(`${userId}/avatar.jpg`).data?.publicUrl;
+    if (!publicUrl) return;
     const img = new Image();
-    img.onload = () => { if (!document.contains(orb)) return; orb.style.backgroundImage = `url("${url}")`; orb.classList.add('has-profile-image'); createUploadControl(orb); };
-    img.src = url;
+    img.onload = () => {
+      if (!document.contains(logo)) return;
+      logo.style.backgroundImage = `url("${publicUrl}?v=${Date.now()}")`;
+      logo.style.backgroundSize = 'cover';
+      logo.style.backgroundPosition = 'center';
+      logo.style.backgroundRepeat = 'no-repeat';
+      logo.style.color = 'transparent';
+    };
+    img.src = publicUrl;
   }
 
   async function upload(file) {
-    if (!file) return;
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) return alert('Selecciona una imagen JPG, PNG o WEBP.');
     if (file.size > 4 * 1024 * 1024) return alert('La imagen debe pesar menos de 4 MB.');
     if (!await init()) return alert('No se encontró la sesión del usuario.');
+
     const reader = new FileReader();
     reader.onload = () => {
       const image = new Image();
       image.onload = () => {
         const max = 700, scale = Math.min(1, max / Math.max(image.width, image.height));
-        const canvas = document.createElement('canvas'); canvas.width = Math.max(1, Math.round(image.width * scale)); canvas.height = Math.max(1, Math.round(image.height * scale));
-        const ctx = canvas.getContext('2d'); if (!ctx) return alert('No se pudo procesar la imagen.');
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(image.width * scale));
+        canvas.height = Math.max(1, Math.round(image.height * scale));
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return alert('No se pudo procesar la imagen.');
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         canvas.toBlob(async blob => {
           if (!blob) return alert('No se pudo procesar la imagen.');
           const { error } = await client.storage.from(BUCKET).upload(`${userId}/avatar.jpg`, blob, { contentType:'image/jpeg', upsert:true, cacheControl:'3600' });
           if (error) return alert(`No se pudo guardar la foto: ${error.message || 'error de Storage'}`);
-          const orb = document.querySelector('.hero-orb');
-          if (orb) { const publicUrl = client.storage.from(BUCKET).getPublicUrl(`${userId}/avatar.jpg`).data.publicUrl; orb.style.backgroundImage = `url("${publicUrl}?v=${Date.now()}")`; orb.classList.add('has-profile-image'); createUploadControl(orb); }
-        }, 'image/jpeg', .84);
+          const logo = document.querySelector('.brand-mark');
+          if (logo) {
+            const publicUrl = client.storage.from(BUCKET).getPublicUrl(`${userId}/avatar.jpg`).data.publicUrl;
+            logo.style.backgroundImage = `url("${publicUrl}?v=${Date.now()}")`;
+            logo.style.backgroundSize = 'cover';
+            logo.style.backgroundPosition = 'center';
+            logo.style.color = 'transparent';
+            ensureProfileLogo();
+          }
+        }, 'image/jpeg', .86);
       };
-      image.onerror = () => alert('No se pudo leer la imagen.'); image.src = reader.result;
+      image.onerror = () => alert('No se pudo leer la imagen.');
+      image.src = reader.result;
     };
     reader.readAsDataURL(file);
   }
 
   function start() {
-    addControl(); if (observer) return;
-    observer = new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(addControl, 50); });
+    ensureProfileLogo();
+    if (observer) return;
+    observer = new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(ensureProfileLogo, 50); });
     observer.observe(document.getElementById('app') || document.body, { childList:true, subtree:true });
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true }); else start();
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once:true });
+  else start();
 })();

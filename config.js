@@ -3,6 +3,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   const load=s=>{const e=document.createElement('script');e.src=s;e.defer=true;document.head.appendChild(e)};
   load('stable-navigation.js');
   load('admin.js');
+  load('regional17-theme.js');
   document.addEventListener('input',e=>{
     const el=e.target;
     if(!(el instanceof HTMLInputElement)||!el.closest('.search'))return;

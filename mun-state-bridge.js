@@ -1,7 +1,7 @@
 /* Regional 17 · MUN · State bridge
-   Evita que el renderer antiguo de MUN sobrescriba el estado nuevo de localStorage.
-   Al seleccionar modelo/comisión, persiste la selección y recarga para que el renderer
-   vuelva a leer el estado actual. No modifica la estructura de datos existente.
+   Sincroniza la selección del modelo/comisión sin recargar la página.
+   El renderer de MUN conserva el control de navegación y renderiza la vista
+   inmediatamente, evitando la caída causada por window.location.reload().
 */
 (() => {
   'use strict';
@@ -16,30 +16,29 @@
   }
 
   function write(state) {
-    localStorage.setItem(KEY, JSON.stringify(state));
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (error) {
+      console.warn('[MUN] No se pudo persistir la selección:', error);
+    }
   }
 
+  // No cancelamos el click: mun-replace.js necesita recibirlo para renderizar.
   document.addEventListener('click', event => {
     const modelCard = event.target.closest?.('[data-model]');
     if (modelCard) {
       const state = read();
-      state.selectedModel = modelCard.dataset.model;
+      state.selectedModel = modelCard.dataset.model || null;
       state.selectedCommission = null;
       write(state);
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      window.location.reload();
       return;
     }
 
     const commissionCard = event.target.closest?.('[data-com]');
     if (commissionCard) {
       const state = read();
-      state.selectedCommission = commissionCard.dataset.com;
+      state.selectedCommission = commissionCard.dataset.com || null;
       write(state);
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      window.location.reload();
     }
   }, true);
 })();

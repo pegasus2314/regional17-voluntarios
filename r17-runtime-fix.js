@@ -1,10 +1,10 @@
 (() => {
   'use strict';
-  if (window.__R17_RUNTIME_FIX_V3__) return;
-  window.__R17_RUNTIME_FIX_V3__ = true;
+  if (window.__R17_RUNTIME_FIX_V4__) return;
+  window.__R17_RUNTIME_FIX_V4__ = true;
 
   const css = document.createElement('style');
-  css.id = 'r17-runtime-stability-v3';
+  css.id = 'r17-runtime-stability-v4';
   css.textContent = `
     *, *::before, *::after { animation: none !important; }
     html, body { scroll-behavior: auto !important; }
@@ -16,13 +16,11 @@
 
   let preservedChat = null;
   let chatWasOpen = false;
+  let appInitialized = false;
 
   function captureChat() {
     const chat = document.querySelector('.rv-chat');
-    if (chat) {
-      preservedChat = chat;
-      chatWasOpen = true;
-    }
+    if (chat) { preservedChat = chat; chatWasOpen = true; }
   }
 
   function restoreChat() {
@@ -43,18 +41,27 @@
       enumerable: desc.enumerable,
       get: desc.get,
       set(value) {
-        if (this.id === 'app') captureChat();
+        if (this.id === 'app') {
+          const isLayout = typeof value === 'string' && value.includes('class="shell"');
+          if (appInitialized && isLayout && chatWasOpen) {
+            captureChat();
+            desc.set.call(this, value);
+            queueMicrotask(restoreChat);
+            return;
+          }
+        }
         desc.set.call(this, value);
-        if (this.id === 'app') queueMicrotask(restoreChat);
+        if (this.id === 'app') {
+          appInitialized = true;
+          queueMicrotask(restoreChat);
+        }
       }
     });
   }
 
   new MutationObserver(() => {
-    if (chatWasOpen && preservedChat && !document.querySelector('.rv-chat')) {
-      queueMicrotask(restoreChat);
-    }
-  }).observe(document.documentElement, { childList: true, subtree: true });
+    if (chatWasOpen && preservedChat && !document.querySelector('.rv-chat')) queueMicrotask(restoreChat);
+  }).observe(document.documentElement, { childList:true, subtree:true });
 
   window.addEventListener('r17-chat-open', () => {
     chatWasOpen = true;

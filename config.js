@@ -18,4 +18,7 @@ window.RV_CONFIG={SUPABASE_URL:'https://ibsmrkwkmcjyekwllxic.supabase.co',SUPABA
   }
   function schedule(){if(queued)return;queued=true;queueMicrotask(()=>{queued=false;installCalendar()})}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>{installCalendar();new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true})},{once:true});else{installCalendar();new MutationObserver(schedule).observe(document.body,{childList:true,subtree:true})}
+  // Definitive MUN delegate persistence fix. Loaded from config so it is active
+  // after the page starts, including when the MUN panel is opened dynamically.
+  setTimeout(()=>{if(document.querySelector('script[data-r17-delegate-save-fix]'))return;const s=document.createElement('script');s.src='mun-delegate-save-fix.js?v=2';s.dataset.r17DelegateSaveFix='1';s.async=false;document.head.appendChild(s)},250);
 })();

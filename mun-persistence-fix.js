@@ -4,10 +4,8 @@
   const KEY='r17_mun_state_v2';
   const read=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{"models":[],"selectedModel":null,"selectedCommission":null}')}catch{return {models:[],selectedModel:null,selectedCommission:null}}};
   const write=s=>localStorage.setItem(KEY,JSON.stringify(s));
+  const refreshMUN=()=>{try{window.__r17RefreshMUN?.()}catch(e){console.warn('[MUN] refresh failed',e)}};
 
-  // The new visual MUN form used .r17-save, while the old persistence bridge only
-  // watched .vbtn.save. Capture the click before the visual form's own refresh()
-  // so the persisted state is followed by a full reload of mun-replace.js.
   document.addEventListener('click',event=>{
     const button=event.target.closest?.('#r17MunFormModal .r17-save');
     if(!button)return;
@@ -37,7 +35,8 @@
       state.selectedCommission=commission.id;
       write(state);
       event.preventDefault();event.stopImmediatePropagation();
-      window.location.reload();
+      form.remove();
+      refreshMUN();
       return;
     }
 
@@ -57,11 +56,12 @@
       state.selectedCommission=commission.id;
       write(state);
       event.preventDefault();event.stopImmediatePropagation();
-      window.location.reload();
+      form.remove();
+      refreshMUN();
+      return;
     }
   },true);
 
-  // Backward compatibility for the older visual form implementation.
   function replaceSaveButton(form){
     const save=form.querySelector('.vbtn.save');
     if(!save||save.dataset.persistenceFixed==='1')return;
@@ -75,7 +75,7 @@
         const name=form.querySelector('#vcn')?.value.trim();if(!name){form.querySelector('#vcn')?.focus();return;}
         if(!Array.isArray(model.commissions))model.commissions=[];
         const c={id:crypto.randomUUID(),name,delegations:[],type:form.querySelector('#vct')?.value||'Comisión ONU',capacity:Number(form.querySelector('#vcc')?.value)||20,topic:form.querySelector('#vctopic')?.value.trim()||'',description:form.querySelector('#vcdesc')?.value.trim()||''};
-        model.commissions.push(c);state.selectedModel=model.id;state.selectedCommission=c.id;write(state);window.location.reload();return;
+        model.commissions.push(c);state.selectedModel=model.id;state.selectedCommission=c.id;write(state);form.remove();refreshMUN();return;
       }
     });
   }

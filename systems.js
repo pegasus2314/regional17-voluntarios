@@ -5,8 +5,8 @@
 
   const SYSTEM = {
     icon: '▣',
-    title: 'Sistema de Evaluación Regional 17',
-    description: 'Gestiona evaluaciones, participantes, evaluadores y resultados desde la plataforma Regional 17.'
+    title: 'Sistema MUN Regional 17',
+    description: 'Gestiona modelos, comisiones, delegaciones, asistencia y hojas de trabajo desde la plataforma Regional 17.'
   };
 
   const STYLE_ID = 'rv-external-systems-style';
@@ -72,7 +72,7 @@
     const panel = document.createElement('section');
     panel.id = 'rv-dashboard-systems';
     panel.className = 'rv-systems-panel';
-    panel.innerHTML = `<div class="rv-systems-panel-head"><div><h3>▣ Sistemas PLERD</h3><p>Herramientas institucionales integradas a Regional 17.</p></div></div>
+    panel.innerHTML = `<div class="rv-systems-panel-head"><div><h3>▣ Sistema MUN Regional 17</h3><p>Herramientas para gestionar modelos, comisiones, delegaciones y asistencia.</p></div></div>
       <div class="rv-systems-grid"><button class="rv-system-card" type="button" data-rv-evaluation>
         <span class="rv-card-icon">${SYSTEM.icon}</span><span class="rv-card-copy"><strong>${SYSTEM.title}</strong><p>${SYSTEM.description}</p></span><span class="rv-arrow">→</span>
       </button></div>`;

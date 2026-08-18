@@ -1,0 +1,48 @@
+/* Regional 17 — keep login username/email text visible */
+#login input[type="email"],
+#login input[name="email"],
+#login input[name="username"],
+#login input[type="text"] {
+  color: #172033 !important;
+  -webkit-text-fill-color: #172033 !important;
+  caret-color: #172033 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+#login input[type="email"]::placeholder,
+#login input[name="email"]::placeholder,
+#login input[name="username"]::placeholder,
+#login input[type="text"]::placeholder {
+  color: #7b8798 !important;
+  -webkit-text-fill-color: #7b8798 !important;
+  opacity: 1 !important;
+}
+
+#login input[type="email"]:-webkit-autofill,
+#login input[type="email"]:-webkit-autofill:hover,
+#login input[type="email"]:-webkit-autofill:focus,
+#login input[name="email"]:-webkit-autofill,
+#login input[name="email"]:-webkit-autofill:hover,
+#login input[name="email"]:-webkit-autofill:focus,
+#login input[name="username"]:-webkit-autofill,
+#login input[name="username"]:-webkit-autofill:hover,
+#login input[name="username"]:-webkit-autofill:focus {
+  -webkit-text-fill-color: #172033 !important;
+  caret-color: #172033 !important;
+}
+
+[data-theme="dark"] #login input[type="email"],
+[data-theme="dark"] #login input[name="email"],
+[data-theme="dark"] #login input[name="username"],
+[data-theme="dark"] #login input[type="text"],
+body.dark #login input[type="email"],
+body.dark #login input[name="email"],
+body.dark #login input[name="username"],
+body.dark #login input[type="text"] {
+  color: #172033 !important;
+  -webkit-text-fill-color: #172033 !important;
+  caret-color: #172033 !important;
+  opacity: 1 !important;
+  background: #fff !important;
+}

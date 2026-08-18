@@ -1,0 +1,28 @@
+/* Regional 17 — Centros Educativos premium polish */
+#content .toolbar{gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}
+#content .toolbar .search{min-width:280px;flex:1}
+#content .toolbar select{min-height:44px;border-radius:12px;padding:0 14px;border:1px solid rgba(120,140,170,.22);background:var(--surface,#fff);color:inherit;box-shadow:0 4px 14px rgba(10,30,60,.05)}
+#content .table-wrap{border-radius:18px;overflow:hidden;border:1px solid rgba(120,140,170,.18);box-shadow:0 12px 34px rgba(10,30,60,.07);background:var(--surface,#fff)}
+#content table{border-collapse:separate;border-spacing:0;width:100%}
+#content table thead th{background:linear-gradient(180deg,rgba(12,42,78,.06),rgba(12,42,78,.025));font-size:12px;text-transform:uppercase;letter-spacing:.06em;padding:15px 16px;white-space:nowrap}
+#content table tbody td{padding:15px 16px;border-top:1px solid rgba(120,140,170,.12);vertical-align:middle}
+#content table tbody tr{transition:background .18s ease,transform .18s ease}
+#content table tbody tr:hover{background:rgba(37,99,235,.035)}
+#content table tbody td:first-child strong{font-size:14px;letter-spacing:-.01em}
+#content table tbody td:first-child small{display:block;margin-top:3px;opacity:.62}
+#content .pill{border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700}
+.overlay .modal{border-radius:22px;overflow:hidden;border:1px solid rgba(120,140,170,.2);box-shadow:0 28px 80px rgba(0,0,0,.22)}
+.overlay .modal-head{padding:20px 22px;background:linear-gradient(135deg,rgba(12,42,78,.08),rgba(37,99,235,.05))}
+.overlay .modal-body{padding:22px}
+.overlay .form-grid{gap:16px}
+.overlay field{display:block}
+.overlay field label{display:block;font-size:12px;font-weight:800;margin:0 0 7px;opacity:.72}
+.overlay input,.overlay select,.overlay textarea{width:100%;border-radius:12px;border:1px solid rgba(120,140,170,.25);padding:12px 13px;background:var(--surface,#fff);color:inherit;outline:none;transition:border-color .18s,box-shadow .18s}
+.overlay input:focus,.overlay select:focus,.overlay textarea:focus{border-color:#2563eb;box-shadow:0 0 0 4px rgba(37,99,235,.1)}
+.overlay textarea{min-height:100px;resize:vertical}
+@media(max-width:760px){#content .toolbar .search{min-width:100%}#content .toolbar select,#content .toolbar .btn{width:100%}#content .table-wrap{overflow-x:auto}#content table{min-width:760px}.overlay .modal{width:calc(100vw - 24px);max-height:90vh;overflow:auto}}
+.dark #content .table-wrap,.dark #content .toolbar select,.dark .overlay .modal,.dark .overlay input,.dark .overlay select,.dark .overlay textarea{background:#0d1b2d;border-color:rgba(148,163,184,.18);color:#e8eef7}
+.dark #content table thead th{background:rgba(255,255,255,.045)}
+.dark #content table tbody td{border-color:rgba(148,163,184,.12)}
+.dark #content table tbody tr:hover{background:rgba(96,165,250,.06)}
+.dark .overlay .modal-head{background:linear-gradient(135deg,rgba(96,165,250,.08),rgba(255,255,255,.025))}

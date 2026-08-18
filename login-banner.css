@@ -1,11 +1,13 @@
-/* Regional 17 · Login centrado + fondo/logo completo */
+/* Regional 17 · Login glassmorphism + fondo/logo completo */
 .login{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;min-height:100vh!important;width:100%!important;overflow:hidden!important;background:#071b35!important}
 .login-brand{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:100vh!important;padding:0!important;margin:0!important;background:#071b35!important;border-radius:0!important;overflow:hidden!important;display:block!important;z-index:0!important}
-.login-brand::after{content:'';position:absolute!important;inset:0!important;z-index:1!important;background:linear-gradient(180deg,rgba(7,27,53,.02),rgba(7,27,53,.14))!important;pointer-events:none!important}
+.login-brand::after{content:'';position:absolute!important;inset:0!important;z-index:1!important;background:linear-gradient(135deg,rgba(7,27,53,.08),rgba(7,27,53,.18))!important;pointer-events:none!important}
 .login-brand>*:not(.regional-login-background){display:none!important}
-/* El logo se conserva completo, sin recorte ni deformación. */
 .regional-login-background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center center!important;padding:0!important;margin:0!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;z-index:0!important;display:block!important;opacity:1!important;image-rendering:auto!important;pointer-events:none!important}
-/* Tarjeta limpia, centrada exactamente en la pantalla. */
-.login-form{position:relative!important;z-index:5!important;align-self:center!important;justify-self:center!important;display:flex!important;flex-direction:column!important;margin:0!important;width:min(440px,calc(100vw - 40px))!important;max-width:440px!important;box-sizing:border-box!important;padding:32px!important;border-radius:22px!important;background:rgba(255,255,255,.97)!important;box-shadow:0 24px 70px rgba(0,0,0,.28)!important;backdrop-filter:blur(10px)!important}
-.login-form h2{text-align:center!important}
-@media(max-width:900px){.login{min-height:100svh!important}.regional-login-background{object-fit:contain!important}.login-form{width:min(420px,calc(100vw - 28px))!important;padding:26px 22px!important}}
+/* Panel Glass: transparente para que el fondo se vea claramente. */
+.login-form{position:relative!important;z-index:5!important;align-self:center!important;justify-self:center!important;display:flex!important;flex-direction:column!important;margin:0!important;width:min(440px,calc(100vw - 40px))!important;max-width:440px!important;box-sizing:border-box!important;padding:34px!important;border:1px solid rgba(255,255,255,.42)!important;border-radius:24px!important;background:rgba(255,255,255,.18)!important;box-shadow:0 24px 70px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.38)!important;backdrop-filter:blur(14px) saturate(135%)!important;-webkit-backdrop-filter:blur(14px) saturate(135%)!important;color:#fff!important}
+.login-form h2,.login-form h3,.login-form label{color:#fff!important;text-shadow:0 1px 8px rgba(0,0,0,.22)!important}
+.login-form input,.login-form select{background:rgba(255,255,255,.20)!important;border:1px solid rgba(255,255,255,.38)!important;color:#fff!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.12)!important;backdrop-filter:blur(8px)!important;-webkit-backdrop-filter:blur(8px)!important}
+.login-form input::placeholder{color:rgba(255,255,255,.78)!important}
+.login-form button{box-shadow:0 10px 25px rgba(0,0,0,.18)!important}
+@media(max-width:900px){.login{min-height:100svh!important}.regional-login-background{object-fit:contain!important}.login-form{width:min(420px,calc(100vw - 28px))!important;padding:28px 22px!important;border-radius:20px!important;background:rgba(255,255,255,.20)!important;backdrop-filter:blur(12px) saturate(130%)!important;-webkit-backdrop-filter:blur(12px) saturate(130%)!important}}

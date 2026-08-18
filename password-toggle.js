@@ -10,15 +10,28 @@
     const style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = `
-      .rv-password-wrap { position: relative !important; width: 100% !important; }
-      .rv-password-wrap > input { width: 100% !important; padding-right: 48px !important; box-sizing: border-box !important; }
+      .rv-password-wrap { position: relative !important; width: 100% !important; display: block !important; }
+      .rv-password-wrap > input {
+        width: 100% !important;
+        padding-right: 52px !important;
+        box-sizing: border-box !important;
+        color: #172033 !important;
+        -webkit-text-fill-color: #172033 !important;
+        caret-color: #172033 !important;
+        opacity: 1 !important;
+      }
+      .rv-password-wrap > input::placeholder {
+        color: #7b8798 !important;
+        -webkit-text-fill-color: #7b8798 !important;
+        opacity: 1 !important;
+      }
       .rv-password-toggle {
         position: absolute !important;
-        right: 10px !important;
+        right: 8px !important;
         top: 50% !important;
         transform: translateY(-50%) !important;
-        width: 34px !important;
-        height: 34px !important;
+        width: 38px !important;
+        height: 38px !important;
         padding: 0 !important;
         margin: 0 !important;
         border: 0 !important;
@@ -36,18 +49,34 @@
       .rv-password-toggle:hover { background: rgba(100,116,139,.12) !important; color: #172033 !important; }
       .rv-password-toggle:focus-visible { outline: 2px solid #2563eb !important; outline-offset: 2px !important; }
       .rv-password-toggle svg { width: 20px !important; height: 20px !important; pointer-events: none !important; }
+
+      /* Dark mode: the input itself stays readable against the white login field. */
+      [data-theme="dark"] .rv-password-wrap > input,
+      .dark .rv-password-wrap > input,
+      body.dark .rv-password-wrap > input {
+        color: #172033 !important;
+        -webkit-text-fill-color: #172033 !important;
+        caret-color: #172033 !important;
+        background: #fff !important;
+      }
+      [data-theme="dark"] .rv-password-wrap > input::placeholder,
+      .dark .rv-password-wrap > input::placeholder,
+      body.dark .rv-password-wrap > input::placeholder {
+        color: #7b8798 !important;
+        -webkit-text-fill-color: #7b8798 !important;
+      }
       [data-theme="dark"] .rv-password-toggle,
       .dark .rv-password-toggle,
-      body.dark .rv-password-toggle { color: #cbd5e1 !important; }
+      body.dark .rv-password-toggle { color: #526070 !important; }
       [data-theme="dark"] .rv-password-toggle:hover,
       .dark .rv-password-toggle:hover,
-      body.dark .rv-password-toggle:hover { background: rgba(148,163,184,.16) !important; color: #fff !important; }
-      .rv-password-wrap > input[type="password"],
-      .rv-password-wrap > input[type="text"] { color: inherit !important; -webkit-text-fill-color: currentColor !important; opacity: 1 !important; }
+      body.dark .rv-password-toggle:hover { background: rgba(100,116,139,.12) !important; color: #172033 !important; }
+
       .rv-password-wrap > input:-webkit-autofill,
       .rv-password-wrap > input:-webkit-autofill:hover,
       .rv-password-wrap > input:-webkit-autofill:focus {
-        -webkit-text-fill-color: currentColor !important;
+        -webkit-text-fill-color: #172033 !important;
+        caret-color: #172033 !important;
         transition: background-color 9999s ease-out 0s !important;
       }
     `;

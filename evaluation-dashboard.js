@@ -38,14 +38,8 @@
   }
 
   function close() { document.getElementById(ID)?.remove(); }
-
-  function showInfo(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast info';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    setTimeout(() => toast.remove(), 2600);
-  }
+  function showInfo(message) { const toast=document.createElement('div');toast.className='toast info';toast.textContent=message;document.body.appendChild(toast);setTimeout(()=>toast.remove(),2600); }
+  function openBuilder(type){ close(); window.RV_EVALUATION_BUILDER?.open(type); }
 
   function open() {
     close();
@@ -56,25 +50,25 @@
     overlay.innerHTML = `
       <section class="rv-eval-window" role="dialog" aria-modal="true" aria-labelledby="rv-eval-title">
         <header class="rv-eval-head">
-          <div><div class="rv-eval-kicker">Sistemas PLERD · Regional 17</div><h2 id="rv-eval-title">Sistema de Evaluación Regional 17</h2><p>Plataforma para gestionar las evaluaciones de Modelos de Centro y Modelos Distritales.</p></div>
+          <div><div class="rv-eval-kicker">Sistema Regional 17</div><h2 id="rv-eval-title">Sistema de Evaluación Regional 17</h2><p>Plataforma para gestionar las evaluaciones de Modelos de Centro y Modelos Distritales.</p></div>
           <button class="rv-eval-close" type="button" aria-label="Cerrar">×</button>
         </header>
         <div class="rv-eval-body">
           <div class="rv-eval-stats">
             <div class="rv-eval-stat"><span>Evaluaciones activas</span><strong>—</strong></div>
-            <div class="rv-eval-stat"><span>Participantes</span><strong>—</strong></div>
+            <div class="rv-eval-stat"><span>Delegaciones</span><strong>—</strong></div>
             <div class="rv-eval-stat"><span>Evaluadores</span><strong>—</strong></div>
             <div class="rv-eval-stat"><span>Evaluaciones realizadas</span><strong>—</strong></div>
           </div>
           <div class="rv-eval-grid">
             <button class="rv-eval-module" type="button" data-module="evaluaciones"><span class="rv-eval-icon">▣</span><span><strong>Evaluaciones</strong><p>Crear, activar, cerrar y consultar procesos de evaluación.</p><em>Gestionar evaluaciones →</em></span></button>
             <button class="rv-eval-module" type="button" data-module="plantillas"><span class="rv-eval-icon">◫</span><span><strong>Plantillas y criterios</strong><p>Diseñar categorías, criterios y puntuaciones sin modificar el código.</p><em>Constructor dinámico →</em></span></button>
-            <button class="rv-eval-module" type="button" data-module="comisiones"><span class="rv-eval-icon">⌂</span><span><strong>Comisiones</strong><p>Organizar las comisiones de cada modelo y sus participantes.</p><em>Gestionar comisiones →</em></span></button>
-            <button class="rv-eval-module" type="button" data-module="participantes"><span class="rv-eval-icon">♙</span><span><strong>Participantes</strong><p>Consultar delegaciones, participantes y estado de evaluación.</p><em>Gestionar participantes →</em></span></button>
+            <button class="rv-eval-module" type="button" data-module="comisiones"><span class="rv-eval-icon">⌂</span><span><strong>Comisiones</strong><p>Organizar las comisiones de cada modelo y sus delegaciones.</p><em>Gestionar comisiones →</em></span></button>
+            <button class="rv-eval-module" type="button" data-module="participantes"><span class="rv-eval-icon">♙</span><span><strong>Delegaciones y representantes</strong><p>Gestionar países, representantes y estado de evaluación.</p><em>Gestionar delegaciones →</em></span></button>
             <button class="rv-eval-module" type="button" data-module="evaluadores"><span class="rv-eval-icon">✓</span><span><strong>Evaluadores</strong><p>Gestionar evaluadores y sus permisos dentro del sistema.</p><em>Gestionar evaluadores →</em></span></button>
-            <button class="rv-eval-module" type="button" data-module="asignaciones"><span class="rv-eval-icon">↔</span><span><strong>Asignaciones</strong><p>Asignar evaluadores a comisiones y participantes.</p><em>Gestionar asignaciones →</em></span></button>
+            <button class="rv-eval-module" type="button" data-module="asignaciones"><span class="rv-eval-icon">↔</span><span><strong>Asignaciones</strong><p>Asignar evaluadores a comisiones y delegaciones.</p><em>Gestionar asignaciones →</em></span></button>
             <button class="rv-eval-module" type="button" data-module="resultados"><span class="rv-eval-icon">↗</span><span><strong>Resultados y ranking</strong><p>Consolidar puntuaciones, promedios y posiciones finales.</p><em>Ver resultados →</em></span></button>
-            <button class="rv-eval-module" type="button" data-module="nueva"><span class="rv-eval-icon">+</span><span><strong>Nueva evaluación</strong><p>Crear una evaluación personalizada con sus propios criterios.</p><em>Crear evaluación →</em></span></button>
+            <button class="rv-eval-module" type="button" data-module="nueva"><span class="rv-eval-icon">+</span><span><strong>Nueva evaluación</strong><p>Crear una evaluación con sus comisiones, países y representantes.</p><em>Crear evaluación →</em></span></button>
           </div>
           <section class="rv-eval-types">
             <button class="rv-eval-type" type="button" data-type="centro"><strong>🏫 Modelo de Centro</strong><p>Evaluaciones para los modelos desarrollados dentro de los centros educativos.</p></button>
@@ -84,25 +78,19 @@
             <h3>Plantilla base · Evaluación Regional 17</h3>
             <p>La plantilla inicial tendrá una puntuación máxima de 100 puntos y podrá adaptarse a cada modelo.</p>
             <div class="rv-eval-criteria">
-              <div>Investigación y análisis crítico</div><b>30 pts</b>
-              <div>Comunicación y lenguaje</div><b>30 pts</b>
-              <div>Negociación y resolución de conflictos</div><b>20 pts</b>
-              <div>Liderazgo y colaboración</div><b>20 pts</b>
+              <div>Investigación y análisis crítico</div><b>30 pts</b><div>Comunicación y lenguaje</div><b>30 pts</b><div>Negociación y resolución de conflictos</div><b>20 pts</b><div>Liderazgo y colaboración</div><b>20 pts</b>
             </div>
           </section>
         </div>
       </section>`;
     document.body.appendChild(overlay);
-    overlay.querySelector('.rv-eval-close').onclick = close;
-    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-    overlay.querySelectorAll('[data-module]').forEach(btn => btn.addEventListener('click', () => {
-      showInfo(`${btn.querySelector('strong')?.textContent || 'Módulo'}: estamos preparando esta sección.`);
-    }));
-    overlay.querySelectorAll('[data-type]').forEach(btn => btn.addEventListener('click', () => {
-      showInfo(`${btn.dataset.type === 'centro' ? 'Modelo de Centro' : 'Modelo Distrital'}: preparado para configurar su evaluación.`);
-    }));
+    overlay.querySelector('.rv-eval-close').onclick=close;
+    overlay.addEventListener('click',e=>{if(e.target===overlay)close()});
+    overlay.querySelector('[data-module="nueva"]').onclick=()=>openBuilder();
+    overlay.querySelectorAll('[data-type]').forEach(btn=>btn.onclick=()=>openBuilder(btn.dataset.type==='centro'?'Modelo de Centro':'Modelo Distrital'));
+    overlay.querySelectorAll('[data-module]:not([data-module="nueva"])').forEach(btn=>btn.onclick=()=>showInfo(`${btn.querySelector('strong')?.textContent||'Módulo'}: esta sección se conectará en el siguiente bloque.`));
   }
 
-  window.addEventListener('rv-open-evaluation', open);
-  window.RV_EVALUATION_DASHBOARD = { open, close };
+  window.addEventListener('rv-open-evaluation',open);
+  window.RV_EVALUATION_DASHBOARD={open,close};
 })();

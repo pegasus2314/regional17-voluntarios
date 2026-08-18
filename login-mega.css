@@ -1,0 +1,21 @@
+/* Regional 17 — Login Mega UI */
+.login{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;background:#071b35!important}
+.login-brand::after{background:linear-gradient(115deg,rgba(4,16,34,.48),rgba(7,27,53,.18) 55%,rgba(4,16,34,.42))!important}
+.login-form{width:min(460px,calc(100vw - 32px))!important;padding:38px!important;border:1px solid rgba(255,255,255,.34)!important;border-radius:28px!important;background:rgba(8,25,47,.46)!important;box-shadow:0 30px 90px rgba(0,0,0,.38),inset 0 1px 0 rgba(255,255,255,.18)!important;backdrop-filter:blur(22px) saturate(145%)!important;-webkit-backdrop-filter:blur(22px) saturate(145%)!important}
+.login-form h2{font-size:clamp(28px,4vw,34px)!important;line-height:1.08!important;letter-spacing:-.035em!important;margin:0 0 8px!important}
+.login-form h2::after{content:"";display:block;width:48px;height:4px;border-radius:99px;background:#fff;margin-top:14px;opacity:.9}
+.login-form h3{font-size:14px!important;font-weight:500!important;opacity:.82!important;margin:0 0 24px!important}
+.login-form label{display:block!important;font-size:12px!important;font-weight:700!important;letter-spacing:.02em!important;margin:0 0 8px!important}
+.login-form input,.login-form select{min-height:52px!important;width:100%!important;box-sizing:border-box!important;border-radius:14px!important;padding:0 15px!important;background:rgba(255,255,255,.12)!important;border:1px solid rgba(255,255,255,.28)!important;color:#fff!important;outline:none!important;transition:border-color .18s ease,box-shadow .18s ease,background .18s ease,transform .18s ease!important}
+.login-form input:hover{background:rgba(255,255,255,.16)!important}
+.login-form input:focus,.login-form select:focus{border-color:rgba(255,255,255,.78)!important;background:rgba(255,255,255,.18)!important;box-shadow:0 0 0 4px rgba(255,255,255,.10),0 10px 28px rgba(0,0,0,.12)!important}
+.login-form input::placeholder{color:rgba(255,255,255,.62)!important}
+.login-form button[type="submit"]{width:100%!important;min-height:52px!important;border:0!important;border-radius:14px!important;font-weight:800!important;letter-spacing:.01em!important;background:#fff!important;color:#102844!important;box-shadow:0 14px 32px rgba(0,0,0,.22)!important;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease!important}
+.login-form button[type="submit"]:hover{transform:translateY(-2px)!important;box-shadow:0 18px 38px rgba(0,0,0,.28)!important;filter:brightness(.98)!important}
+.login-form button[type="submit"]:active{transform:translateY(0)!important}
+.login-form button:focus-visible,.login-form input:focus-visible,.login-form select:focus-visible{outline:3px solid rgba(255,255,255,.42)!important;outline-offset:2px!important}
+.login-form .password-toggle,.login-form [aria-label*="contraseña" i]{color:#fff!important}
+.login-form small{color:rgba(255,255,255,.72)!important}
+.login-form a{color:#fff!important;font-weight:700!important;text-underline-offset:3px!important}
+@media(max-width:600px){.login-form{padding:30px 20px!important;border-radius:22px!important}.login-form input,.login-form select,.login-form button[type="submit"]{min-height:50px!important}.login-form h2{font-size:27px!important}}
+@media(prefers-reduced-motion:reduce){.login-form input,.login-form button[type="submit"]{transition:none!important}.login-form button[type="submit"]:hover{transform:none!important}}

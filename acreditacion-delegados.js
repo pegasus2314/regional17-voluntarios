@@ -9,15 +9,20 @@
   const saveData=v=>localStorage.setItem(KEY,JSON.stringify(v));
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 
+  function findNav(){
+    return document.querySelector('.sidebar nav')||document.querySelector('.sidebar')||document.querySelector('nav');
+  }
   function addNavButton(){
-    const nav=document.querySelector('.sidebar nav');
-    if(!nav || nav.querySelector('[data-acreditacion]')) return;
+    const nav=findNav();
+    if(!nav || nav.querySelector('[data-acreditacion]')) return false;
     const b=document.createElement('button');
     b.className='nav-item';
     b.dataset.acreditacion='1';
-    b.innerHTML='<span>🪪</span>Acreditación';
+    b.type='button';
+    b.innerHTML='<span>🪪</span><span>Acreditación</span>';
     b.onclick=openPanel;
     nav.appendChild(b);
+    return true;
   }
 
   function openPanel(){
@@ -57,12 +62,7 @@
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
       ${field('Nombre completo','nombre',x.nombre,'text','required')}${field('Edad','edad',x.edad,'number')}${field('Centro educativo','centro',x.centro)}${field('Número de teléfono','telefono',x.telefono,'tel')}${field('Correo electrónico','correo',x.correo,'email')}${field('Cédula','cedula',x.cedula)}${field('Teléfono de familiar','familiar',x.familiar,'tel')}${field('País / Delegación','pais',x.pais)}${field('Comisión','comision',x.comision)}<label>Distrito<select id="f-distrito" class="input"><option value="">Seleccionar</option>${DISTRICTS.map(d=>`<option value="${esc(d)}" ${x.distrito===d?'selected':''}>${esc(d)}</option>`).join('')}</select></label>${field('Modelo','modelo',x.modelo)}<label>Estado<select id="f-estado" class="input"><option ${x.estado==='Pendiente'||!x.estado?'selected':''}>Pendiente</option><option ${x.estado==='Acreditado'?'selected':''}>Acreditado</option><option ${x.estado==='Observado'?'selected':''}>Observado</option></select></label></div>
       <div style="display:flex;gap:10px;margin-top:18px"><button class="btn primary" id="f-save">💾 Guardar acreditación</button><button class="btn" id="f-cancel">Cancelar</button></div></div>`;
-      document.getElementById('f-save').onclick=()=>{
-        const g=id=>document.getElementById(id)?.value.trim()||'';
-        const obj={id:x.id||crypto.randomUUID(),nombre:g('f-nombre'),edad:g('f-edad'),centro:g('f-centro'),telefono:g('f-telefono'),correo:g('f-correo'),cedula:g('f-cedula'),familiar:g('f-familiar'),pais:g('f-pais'),comision:g('f-comision'),distrito:g('f-distrito'),modelo:g('f-modelo'),estado:g('f-estado')||'Pendiente'};
-        if(!obj.nombre){alert('Escribe el nombre completo.');return}
-        const all=getData(),i=all.findIndex(v=>v.id===obj.id); if(i>=0)all[i]=obj;else all.push(obj); saveData(all); f.innerHTML=''; renderList();
-      };
+      document.getElementById('f-save').onclick=()=>{const g=id=>document.getElementById(id)?.value.trim()||'';const obj={id:x.id||crypto.randomUUID(),nombre:g('f-nombre'),edad:g('f-edad'),centro:g('f-centro'),telefono:g('f-telefono'),correo:g('f-correo'),cedula:g('f-cedula'),familiar:g('f-familiar'),pais:g('f-pais'),comision:g('f-comision'),distrito:g('f-distrito'),modelo:g('f-modelo'),estado:g('f-estado')||'Pendiente'};if(!obj.nombre){alert('Escribe el nombre completo.');return}const all=getData(),i=all.findIndex(v=>v.id===obj.id);if(i>=0)all[i]=obj;else all.push(obj);saveData(all);f.innerHTML='';renderList()};
       document.getElementById('f-cancel').onclick=()=>f.innerHTML='';
     }
     function field(label,key,value,type='text',req=''){return `<label>${label}<input id="f-${key}" class="input" type="${type}" value="${esc(value||'')}" ${req}></label>`}
@@ -70,7 +70,17 @@
 
   window.openAcreditacionDelegados=openPanel;
   window.renderAcreditacionDelegados=openPanel;
-  function boot(){addNavButton();}
+
+  function boot(){
+    addNavButton();
+    if(window.MutationObserver){
+      const observer=new MutationObserver(()=>addNavButton());
+      observer.observe(document.body,{childList:true,subtree:true});
+      setTimeout(()=>observer.disconnect(),15000);
+    }
+    setTimeout(addNavButton,500);
+    setTimeout(addNavButton,1500);
+    setTimeout(addNavButton,3000);
+  }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
-  setTimeout(addNavButton,1000); setTimeout(addNavButton,2500);
 })();

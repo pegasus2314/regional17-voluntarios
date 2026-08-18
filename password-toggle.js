@@ -4,6 +4,7 @@
 
   const STYLE_ID = 'rv-password-toggle-style';
   const BUTTON_ID = 'rv-password-toggle';
+  const INPUT_STYLE_MARK = 'data-rv-password-fixed';
 
   function installStyles() {
     if (document.getElementById(STYLE_ID)) return;
@@ -11,7 +12,7 @@
     style.id = STYLE_ID;
     style.textContent = `
       .rv-password-wrap { position: relative !important; width: 100% !important; display: block !important; }
-      .rv-password-wrap > input {
+      .rv-password-wrap input {
         width: 100% !important;
         padding-right: 52px !important;
         box-sizing: border-box !important;
@@ -19,11 +20,18 @@
         -webkit-text-fill-color: #172033 !important;
         caret-color: #172033 !important;
         opacity: 1 !important;
+        text-shadow: none !important;
       }
-      .rv-password-wrap > input::placeholder {
+      .rv-password-wrap input::placeholder {
         color: #7b8798 !important;
         -webkit-text-fill-color: #7b8798 !important;
         opacity: 1 !important;
+      }
+      .rv-password-wrap input:-webkit-autofill,
+      .rv-password-wrap input:-webkit-autofill:hover,
+      .rv-password-wrap input:-webkit-autofill:focus {
+        -webkit-text-fill-color: #172033 !important;
+        caret-color: #172033 !important;
       }
       .rv-password-toggle {
         position: absolute !important;
@@ -50,37 +58,36 @@
       .rv-password-toggle:focus-visible { outline: 2px solid #2563eb !important; outline-offset: 2px !important; }
       .rv-password-toggle svg { width: 20px !important; height: 20px !important; pointer-events: none !important; }
 
-      /* Dark mode: the input itself stays readable against the white login field. */
-      [data-theme="dark"] .rv-password-wrap > input,
-      .dark .rv-password-wrap > input,
-      body.dark .rv-password-wrap > input {
+      /* Keep login password text readable in both themes. */
+      [data-theme="dark"] .rv-password-wrap input,
+      .dark .rv-password-wrap input,
+      body.dark .rv-password-wrap input {
         color: #172033 !important;
         -webkit-text-fill-color: #172033 !important;
         caret-color: #172033 !important;
         background: #fff !important;
       }
-      [data-theme="dark"] .rv-password-wrap > input::placeholder,
-      .dark .rv-password-wrap > input::placeholder,
-      body.dark .rv-password-wrap > input::placeholder {
+      [data-theme="dark"] .rv-password-wrap input::placeholder,
+      .dark .rv-password-wrap input::placeholder,
+      body.dark .rv-password-wrap input::placeholder {
         color: #7b8798 !important;
         -webkit-text-fill-color: #7b8798 !important;
       }
       [data-theme="dark"] .rv-password-toggle,
       .dark .rv-password-toggle,
       body.dark .rv-password-toggle { color: #526070 !important; }
-      [data-theme="dark"] .rv-password-toggle:hover,
-      .dark .rv-password-toggle:hover,
-      body.dark .rv-password-toggle:hover { background: rgba(100,116,139,.12) !important; color: #172033 !important; }
-
-      .rv-password-wrap > input:-webkit-autofill,
-      .rv-password-wrap > input:-webkit-autofill:hover,
-      .rv-password-wrap > input:-webkit-autofill:focus {
-        -webkit-text-fill-color: #172033 !important;
-        caret-color: #172033 !important;
-        transition: background-color 9999s ease-out 0s !important;
-      }
     `;
     document.head.appendChild(style);
+  }
+
+  function forceInputStyles(input) {
+    if (!input) return;
+    input.setAttribute(INPUT_STYLE_MARK, '1');
+    input.style.setProperty('color', '#172033', 'important');
+    input.style.setProperty('-webkit-text-fill-color', '#172033', 'important');
+    input.style.setProperty('caret-color', '#172033', 'important');
+    input.style.setProperty('opacity', '1', 'important');
+    input.style.setProperty('text-shadow', 'none', 'important');
   }
 
   const eye = () => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>`;
@@ -88,9 +95,12 @@
 
   function setup() {
     const input = document.querySelector('#login input[name="password"]');
-    if (!input || document.getElementById(BUTTON_ID)) return;
+    if (!input) return;
 
     installStyles();
+    forceInputStyles(input);
+
+    if (document.getElementById(BUTTON_ID)) return;
 
     let wrapper = input.parentElement;
     if (!wrapper || wrapper.tagName.toLowerCase() === 'field') {
@@ -113,6 +123,7 @@
     button.addEventListener('click', () => {
       const showing = input.type === 'text';
       input.type = showing ? 'password' : 'text';
+      forceInputStyles(input);
       button.innerHTML = showing ? eye() : eyeOff();
       button.setAttribute('aria-label', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
       button.setAttribute('title', showing ? 'Mostrar contraseña' : 'Ocultar contraseña');
@@ -123,6 +134,7 @@
   }
 
   const observer = new MutationObserver(setup);
+
   function start() {
     installStyles();
     setup();

@@ -8,79 +8,24 @@
   const getData=()=>{try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch{return[]}};
   const saveData=v=>localStorage.setItem(KEY,JSON.stringify(v));
   const esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+  const css=`<style id="acreditacion-ui-css">
+  .ac-shell{max-width:1240px;margin:auto;padding:6px 0 30px}.ac-hero{padding:28px;border-radius:22px;background:linear-gradient(135deg,#0b2344,#123d68);color:#fff;box-shadow:0 14px 40px rgba(0,0,0,.16);position:relative;overflow:hidden}.ac-hero:after{content:'🪪';position:absolute;right:34px;top:20px;font-size:72px;opacity:.12}.ac-kicker{font-size:11px;font-weight:800;letter-spacing:.14em;opacity:.72}.ac-hero h1{margin:7px 0 5px;font-size:28px}.ac-hero p{margin:0;opacity:.78}.ac-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.ac-stat{padding:18px;border-radius:17px;background:var(--card,#fff);border:1px solid rgba(127,127,127,.16);box-shadow:0 5px 18px rgba(0,0,0,.05)}.ac-stat b{display:block;font-size:25px}.ac-stat span{font-size:12px;opacity:.65}.ac-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;padding:14px;border-radius:18px;background:var(--card,#fff);border:1px solid rgba(127,127,127,.15);margin-bottom:14px}.ac-toolbar .input{min-height:44px;border-radius:12px}.ac-search{flex:1;min-width:250px}.ac-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}.ac-card{padding:18px;border-radius:20px;background:var(--card,#fff);border:1px solid rgba(127,127,127,.15);box-shadow:0 7px 22px rgba(0,0,0,.05);transition:.18s}.ac-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.09)}.ac-card-top{display:flex;gap:12px;align-items:center}.ac-flag{width:54px;height:54px;border-radius:15px;display:grid;place-items:center;background:rgba(20,80,130,.10);font-size:31px;flex:none}.ac-name{font-weight:800;font-size:16px}.ac-country{font-size:13px;opacity:.65;margin-top:3px}.ac-meta{display:grid;gap:7px;margin:15px 0;font-size:13px}.ac-meta span{opacity:.72}.ac-actions{display:flex;justify-content:space-between;align-items:center;gap:8px}.ac-status{font-size:12px;font-weight:800;padding:6px 10px;border-radius:999px}.ac-ok{background:#dff6e8;color:#18733b}.ac-pending{background:#fff1c9;color:#8a5b00}.ac-observed{background:#ffe0e0;color:#a32828}.ac-empty{text-align:center;padding:45px 20px;border-radius:20px;background:var(--card,#fff);border:1px dashed rgba(127,127,127,.3);opacity:.7}.ac-form{margin-top:18px;padding:24px;border-radius:22px;background:var(--card,#fff);border:1px solid rgba(127,127,127,.15);box-shadow:0 8px 25px rgba(0,0,0,.06)}.ac-form h3{margin:0 0 18px;font-size:20px}.ac-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.ac-form label{display:grid;gap:6px;font-size:12px;font-weight:700}.ac-form .input{width:100%;min-height:44px;box-sizing:border-box;border-radius:11px}.ac-form .full{grid-column:1/-1}.ac-form-actions{display:flex;gap:10px;margin-top:20px}.ac-new{white-space:nowrap}.ac-section-title{display:flex;justify-content:space-between;align-items:center;margin:18px 0 10px}.ac-section-title h3{margin:0;font-size:15px}@media(max-width:700px){.ac-stats{grid-template-columns:repeat(2,1fr)}.ac-form-grid{grid-template-columns:1fr}.ac-hero{padding:22px}.ac-hero h1{font-size:23px}.ac-grid{grid-template-columns:1fr}}
+  </style>`;
 
-  function findNav(){
-    return document.querySelector('.sidebar nav')||document.querySelector('.sidebar')||document.querySelector('nav');
-  }
-  function addNavButton(){
-    const nav=findNav();
-    if(!nav || nav.querySelector('[data-acreditacion]')) return false;
-    const b=document.createElement('button');
-    b.className='nav-item';
-    b.dataset.acreditacion='1';
-    b.type='button';
-    b.innerHTML='<span>🪪</span><span>Acreditación</span>';
-    b.onclick=openPanel;
-    nav.appendChild(b);
-    return true;
-  }
-
+  function findNav(){return document.querySelector('.sidebar nav')||document.querySelector('.sidebar')||document.querySelector('nav')}
+  function addNavButton(){const nav=findNav();if(!nav||nav.querySelector('[data-acreditacion]'))return false;const b=document.createElement('button');b.className='nav-item';b.dataset.acreditacion='1';b.type='button';b.innerHTML='<span>🪪</span><span>Acreditación</span>';b.onclick=openPanel;nav.appendChild(b);return true}
+  function flag(pais){const map={'República Dominicana':'🇩🇴','Estados Unidos':'🇺🇸','China':'🇨🇳','Francia':'🇫🇷','Rusia':'🇷🇺','Reino Unido':'🇬🇧','Palestina':'🇵🇸'};return map[pais]||'🌎'}
   function openPanel(){
-    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));
-    const b=document.querySelector('[data-acreditacion]'); if(b)b.classList.add('active');
-    const root=document.getElementById('content')||document.getElementById('rv-view')||document.getElementById('app');
-    if(!root)return;
-    root.innerHTML=`<section class="card" style="padding:24px;max-width:1200px;margin:auto">
-      <div style="display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap">
-        <div><div style="font-size:12px;opacity:.6;font-weight:700">MUN REGIONAL 17</div><h2 style="margin:4px 0">🪪 Acreditación de Delegados</h2><p style="margin:6px 0;opacity:.7">Registro independiente de participantes.</p></div>
-        <button class="btn primary" id="ac-new">＋ Nuevo delegado</button>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin:18px 0">
-        <input id="ac-search" class="input" placeholder="Buscar nombre, cédula, país, comisión o centro..." style="flex:1;min-width:240px">
-        <select id="ac-district" class="input"><option value="">Todos los distritos</option>${DISTRICTS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}</select>
-        <select id="ac-status" class="input"><option value="">Todos los estados</option><option>Acreditado</option><option>Pendiente</option><option>Observado</option></select>
-      </div>
-      <div id="ac-list"></div><div id="ac-form"></div>
-    </section>`;
-    renderList();
-    document.getElementById('ac-new').onclick=()=>showForm({});
-    document.getElementById('ac-search').oninput=renderList;
-    document.getElementById('ac-district').onchange=renderList;
-    document.getElementById('ac-status').onchange=renderList;
-
-    function renderList(){
-      const q=(document.getElementById('ac-search').value||'').toLowerCase();
-      const d=document.getElementById('ac-district').value, s=document.getElementById('ac-status').value;
-      const rows=getData().filter(x=>(!q||[x.nombre,x.cedula,x.pais,x.comision,x.centro,x.modelo].join(' ').toLowerCase().includes(q))&&(!d||x.distrito===d)&&(!s||x.estado===s));
-      document.getElementById('ac-list').innerHTML=rows.length?`<div style="display:grid;gap:10px">${rows.map(x=>`<div class="card" style="padding:14px;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap"><div><strong>${esc(x.nombre)}</strong><div style="opacity:.7">${esc(x.pais||'Sin país')} · ${esc(x.comision||'Sin comisión')} · ${esc(x.distrito||'Sin distrito')}</div><small style="opacity:.6">${esc(x.centro||'Sin centro')} · ${esc(x.modelo||'Sin modelo')}</small></div><div><span>${x.estado==='Acreditado'?'🟢':x.estado==='Observado'?'🔴':'🟡'} ${esc(x.estado||'Pendiente')}</span> <button class="btn" data-edit="${esc(x.id)}">Ver ficha</button></div></div>`).join('')}</div>`:`<div style="padding:30px;text-align:center;opacity:.65">No hay delegados registrados.</div>`;
-      document.querySelectorAll('[data-edit]').forEach(btn=>btn.onclick=()=>showForm(getData().find(x=>x.id===btn.dataset.edit)||{}));
-    }
-
-    function showForm(x){
-      const f=document.getElementById('ac-form');
-      f.innerHTML=`<div class="card" style="margin-top:20px;padding:20px"><h3 style="margin-top:0">${x.id?'Editar delegado':'Nuevo delegado'}</h3>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px">
-      ${field('Nombre completo','nombre',x.nombre,'text','required')}${field('Edad','edad',x.edad,'number')}${field('Centro educativo','centro',x.centro)}${field('Número de teléfono','telefono',x.telefono,'tel')}${field('Correo electrónico','correo',x.correo,'email')}${field('Cédula','cedula',x.cedula)}${field('Teléfono de familiar','familiar',x.familiar,'tel')}${field('País / Delegación','pais',x.pais)}${field('Comisión','comision',x.comision)}<label>Distrito<select id="f-distrito" class="input"><option value="">Seleccionar</option>${DISTRICTS.map(d=>`<option value="${esc(d)}" ${x.distrito===d?'selected':''}>${esc(d)}</option>`).join('')}</select></label>${field('Modelo','modelo',x.modelo)}<label>Estado<select id="f-estado" class="input"><option ${x.estado==='Pendiente'||!x.estado?'selected':''}>Pendiente</option><option ${x.estado==='Acreditado'?'selected':''}>Acreditado</option><option ${x.estado==='Observado'?'selected':''}>Observado</option></select></label></div>
-      <div style="display:flex;gap:10px;margin-top:18px"><button class="btn primary" id="f-save">💾 Guardar acreditación</button><button class="btn" id="f-cancel">Cancelar</button></div></div>`;
-      document.getElementById('f-save').onclick=()=>{const g=id=>document.getElementById(id)?.value.trim()||'';const obj={id:x.id||crypto.randomUUID(),nombre:g('f-nombre'),edad:g('f-edad'),centro:g('f-centro'),telefono:g('f-telefono'),correo:g('f-correo'),cedula:g('f-cedula'),familiar:g('f-familiar'),pais:g('f-pais'),comision:g('f-comision'),distrito:g('f-distrito'),modelo:g('f-modelo'),estado:g('f-estado')||'Pendiente'};if(!obj.nombre){alert('Escribe el nombre completo.');return}const all=getData(),i=all.findIndex(v=>v.id===obj.id);if(i>=0)all[i]=obj;else all.push(obj);saveData(all);f.innerHTML='';renderList()};
-      document.getElementById('f-cancel').onclick=()=>f.innerHTML='';
-    }
-    function field(label,key,value,type='text',req=''){return `<label>${label}<input id="f-${key}" class="input" type="${type}" value="${esc(value||'')}" ${req}></label>`}
+    document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));const b=document.querySelector('[data-acreditacion]');if(b)b.classList.add('active');
+    const root=document.getElementById('content')||document.getElementById('rv-view')||document.getElementById('app');if(!root)return;
+    root.innerHTML=css+`<section class="ac-shell"><div class="ac-hero"><div class="ac-kicker">MUN · REGIONAL 17</div><h1>🪪 Acreditación de Delegados</h1><p>Registro y control de participantes del modelo.</p></div><div class="ac-stats" id="ac-stats"></div><div class="ac-toolbar"><input id="ac-search" class="input ac-search" placeholder="🔎 Buscar por nombre, cédula, país o comisión..."><select id="ac-district" class="input"><option value="">Todos los distritos</option>${DISTRICTS.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('')}</select><select id="ac-status" class="input"><option value="">Todos los estados</option><option>Acreditado</option><option>Pendiente</option><option>Observado</option></select><button class="btn primary ac-new" id="ac-new">＋ Nuevo delegado</button></div><div class="ac-section-title"><h3>Delegados registrados</h3><span id="ac-count" style="font-size:12px;opacity:.6"></span></div><div id="ac-list"></div><div id="ac-form"></div></section>`;
+    renderList();document.getElementById('ac-new').onclick=()=>showForm({});document.getElementById('ac-search').oninput=renderList;document.getElementById('ac-district').onchange=renderList;document.getElementById('ac-status').onchange=renderList;
+    function renderStats(all){const n=all.length,ok=all.filter(x=>x.estado==='Acreditado').length,p=all.filter(x=>!x.estado||x.estado==='Pendiente').length,o=all.filter(x=>x.estado==='Observado').length;document.getElementById('ac-stats').innerHTML=`<div class="ac-stat"><b>${n}</b><span>Total delegados</span></div><div class="ac-stat"><b>${ok}</b><span>🟢 Acreditados</span></div><div class="ac-stat"><b>${p}</b><span>🟡 Pendientes</span></div><div class="ac-stat"><b>${o}</b><span>🔴 Observados</span></div>`}
+    function renderList(){const all=getData();renderStats(all);const q=(document.getElementById('ac-search').value||'').toLowerCase(),d=document.getElementById('ac-district').value,s=document.getElementById('ac-status').value;const rows=all.filter(x=>(!q||[x.nombre,x.cedula,x.pais,x.comision,x.centro,x.modelo].join(' ').toLowerCase().includes(q))&&(!d||x.distrito===d)&&(!s||x.estado===s));document.getElementById('ac-count').textContent=`${rows.length} resultado${rows.length===1?'':'s'}`;document.getElementById('ac-list').innerHTML=rows.length?`<div class="ac-grid">${rows.map(x=>{const st=x.estado||'Pendiente',cl=st==='Acreditado'?'ac-ok':st==='Observado'?'ac-observed':'ac-pending';return `<article class="ac-card"><div class="ac-card-top"><div class="ac-flag">${flag(x.pais)}</div><div><div class="ac-name">${esc(x.nombre)}</div><div class="ac-country">${esc(x.pais||'Delegación sin asignar')}</div></div></div><div class="ac-meta"><div>🏛️ <span>${esc(x.comision||'Comisión pendiente')}</span></div><div>🗺️ <span>${esc(x.distrito||'Distrito pendiente')}</span></div><div>🏫 <span>${esc(x.centro||'Centro educativo pendiente')}</span></div><div>🎯 <span>${esc(x.modelo||'Modelo pendiente')}</span></div></div><div class="ac-actions"><span class="ac-status ${cl}">${st==='Acreditado'?'🟢':st==='Observado'?'🔴':'🟡'} ${esc(st)}</span><button class="btn" data-edit="${esc(x.id)}">Ver ficha</button></div></article>`}).join('')}</div>`:`<div class="ac-empty">🪪<br><strong>No hay delegados registrados</strong><br><small>Agrega el primer delegado con “Nuevo delegado”.</small></div>`;document.querySelectorAll('[data-edit]').forEach(btn=>btn.onclick=()=>showForm(getData().find(x=>x.id===btn.dataset.edit)||{}))}
+    function showForm(x){const f=document.getElementById('ac-form');f.innerHTML=`<div class="ac-form"><h3>${x.id?'Editar delegado':'Nuevo delegado'}</h3><div class="ac-form-grid">${field('Nombre completo','nombre',x.nombre,'text','required','full')}${field('Edad','edad',x.edad,'number')}${field('Centro educativo','centro',x.centro)}${field('Número de teléfono','telefono',x.telefono,'tel')}${field('Correo electrónico','correo',x.correo,'email')}${field('Cédula','cedula',x.cedula)}${field('Teléfono de familiar','familiar',x.familiar,'tel')}${field('País / Delegación','pais',x.pais)}${field('Comisión','comision',x.comision)}<label>Distrito<select id="f-distrito" class="input"><option value="">Seleccionar</option>${DISTRICTS.map(d=>`<option value="${esc(d)}" ${x.distrito===d?'selected':''}>${esc(d)}</option>`).join('')}</select></label>${field('Modelo','modelo',x.modelo)}<label>Estado<select id="f-estado" class="input"><option ${x.estado==='Pendiente'||!x.estado?'selected':''}>Pendiente</option><option ${x.estado==='Acreditado'?'selected':''}>Acreditado</option><option ${x.estado==='Observado'?'selected':''}>Observado</option></select></label></div><div class="ac-form-actions"><button class="btn primary" id="f-save">💾 Guardar acreditación</button><button class="btn" id="f-cancel">Cancelar</button></div></div>`;document.getElementById('f-save').onclick=()=>{const g=id=>document.getElementById(id)?.value.trim()||'';const obj={id:x.id||crypto.randomUUID(),nombre:g('f-nombre'),edad:g('f-edad'),centro:g('f-centro'),telefono:g('f-telefono'),correo:g('f-correo'),cedula:g('f-cedula'),familiar:g('f-familiar'),pais:g('f-pais'),comision:g('f-comision'),distrito:g('f-distrito'),modelo:g('f-modelo'),estado:g('f-estado')||'Pendiente'};if(!obj.nombre){alert('Escribe el nombre completo.');return}const all=getData(),i=all.findIndex(v=>v.id===obj.id);if(i>=0)all[i]=obj;else all.push(obj);saveData(all);f.innerHTML='';renderList()};document.getElementById('f-cancel').onclick=()=>f.innerHTML=''}
+    function field(label,key,value,type='text',req='',extra=''){return `<label class="${extra}">${label}<input id="f-${key}" class="input" type="${type}" value="${esc(value||'')}" ${req}></label>`}
   }
-
-  window.openAcreditacionDelegados=openPanel;
-  window.renderAcreditacionDelegados=openPanel;
-
-  function boot(){
-    addNavButton();
-    if(window.MutationObserver){
-      const observer=new MutationObserver(()=>addNavButton());
-      observer.observe(document.body,{childList:true,subtree:true});
-      setTimeout(()=>observer.disconnect(),15000);
-    }
-    setTimeout(addNavButton,500);
-    setTimeout(addNavButton,1500);
-    setTimeout(addNavButton,3000);
-  }
+  window.openAcreditacionDelegados=openPanel;window.renderAcreditacionDelegados=openPanel;
+  function boot(){addNavButton();if(window.MutationObserver){const observer=new MutationObserver(()=>addNavButton());observer.observe(document.body,{childList:true,subtree:true});setTimeout(()=>observer.disconnect(),15000)}setTimeout(addNavButton,500);setTimeout(addNavButton,1500);setTimeout(addNavButton,3000)}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 })();

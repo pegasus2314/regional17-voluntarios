@@ -1,9 +1,12 @@
-/* Login: panel regional limpio, solo imagen + formulario */
-.login{grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);background:#f4f7fb}
+/* Login Regional 17 · diseño centrado y banner a pantalla completa */
+.login{grid-template-columns:minmax(0,1.15fr) minmax(390px,.85fr);min-height:100vh;background:#f4f7fb;align-items:stretch}
 .login-brand{position:relative;isolation:isolate;overflow:hidden;min-height:100vh;padding:0!important;justify-content:initial;background:#071b35;border-radius:0!important}
-.login-brand::after{content:'';position:absolute;inset:0;z-index:0;background:rgba(7,27,53,.10);pointer-events:none}
-/* El login solo debe mostrar la imagen regional. Oculta cualquier elemento antiguo, incluido el círculo/foto anterior. */
+.login-brand::after{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(90deg,rgba(7,27,53,.08),rgba(7,27,53,.02));pointer-events:none}
+/* La imagen ocupa todo el panel sin deformarse y mantiene su proporción. */
 .login-brand>*:not(.regional-login-background){display:none!important}
-.regional-login-background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;padding:0!important;margin:0!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;z-index:1!important;display:block!important;opacity:1!important;pointer-events:none!important}
-.login-form{position:relative;z-index:2}
-@media(max-width:900px){.login{grid-template-columns:1fr}.login-brand{min-height:44vh;padding:0!important}.regional-login-background{padding:0!important}.login-form{width:min(500px,calc(100% - 32px));margin:20px auto 30px}}
+.regional-login-background{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;object-position:center center!important;padding:0!important;margin:0!important;box-sizing:border-box!important;border:0!important;border-radius:0!important;z-index:0!important;display:block!important;opacity:1!important;image-rendering:auto!important;pointer-events:none!important}
+/* Formulario perfectamente centrado dentro de su panel */
+.login-form{position:relative;z-index:2;align-self:center!important;justify-self:center!important;margin:auto!important;width:min(500px,calc(100% - 64px))!important;max-width:500px;box-sizing:border-box}
+.login-form h2{text-align:left}
+@media(max-width:900px){.login{grid-template-columns:1fr;align-items:stretch}.login-brand{min-height:42vh;height:42vh}.regional-login-background{object-fit:cover!important;object-position:center center!important}.login-form{width:min(500px,calc(100% - 32px))!important;margin:28px auto 36px!important}}
+@media(min-width:901px){.login-form{min-height:0}}

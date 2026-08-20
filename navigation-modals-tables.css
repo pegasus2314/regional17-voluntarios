@@ -1,6 +1,9 @@
 /* Regional 17 — navigation, modals and tables polish */
 :root{--ui-border:#dbe4ee;--ui-surface:#fff;--ui-surface2:#f7f9fc;--ui-text:#172033;--ui-muted:#66758a;--ui-accent:#2563eb}
-nav a,.nav-item,.sidebar a,.menu-item{border-radius:10px;transition:background .14s ease,color .14s ease,transform .14s ease}nav a:hover,.nav-item:hover,.sidebar a:hover,.menu-item:hover{transform:translateX(2px)}nav a[aria-current="page"],.nav-item.active,.sidebar a.active,.menu-item.active{background:rgba(37,99,235,.1);color:var(--ui-accent);font-weight:700}
+/* Sidebar navigation must never translate or scale. Keep only visual state changes. */
+nav a,.nav-item,.sidebar a,.menu-item{border-radius:10px;transition:background-color .14s ease,color .14s ease,border-color .14s ease,box-shadow .14s ease}
+nav a:hover,.nav-item:hover,.sidebar a:hover,.menu-item:hover{transform:none!important}
+nav a[aria-current="page"],.nav-item.active,.sidebar a.active,.menu-item.active{background:rgba(37,99,235,.1);color:var(--ui-accent);font-weight:700}
 .modal-backdrop,.modal-overlay{backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);background:rgba(7,27,53,.48)!important}.modal{animation:rv-modal-in .16s ease-out}.modal-close{border-radius:9px}.modal-close:hover{background:rgba(100,116,139,.1)}
 .table-wrap{scrollbar-width:thin}.table-wrap table{min-width:620px}.table-wrap th,.table-wrap td{padding:12px 14px;border-bottom:1px solid var(--ui-border)}.table-wrap th{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ui-muted);font-weight:800}.table-wrap tbody tr:last-child td{border-bottom:0}.table-wrap td{font-size:13px;vertical-align:middle}.table-wrap .actions{white-space:nowrap}
 @keyframes rv-modal-in{from{opacity:0;transform:translateY(7px) scale(.99)}to{opacity:1;transform:none}}

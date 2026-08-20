@@ -20,20 +20,15 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
           p = Path('app.js')
           s = p.read_text(encoding='utf-8')
           marker = 'const __R17_NAV_STABLE_V1__ = true;'
-          if marker in s:
-              print('app.js already patched')
-          else:
+          if marker not in s:
               old = "document.getElementById('logout').onclick=async()=>{await sb.auth.signOut()};document.getElementById('menu').onclick=()=>document.querySelector('.sidebar').classList.toggle('open');document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;state.selected=[];layout();render()});document.getElementById('quickAdd')?.addEventListener('click',()=>view==='centers'?centerModal():view==='activities'?activityModal():view==='events'?eventModal():volunteerModal());"
               new = "document.getElementById('logout').onclick=async()=>{await sb.auth.signOut()};document.getElementById('menu').onclick=()=>document.querySelector('.sidebar').classList.toggle('open');document.querySelectorAll('.sidebar [data-view]').forEach(b=>b.onclick=()=>navigateTo(b.dataset.view));document.getElementById('quickAdd')?.addEventListener('click',()=>view==='centers'?centerModal():view==='activities'?activityModal():view==='events'?eventModal():volunteerModal());"
-              if old not in s:
-                  raise SystemExit('layout navigation block not found')
+              if old not in s: raise SystemExit('layout navigation block not found')
               s = s.replace(old, new, 1)
-
               anchor = "function layout(){"
               helpers = """const __R17_NAV_STABLE_V1__ = true;
 function updateShell(){
@@ -52,25 +47,18 @@ function navigateTo(nextView){
 }
 
 """
-              if anchor not in s:
-                  raise SystemExit('layout anchor not found')
+              if anchor not in s: raise SystemExit('layout anchor not found')
               s = s.replace(anchor, helpers+anchor, 1)
-
               s = s.replace("document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{view=b.dataset.view;layout();render()});", "document.querySelectorAll('.main [data-view]').forEach(b=>b.onclick=()=>navigateTo(b.dataset.view));", 1)
               s = s.replace("window.__rvCenter=id=>{view='centers';layout();render();setTimeout(()=>{", "window.__rvCenter=id=>{navigateTo('centers');setTimeout(()=>{", 1)
               s = s.replace("if(view==='volunteers'&&canManage())document.getElementById('selection')?.addEventListener('click',()=>{view='selection';layout();render()});", "if(view==='volunteers'&&canManage())document.getElementById('selection')?.addEventListener('click',()=>navigateTo('selection'));", 1)
               s = s.replace("async function reload(){await loadAll();layout();render()}", "async function reload(){await loadAll();if(!document.querySelector('.shell'))layout();updateShell();render()}", 1)
-
-              # Avoid a second full shell build caused by Supabase INITIAL_SESSION.
               old_auth = "session=s;if(s){try{await loadProfile();await loadAll();layout();render()}catch(e){console.error(e)}}else login()"
               new_auth = "if(!s){session=null;login();return}if(session?.user?.id===s.user.id && document.querySelector('.shell')) return;session=s;try{await loadProfile();await loadAll();if(!document.querySelector('.shell'))layout();updateShell();render()}catch(e){console.error(e)}"
-              if old_auth not in s:
-                  raise SystemExit('auth state block not found')
+              if old_auth not in s: raise SystemExit('auth state block not found')
               s = s.replace(old_auth, new_auth, 1)
-
               p.write_text(s, encoding='utf-8')
 
-          # Make first paint wait for the actual first screen, not merely the shell/loading skeleton.
           p = Path('stability-preload.js')
           s = p.read_text(encoding='utf-8')
           old = """const reveal = () => {
@@ -89,8 +77,7 @@ function navigateTo(nextView){
     document.documentElement.classList.add('r17-ready');
     observer?.disconnect();
   };"""
-          if old in s:
-              s = s.replace(old, new, 1)
+          if old in s: s = s.replace(old, new, 1)
           p.write_text(s, encoding='utf-8')
           PY
 

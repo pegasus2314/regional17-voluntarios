@@ -8,21 +8,21 @@
 #content table tbody td{padding:15px 16px;border-top:1px solid rgba(120,140,170,.12);vertical-align:middle}
 #content table tbody tr{transition:background .18s ease,transform .18s ease}
 #content table tbody tr:hover{background:rgba(37,99,235,.035)}
-#content table tbody td:first-child strong{font-size:14px;letter-spacing:-.01em}
+#content table tbody td:first-child strong{font-size:14px;letter-spacing:-.01em;white-space:normal;overflow:visible;text-overflow:clip;display:block;max-width:none;line-height:1.4}
 #content table tbody td:first-child small{display:block;margin-top:3px;opacity:.62}
 #content .pill{border-radius:999px;padding:6px 10px;font-size:11px;font-weight:700}
 /* Centros Educativos: clean responsive cards */
 #content .cards-grid{gap:16px;align-items:stretch}
-#content .center-card{position:relative;display:flex;gap:15px;align-items:flex-start;padding:19px 20px;border:1px solid rgba(120,140,170,.16);border-radius:18px;background:var(--surface,#fff);box-shadow:0 6px 22px rgba(10,30,60,.055);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;overflow:hidden}
+#content .center-card{position:relative;display:flex;gap:15px;align-items:flex-start;padding:19px 20px;border:1px solid rgba(120,140,170,.16);border-radius:18px;background:var(--surface,#fff);box-shadow:0 6px 22px rgba(10,30,60,.055);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;overflow:visible}
 #content .center-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,#2563eb,#60a5fa);opacity:.9}
 #content .center-card:hover{transform:translateY(-2px);box-shadow:0 14px 32px rgba(10,30,60,.1);border-color:rgba(37,99,235,.24)}
 #content .center-icon{flex:0 0 48px;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:25px;line-height:1;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(96,165,250,.07));border:1px solid rgba(37,99,235,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.45);font-size:0}
 #content .center-icon::after{content:"🏫";font-size:25px;line-height:1}
-#content .center-card .grow{min-width:0;padding-top:1px}
-#content .center-card h3{margin:0;font-size:15px;font-weight:800;line-height:1.35;letter-spacing:-.015em;color:var(--text,#10233f)}
+#content .center-card .grow{min-width:0;flex:1;padding-top:1px}
+#content .center-card h3{margin:0;font-size:15px;font-weight:800;line-height:1.4;letter-spacing:-.015em;color:var(--text,#10233f);white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;word-break:normal}
 #content .center-card p{margin:6px 0 8px;line-height:1.45;font-size:13px;opacity:.68;overflow-wrap:anywhere}
 #content .center-card small{display:flex;flex-wrap:wrap;gap:5px;line-height:1.45;font-size:11px;opacity:.66}
-#content .center-card .card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-left:auto;padding-top:1px}
+#content .center-card .card-actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;align-items:center;margin-left:auto;padding-top:1px;flex-shrink:0}
 #content .center-card .btn.small{min-height:34px;padding:0 11px;border-radius:9px;font-size:12px}
 #content .center-card .btn.small.danger{color:#b42318;border-color:rgba(180,35,24,.18)}
 #content .center-card .grow p,.center-card .grow h3{overflow-wrap:anywhere}

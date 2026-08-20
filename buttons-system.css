@@ -17,3 +17,15 @@ button:disabled,.btn:disabled,[aria-disabled="true"]{opacity:.52;cursor:not-allo
 html.rv-dark-mode .btn.secondary,html.rv-dark-mode .btn.outline{background:#102238;color:#e7eef7;border-color:#2c425d}html.rv-dark-mode .btn.ghost{background:transparent;color:#76a9ff;border-color:transparent}
 @media(max-width:600px){button,.btn,[role="button"],input[type="button"],input[type="submit"],input[type="reset"]{min-height:44px}.btn.small{min-height:40px}}
 @media(prefers-reduced-motion:reduce){button,.btn,[role="button"],input[type="button"],input[type="submit"],input[type="reset"]{transition:none}}
+
+/* Sidebar navigation: stable geometry, no movement on hover/click. */
+.sidebar .nav-item,
+.sidebar .nav-item:hover,
+.sidebar .nav-item:focus,
+.sidebar .nav-item:focus-visible,
+.sidebar .nav-item:active,
+.sidebar .nav-item.active{transform:none!important;translate:none!important;scale:none!important;min-height:0;height:39px;box-sizing:border-box;transition:background-color .14s ease,color .14s ease;box-shadow:none!important;outline-offset:2px}
+.sidebar .nav-item:hover,.sidebar .nav-item.active{background:#f3b34326;color:#ffd477}
+.sidebar .nav-item:active{background:#f3b34335;color:#ffd477}
+.sidebar .nav-item span{width:18px;min-width:18px;height:18px;display:grid;place-items:center;flex:none;transform:none!important}
+.sidebar nav{gap:5px}

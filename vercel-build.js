@@ -23,15 +23,11 @@ if (!app.includes('const __R17_NAV_STABLE_V2__ = true;')) {
   fs.writeFileSync(appPath, app);
 }
 
+// stability-preload.js is already kept in its compatible, fail-safe form in source control.
+// Do not rewrite it during the build: older builds expected a different reveal function and
+// would fail when the current preload was already updated.
 const preloadPath = 'stability-preload.js';
-let preload = fs.readFileSync(preloadPath, 'utf8');
-if (!preload.includes('readyScreen')) {
-  const oldReveal = `const reveal = () => {\n    if (revealed || !mount.firstElementChild) return;\n    revealed = true;\n    document.documentElement.classList.remove('r17-booting');\n    document.documentElement.classList.add('r17-ready');\n    observer?.disconnect();\n  };`;
-  const newReveal = `const reveal = () => {\n    if (revealed || !mount.firstElementChild) return;\n    const readyScreen = mount.querySelector('.login, .setup, .error-box') || (mount.querySelector('.shell') && mount.querySelector('#content') && !mount.querySelector('#content .loading'));\n    if (!readyScreen) return;\n    revealed = true;\n    document.documentElement.classList.remove('r17-booting');\n    document.documentElement.classList.add('r17-ready');\n    observer?.disconnect();\n  };`;
-  if (!preload.includes(oldReveal)) throw new Error('Could not find stability preload reveal function');
-  preload = preload.replace(oldReveal, newReveal);
-  fs.writeFileSync(preloadPath, preload);
-}
+if (!fs.existsSync(preloadPath)) throw new Error('Missing stability-preload.js');
 
 // Vercel serves the configured output directory for static projects.
 const out = path.resolve('public');

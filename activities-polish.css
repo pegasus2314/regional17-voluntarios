@@ -1,64 +1,44 @@
-/* Actividades — capa visual aislada. Solo diseño; no modifica la lógica. */
-#rv-view-activities,.activities-page{max-width:1380px;margin:0 auto;padding:6px 0 40px;color:var(--ink)}
+/* Regional 17 — Actividades 2.1: estilos sobre el markup real */
+#rv-view-activities,.activities-page{width:100%;max-width:1440px;margin:0 auto;padding:8px 0 42px;color:var(--ink)}
 
-/* Encabezado premium */
-.activities-page .page-head{position:relative;display:flex;justify-content:space-between;align-items:center;gap:24px;padding:30px 32px;margin-bottom:20px;border:1px solid rgba(255,255,255,.1);border-radius:24px;background:linear-gradient(135deg,#06172d 0%,#0b3159 52%,#0d5a91 100%);color:#fff;box-shadow:0 20px 50px rgba(7,27,53,.18);overflow:hidden}
-.activities-page .page-head:before{content:"";position:absolute;width:360px;height:360px;right:-150px;top:-210px;border:1px solid rgba(255,255,255,.12);border-radius:50%;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.018);pointer-events:none}
-.activities-page .page-head:after{content:"";position:absolute;width:170px;height:170px;left:42%;bottom:-125px;border-radius:50%;background:rgba(255,255,255,.06);filter:blur(2px);pointer-events:none}
-.activities-page .page-head h2{position:relative;z-index:1;margin:4px 0 7px;font-size:28px;line-height:1.15;letter-spacing:-.03em}
-.activities-page .page-head p{position:relative;z-index:1;margin:0;color:#d5e4f2;font-size:12px;line-height:1.55;max-width:680px}
-.activities-page .page-actions{position:relative;z-index:2;display:flex;align-items:center;justify-content:flex-end;gap:9px;flex-wrap:wrap}
-.activities-page .page-actions .btn{min-height:40px;border-radius:12px;padding:0 15px;font-weight:750;box-shadow:0 7px 18px rgba(0,0,0,.14);transition:transform .18s,box-shadow .18s}
-.activities-page .page-actions .btn:hover{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,0,0,.18)}
+/* Cabecera */
+.activities-page .page-head{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:30px 32px;margin:0 0 20px;border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#071b35 0%,#124a78 58%,#1685b8 100%);color:#fff;box-shadow:0 18px 45px rgba(7,27,53,.18)}
+.activities-page .page-head:before{content:"";position:absolute;right:-90px;top:-160px;width:360px;height:360px;border:1px solid rgba(255,255,255,.14);border-radius:50%;box-shadow:0 0 0 55px rgba(255,255,255,.025),0 0 0 110px rgba(255,255,255,.018)}
+.activities-page .page-head h2{position:relative;margin:0 0 6px;font-size:29px;letter-spacing:-.7px}.activities-page .page-head p{position:relative;margin:0;color:#d7e8f5;font-size:11px;line-height:1.6;max-width:680px}
 
-/* Barra de búsqueda y filtros */
-.activities-page .toolbar{display:grid;grid-template-columns:minmax(240px,1fr) 190px auto;gap:10px;align-items:center;margin-bottom:18px;padding:11px;background:var(--surface,#fff);border:1px solid var(--line);border-radius:17px;box-shadow:0 8px 26px rgba(7,27,53,.055);position:sticky;top:12px;z-index:8;backdrop-filter:blur(12px)}
-.activities-page .toolbar input,.activities-page .toolbar select{width:100%;min-height:44px;border:1px solid #d8e1eb;border-radius:12px;background:#f8fafc;padding:0 13px;font-size:11px;color:var(--ink);outline:none;transition:border-color .18s,box-shadow .18s,background .18s,transform .18s}
-.activities-page .toolbar input::placeholder{color:#8b98a8}.activities-page .toolbar input:focus,.activities-page .toolbar select:focus{background:#fff;border-color:#0d5a91;box-shadow:0 0 0 4px rgba(13,90,145,.08)}
+/* Barra real generada por activities() */
+.activities-page .toolbar,.activities-page .cards-grid{position:relative;z-index:1}
+.activities-page .toolbar{display:flex;align-items:center;gap:10px;width:100%;margin-bottom:18px;padding:10px;background:var(--surface,#fff);border:1px solid var(--line);border-radius:17px;box-shadow:0 8px 25px rgba(7,27,53,.055)}
+.activities-page .toolbar .search{flex:1;max-width:620px}.activities-page .toolbar .search input{height:44px;width:100%;border:1px solid #d8e1eb;border-radius:12px;background:#f8fafc;color:var(--ink);padding:0 14px;font-size:11px;outline:none}.activities-page .toolbar .search input:focus{background:#fff;border-color:#1685b8;box-shadow:0 0 0 4px rgba(22,133,184,.08)}
 
-/* Resumen / estadísticas si están presentes */
-.activities-page .stats,.activities-page .activity-stats,.activities-page .summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:18px}
-.activities-page .stat-card,.activities-page .summary-card{position:relative;overflow:hidden;padding:17px 18px;border:1px solid var(--line);border-radius:16px;background:var(--surface,#fff);box-shadow:0 7px 22px rgba(7,27,53,.045);transition:transform .18s,box-shadow .18s}
-.activities-page .stat-card:hover,.activities-page .summary-card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(7,27,53,.08)}
-.activities-page .stat-card:after,.activities-page .summary-card:after{content:"";position:absolute;right:-22px;bottom:-32px;width:90px;height:90px;border-radius:50%;background:rgba(13,90,145,.055)}
+/* ESTE ES EL CONTENEDOR QUE REALMENTE USA activities() */
+.activities-page .cards-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}
+.activities-page .cards-grid .activity-card{position:relative;display:flex!important;flex-direction:column;min-width:0;min-height:265px;padding:0!important;overflow:hidden;background:var(--surface,#fff)!important;border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 9px 28px rgba(7,27,53,.065);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
+.activities-page .cards-grid .activity-card:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#0d5a91,#26a6d9)}
+.activities-page .cards-grid .activity-card:after{content:"";position:absolute;right:-55px;top:-55px;width:145px;height:145px;border-radius:50%;background:rgba(22,133,184,.045);pointer-events:none}
+.activities-page .cards-grid .activity-card:hover{transform:translateY(-5px);border-color:#b9cfdf!important;box-shadow:0 20px 42px rgba(7,27,53,.13)}
 
-/* Contenedor de actividades */
-.activities-page .activity-grid,.activities-page .activities-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:17px}
-.activities-page .activity-card,.activities-page .activity-item{position:relative;display:flex;flex-direction:column;min-height:205px;background:var(--surface,#fff)!important;border:1px solid var(--line)!important;border-radius:18px!important;padding:20px!important;box-shadow:0 8px 25px rgba(7,27,53,.055);transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;overflow:hidden}
-.activities-page .activity-card:before,.activities-page .activity-item:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,#0d5a91,#4c9bd0);opacity:.95}
-.activities-page .activity-card:after,.activities-page .activity-item:after{content:"";position:absolute;right:-48px;top:-48px;width:130px;height:130px;border-radius:50%;background:rgba(13,90,145,.035);pointer-events:none}
-.activities-page .activity-card:hover,.activities-page .activity-item:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(7,27,53,.12);border-color:#c5d5e5!important}
-.activities-page .activity-card h3,.activities-page .activity-item h3{margin:2px 0 8px;color:var(--ink);font-size:15px;line-height:1.4;letter-spacing:-.01em}
-.activities-page .activity-meta{display:flex;flex-wrap:wrap;gap:6px;margin:7px 0 11px}
-.activities-page .activity-meta span,.activities-page .status{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border:1px solid #dce7f1;border-radius:999px;background:#f1f6fa;color:#506176;font-size:9px;font-weight:800;line-height:1}
-.activities-page .status{background:#eaf5ef;border-color:#cfe9da;color:#28734b}
-.activities-page .activity-description{margin:0;color:var(--muted);font-size:10.5px;line-height:1.65;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-.activities-page .item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto;padding-top:17px}
-.activities-page .item-actions .btn{min-height:34px;border-radius:10px;padding:0 11px;font-size:10px;font-weight:700;transition:transform .15s,box-shadow .15s}
-.activities-page .item-actions .btn:hover{transform:translateY(-1px);box-shadow:0 5px 12px rgba(7,27,53,.1)}
+.activities-page .activity-card .card-date{display:inline-flex;align-self:flex-start;margin:22px 20px 4px;padding:7px 10px;border-radius:9px;background:#edf5fa;color:#0d5a91;font-size:9px;font-weight:850;letter-spacing:.02em}
+.activities-page .activity-card h3{margin:10px 20px 7px!important;font-size:16px!important;line-height:1.35;color:var(--ink)!important;letter-spacing:-.2px}
+.activities-page .activity-card>p{margin:0 20px!important;color:var(--muted)!important;font-size:10.5px!important;line-height:1.7!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.activities-page .activity-card .card-meta{margin:14px 20px 0;padding:10px 0;border-top:1px solid var(--line);color:#5d6d80;font-size:9px;line-height:1.5}
+.activities-page .activity-card .card-meta span{display:block}
+.activities-page .activity-card .card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding:15px 20px 19px;border-top:1px solid #edf1f5}
+.activities-page .activity-card .card-actions .btn{min-height:35px;border-radius:10px;padding:0 12px;font-size:10px;font-weight:750}
 
-/* Formularios */
-.activities-page form,.activities-page .form-grid{background:var(--surface,#fff);border:1px solid var(--line);border-radius:19px;padding:23px;box-shadow:0 8px 25px rgba(7,27,53,.05)}
-.activities-page field{display:block;margin-bottom:15px}.activities-page field label{display:block;margin-bottom:7px;font-size:10px;font-weight:800;color:#526175;letter-spacing:.01em}
-.activities-page field input,.activities-page field textarea,.activities-page field select{width:100%;border:1px solid #d8e1eb;border-radius:11px;background:#fbfcfe;padding:10px 12px;font-size:11px;color:var(--ink);outline:none;transition:border-color .18s,box-shadow .18s,background .18s}
-.activities-page field input{min-height:43px}.activities-page field textarea{min-height:100px;resize:vertical;line-height:1.5}
-.activities-page field input:focus,.activities-page field textarea:focus,.activities-page field select:focus{background:#fff;border-color:#0d5a91;box-shadow:0 0 0 4px rgba(13,90,145,.07)}
-.activities-page .modal-actions,.activities-page .form-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:10px;padding-top:14px;border-top:1px solid #edf1f5}
+/* Estados y botones dentro de actividades */
+.activities-page .activity-card .btn.primary{box-shadow:0 7px 15px rgba(13,90,145,.16)}
+.activities-page .empty{grid-column:1/-1}
+.activities-page .empty,.activities-page .empty-state{background:var(--surface,#fff);border:1px dashed #cbd7e3;border-radius:20px;padding:50px 20px;text-align:center}
 
-/* Estado vacío y estados de carga */
-.activities-page .empty-state{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:250px;background:var(--surface,#fff);border:1px dashed #cbd7e3;border-radius:19px;padding:40px 20px;text-align:center;color:var(--muted);box-shadow:0 7px 22px rgba(7,27,53,.035)}
-.activities-page .loading,.activities-page .skeleton{border-radius:14px;background:linear-gradient(90deg,rgba(127,145,164,.08),rgba(127,145,164,.16),rgba(127,145,164,.08));background-size:200% 100%;animation:activity-shimmer 1.5s infinite}
-@keyframes activity-shimmer{to{background-position:-200% 0}}
+/* Formularios de actividades */
+.activities-page form{background:var(--surface,#fff);border:1px solid var(--line);border-radius:19px;padding:23px;box-shadow:0 8px 25px rgba(7,27,53,.05)}
+.activities-page field{display:block;margin-bottom:15px}.activities-page field label{display:block;margin-bottom:7px;font-size:10px;font-weight:800;color:#526175}.activities-page field input,.activities-page field textarea,.activities-page field select{width:100%;border:1px solid #d8e1eb;border-radius:11px;background:#fbfcfe;padding:10px 12px;font-size:11px;color:var(--ink);outline:none}.activities-page field input{min-height:43px}.activities-page field textarea{min-height:100px;resize:vertical}.activities-page .modal-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:10px;padding-top:14px;border-top:1px solid #edf1f5}
 
-/* Modo oscuro */
-.dark .activities-page .toolbar,.dark .activities-page .activity-card,.dark .activities-page .activity-item,.dark .activities-page form,.dark .activities-page .form-grid,.dark .activities-page .empty-state,.dark .activities-page .stat-card,.dark .activities-page .summary-card{background:#111b2a!important;border-color:#25364a!important;box-shadow:0 10px 28px rgba(0,0,0,.2)}
-.dark .activities-page .toolbar{background:rgba(17,27,42,.9)!important}.dark .activities-page .toolbar input,.dark .activities-page .toolbar select,.dark .activities-page field input,.dark .activities-page field textarea,.dark .activities-page field select{background:#0c1522;border-color:#2b3d52;color:#e6edf5}
-.dark .activities-page .toolbar input:focus,.dark .activities-page .toolbar select:focus,.dark .activities-page field input:focus,.dark .activities-page field textarea:focus,.dark .activities-page field select:focus{background:#101d2d;border-color:#4b91c5}
-.dark .activities-page .activity-card h3,.dark .activities-page .activity-item h3{color:#eef4fa}.dark .activities-page .activity-meta span,.dark .activities-page .status{background:#182536;border-color:#2a3d52;color:#b9c9da}.dark .activities-page .status{background:#153226;border-color:#25563e;color:#8fd0aa}
-.dark .activities-page field label{color:#aebdcd}.dark .activities-page .modal-actions,.dark .activities-page .form-actions{border-top-color:#243346}
+/* Dark mode */
+.dark .activities-page .toolbar,.dark .activities-page .cards-grid .activity-card,.dark .activities-page form,.dark .activities-page .empty,.dark .activities-page .empty-state{background:#111b2a!important;border-color:#283b50!important;box-shadow:0 12px 32px rgba(0,0,0,.22)}
+.dark .activities-page .toolbar .search input,.dark .activities-page field input,.dark .activities-page field textarea,.dark .activities-page field select{background:#0b1522;border-color:#2b4056;color:#e8eef5}.dark .activities-page .activity-card h3{color:#f0f5fa!important}.dark .activities-page .activity-card .card-date{background:#162b3d;color:#7fc6e8}.dark .activities-page .activity-card .card-meta{color:#aebdcb;border-color:#26384b}.dark .activities-page .activity-card .card-actions{border-color:#26384b}.dark .activities-page field label{color:#b7c4d1}
 
-/* Responsive */
-@media(max-width:1050px){.activities-page .activity-grid,.activities-page .activities-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.activities-page .toolbar{grid-template-columns:minmax(180px,1fr) 170px auto}.activities-page .stats,.activities-page .activity-stats,.activities-page .summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:780px){.activities-page .page-head{align-items:flex-start;flex-direction:column;padding:23px}.activities-page .page-actions{width:100%;justify-content:flex-start}.activities-page .page-actions .btn{flex:1}.activities-page .toolbar{grid-template-columns:1fr;position:relative;top:auto}.activities-page .activity-grid,.activities-page .activities-grid{grid-template-columns:1fr}.activities-page .stats,.activities-page .activity-stats,.activities-page .summary-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:480px){.activities-page .page-head h2{font-size:22px}.activities-page .page-head p{font-size:11px}.activities-page .page-actions{display:grid;grid-template-columns:1fr 1fr}.activities-page .page-actions .btn{width:100%}.activities-page .activity-card,.activities-page .activity-item{padding:17px!important}.activities-page .stats,.activities-page .activity-stats,.activities-page .summary-grid{grid-template-columns:1fr}}
+@media(max-width:1100px){.activities-page .cards-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){#rv-view-activities,.activities-page{padding:4px 0 30px}.activities-page .page-head{flex-direction:column;align-items:flex-start;padding:23px}.activities-page .page-head h2{font-size:24px}.activities-page .toolbar{padding:8px}.activities-page .toolbar .search{max-width:none;width:100%}.activities-page .cards-grid{grid-template-columns:1fr;gap:14px}.activities-page .cards-grid .activity-card{min-height:230px}}
 @media(prefers-reduced-motion:reduce){.activities-page *,.activities-page *:before,.activities-page *:after{animation:none!important;transition:none!important}}

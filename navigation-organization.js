@@ -1,34 +1,55 @@
 (()=>{'use strict';
 const GROUPS=[
- ['inicio','INICIO','⌂',['dashboard']],
- ['personas','PERSONAS','♙',['voluntario','acredit','usuario']],
- ['gestion','GESTIÓN EDUCATIVA','🏫',['centro','distrito']],
- ['mun','MUN REGIONAL 17','🏛️',['mun','modelo','delegado','comision','mesa','evaluacion','resultado']],
- ['agenda','AGENDA','📅',['actividade','evento','calendario']],
- ['recursos','RECURSOS','📚',['biblioteca','documento']],
- ['comunicacion','COMUNICACIÓN','💬',['chat','comunicado','anuncio']],
- ['administracion','ADMINISTRACIÓN','⚙️',['admin','rol','permiso','configuracion']]
+ ['inicio','INICIO','⌂'],
+ ['personas','PERSONAS','♙'],
+ ['gestion','GESTIÓN EDUCATIVA','🏫'],
+ ['mun','MUN REGIONAL 17','🏛️'],
+ ['agenda','AGENDA','📅'],
+ ['recursos','RECURSOS','📚'],
+ ['comunicacion','COMUNICACIÓN','💬'],
+ ['administracion','ADMINISTRACIÓN','⚙️']
 ];
-const esc=s=>String(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\\':'&#92;'}[c]));
+const MUN_DISTRICTS=[['17-01','Yamasá'],['17-02','Monte Plata'],['17-03','Bayaguana'],['17-04','Sabana Grande de Boyá'],['17-05','Esperalvillo']];
+const MUN_CHILDREN=[['modelo-centro','Modelo de Centro','🏫'],['modelo-distrital','Modelo Distrital','🏛️'],['delegados','Delegados','♙'],['comisiones','Comisiones','▣'],['mesas','Mesas','▤'],['evaluaciones','Evaluaciones','✓'],['resultados','Resultados','★']];
 const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-function classify(text){const t=norm(text);for(const g of GROUPS){if(g[3].some(k=>t.includes(k)))return g[0]}return'otros'}
-function isCenterItem(node){const t=norm(node.textContent);const view=norm(node.getAttribute('data-view')||'');return t.includes('centro educativo')||t.includes('centros educativo')||view.includes('centro')||view.includes('educativo')}
-function centerKey(){return 'centros-educativos'}
-function normalizeLabel(node){const view=norm(node.getAttribute('data-view')||'');if(view==='dashboard'){node.innerHTML='<span>⌂</span>Inicio'}else if(node.hasAttribute('data-mun-cat')){node.innerHTML='<span>🏛️</span>MUN Distrital'}else if(isCenterItem(node)){node.innerHTML='<span>🏫</span>Centros Educativos'}}
-function enhance(){
- document.querySelectorAll('.sidebar nav:not([data-r17-nav])').forEach(nav=>{
-  if(!nav.children.length)return;
-  const nodes=[...nav.children].filter(x=>x.matches('.nav-item,[data-view]'));
-  if(!nodes.length)return;
-  const seenCenters=new Set();const unique=[];
-  for(const n of nodes){normalizeLabel(n);if(isCenterItem(n)){const key=centerKey(n);if(seenCenters.has(key))continue;seenCenters.add(key)}unique.push(n)}
-  nav.dataset.r17Nav='1';
-  const buckets=new Map(GROUPS.map(g=>[g[0],[]]));buckets.set('otros',[]);
-  unique.forEach(n=>{const group=classify(n.textContent);(buckets.get(group)||buckets.get('otros')).push(n)});
-  nav.innerHTML='';
-  for(const g of GROUPS){const items=buckets.get(g[0])||[];if(!items.length)continue;const group=document.createElement('section');group.className='nav-group';group.dataset.group=g[0];const head=document.createElement('button');head.type='button';head.className='nav-group-head';head.innerHTML=`<span>${g[2]}</span><strong>${esc(g[1])}</strong><b aria-hidden="true">⌄</b>`;head.setAttribute('aria-expanded','false');const body=document.createElement('div');body.className='nav-group-body';items.forEach(x=>body.appendChild(x));group.append(head,body);nav.appendChild(group);head.onclick=()=>{const open=group.classList.toggle('is-open');head.setAttribute('aria-expanded',String(open))};const active=items.some(x=>x.classList.contains('active'));if(active){group.classList.add('is-open');head.setAttribute('aria-expanded','true')}}
-  const others=buckets.get('otros')||[];others.forEach(x=>nav.appendChild(x));nav.scrollTop=0;
- });
+const esc=s=>String(s||'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','\\':'&#92;'}[c]));
+const text=n=>norm(n?.textContent||'');
+const isCenter=n=>{const t=text(n),v=norm(n?.dataset?.view||'');return t.includes('centro educativo')||t.includes('centros educativo')||v.includes('centro')||v.includes('educativo')};
+const isMUN=n=>{const t=text(n);return t.includes('mun regional')||t.includes('mun por distrito')||t.includes('mun distrital')||n?.dataset?.munEntry||n?.dataset?.munView||n?.dataset?.munCat};
+const actionOf=n=>n?.onclick||null;
+function allNavItems(nav){return [...nav.querySelectorAll('.nav-item,[data-view]')].filter(n=>!n.classList.contains('nav-group-head')&&!n.dataset.r17GroupProxy);}
+function findExisting(items,patterns){return items.find(n=>patterns.some(p=>text(n).includes(norm(p))));}
+function clickExisting(items,patterns){const n=findExisting(items,patterns);if(n){n.click();return true}return false}
+function openCatalog(){if(window.R17MUNCatalog?.open){window.R17MUNCatalog.open();return}const nav=document.querySelector('.sidebar nav');if(nav)clickExisting(allNavItems(nav),['mun distrital','mun por distritos','modelo de centro','modelo distrital'])}
+function openEvaluation(tab){
+ window.dispatchEvent(new CustomEvent('rv-open-evaluation',{detail:{tab}}));
+ const wanted={delegados:['delegados','participantes'],comisiones:['comisiones'],mesas:['mesas'],evaluaciones:['evaluaciones','evaluación'],resultados:['resultados','resultado']}[tab]||[];
+ let tries=0;const seek=()=>{tries++;const buttons=[...document.querySelectorAll('.r17ea-tab,button')];const b=buttons.find(x=>wanted.some(w=>norm(x.textContent).includes(norm(w))));if(b){b.click();return}if(tries<20)setTimeout(seek,50)};setTimeout(seek,60);
 }
-let scheduled=false;const mo=new MutationObserver(()=>{if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;enhance()})});function boot(){enhance();mo.observe(document.body,{childList:true,subtree:true})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+function proxy(label,icon,fn,key){const b=document.createElement('button');b.type='button';b.className='nav-item r17-nav-proxy';b.dataset.r17GroupProxy=key;b.innerHTML=`<span>${icon}</span>${label}`;b.onclick=e=>{e.preventDefault();fn()};return b}
+function buildMUN(items){
+ const root=document.createElement('div');root.className='nav-nested';
+ let districtButton=findExisting(items,['mun distrital','mun por distritos']);
+ if(districtButton){districtButton.classList.add('r17-mun-main');districtButton.innerHTML='<span>🗺️</span>MUN Distrital'}else districtButton=proxy('MUN Distrital','🗺️',openCatalog,'mun-distrital');
+ const districtWrap=document.createElement('div');districtWrap.className='nav-nested-body';
+ MUN_DISTRICTS.forEach(([code,name])=>districtWrap.appendChild(proxy(`${code} · ${name}`,'📍',()=>{openCatalog();setTimeout(()=>{const b=document.querySelector(`.mc-cat[data-d="${code}"]`);b?.click()},100)},`district-${code}`)));
+ const dgroup=document.createElement('div');dgroup.className='nav-subgroup';const dh=document.createElement('button');dh.type='button';dh.className='nav-subgroup-head';dh.innerHTML='<span>🗺️</span><strong>MUN Distrital</strong><b>⌄</b>';dh.onclick=()=>{const o=dgroup.classList.toggle('is-open');dh.setAttribute('aria-expanded',String(o))};dh.setAttribute('aria-expanded','false');districtWrap.insertBefore(dh,districtWrap.firstChild);dgroup.append(districtButton,districtWrap);root.appendChild(dgroup);
+ const direct=items.filter(n=>{const t=text(n);return !t.includes('mun distrital')&&!t.includes('mun por distritos')&&!t.includes('mun regional')&&!isCenter(n)});
+ const wantedKeys=[['modelo-centro',['modelo de centro'],()=>{openCatalog();setTimeout(()=>document.querySelector('.mc-cat[data-c="modelo_centro"]')?.click(),100)}],['modelo-distrital',['modelo distrital'],()=>{openCatalog();setTimeout(()=>document.querySelector('.mc-cat[data-c="modelo_distrital"]')?.click(),100)}],['delegados',['delegados'],()=>openEvaluation('delegados')],['comisiones',['comisiones'],()=>openEvaluation('comisiones')],['mesas',['mesas'],()=>openEvaluation('mesas')],['evaluaciones',['evaluaciones','evaluación'],()=>openEvaluation('evaluaciones')],['resultados',['resultados','resultado'],()=>openEvaluation('resultados')]];
+ wantedKeys.forEach(([key,patterns,fn])=>{const ex=findExisting(direct,patterns);root.appendChild(ex||proxy(MUN_CHILDREN.find(x=>x[0]===key)?.[1]||key,MUN_CHILDREN.find(x=>x[0]===key)?.[2]||'•',fn,key))});
+ direct.forEach(n=>{if(!root.contains(n))root.appendChild(n)});
+ return root;
+}
+function classify(n){const t=text(n),v=norm(n?.dataset?.view||'');if(v==='dashboard'||t==='inicio'||t==='dashboard')return'inicio';if(isCenter(n))return'gestion';if(isMUN(n))return'mun';if(t.includes('voluntario')||t.includes('acredit')||t.includes('usuario'))return'personas';if(t.includes('calend')||t.includes('evento')||t.includes('agenda'))return'agenda';if(t.includes('biblioteca')||t.includes('recurso')||t.includes('document'))return'recursos';if(t.includes('chat')||t.includes('comunic')||t.includes('anuncio')||t.includes('mensaje'))return'comunicacion';if(t.includes('admin')||t.includes('rol')||t.includes('permiso')||t.includes('configur'))return'administracion';return'otros'}
+function activeKey(group,items){return items.some(n=>n.classList.contains('active'))||group==='inicio'&&items.some(n=>norm(n.dataset.view)==='dashboard')}
+function snapshot(nav){return [...nav.querySelectorAll('.nav-item,[data-view]')].filter(n=>!n.classList.contains('nav-group-head')).map(n=>`${n.dataset.view||''}|${n.dataset.munCat||''}|${n.dataset.munEntry||''}|${n.dataset.munView||''}|${text(n)}`).sort().join('¦')}
+let last='';let busy=false;
+function enhance(){const nav=document.querySelector('.sidebar nav');if(!nav||busy)return;const sig=snapshot(nav);if(sig===last)return;busy=true;try{
+ const raw=allNavItems(nav).filter(n=>!n.dataset.r17GroupProxy);const seen=new Set(),items=[];raw.forEach(n=>{if(isCenter(n)){if(seen.has('centers'))return;seen.add('centers')}items.push(n)});
+ const buckets=new Map(GROUPS.map(g=>[g[0],[]]));items.forEach(n=>{const k=classify(n);(buckets.get(k)||buckets.get('personas')).push(n)});
+ nav.innerHTML='';GROUPS.forEach(g=>{const base=buckets.get(g[0])||[];const group=document.createElement('section');group.className='nav-group';group.dataset.group=g[0];const head=document.createElement('button');head.type='button';head.className='nav-group-head';head.innerHTML=`<span>${g[2]}</span><strong>${g[1]}</strong><b>⌄</b>`;const body=document.createElement('div');body.className='nav-group-body';let content=base;if(g[0]==='mun')body.appendChild(buildMUN(base));else base.forEach(n=>body.appendChild(n));group.append(head,body);nav.appendChild(group);const open=activeKey(g[0],base);group.classList.toggle('is-open',open);head.setAttribute('aria-expanded',String(open));head.onclick=()=>{const state=group.classList.toggle('is-open');head.setAttribute('aria-expanded',String(state))};});
+ const others=buckets.get('otros')||[];if(others.length){const group=document.createElement('section');group.className='nav-group nav-group-other';const body=document.createElement('div');body.className='nav-group-body';others.forEach(n=>body.appendChild(n));group.appendChild(body);nav.appendChild(group)}
+ last=snapshot(nav);
+ }finally{busy=false}}
+let timer=0;const mo=new MutationObserver(()=>{clearTimeout(timer);timer=setTimeout(enhance,40)});function boot(){enhance();mo.observe(document.body,{childList:true,subtree:true})}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

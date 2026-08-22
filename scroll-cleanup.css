@@ -1,0 +1,6 @@
+/* Scroll general: evita el segundo scroll del lienzo principal sin cambiar sus dimensiones. */
+.main>#content{overflow:visible!important;overscroll-behavior:auto!important}
+/* El scroll de la navegación lateral sí se conserva porque su contenido puede superar la altura disponible. */
+.sidebar nav{overflow-y:auto!important;overflow-x:hidden!important}
+/* Conserva scroll únicamente en elementos que realmente lo necesitan. */
+.table-wrap,.modal-body,.library-image-stage{overscroll-behavior:contain}

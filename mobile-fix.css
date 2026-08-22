@@ -2,8 +2,10 @@
 @media (max-width:820px){
   html,body{width:100%;min-width:0;overflow-x:hidden}
   .shell{display:block!important;width:100%!important;min-width:0!important;height:auto!important;min-height:100vh!important;overflow:visible!important}
-  .sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(290px,86vw)!important;min-width:0!important;max-width:min(290px,86vw)!important;height:100dvh!important;z-index:1000!important;transform:translateX(-105%)!important;overflow-y:auto!important}
+  .sidebar{position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:min(290px,86vw)!important;min-width:0!important;max-width:min(290px,86vw)!important;height:100dvh!important;z-index:1000!important;transform:translateX(-105%)!important;overflow-y:auto!important;transition:transform .22s ease!important}
   .sidebar.is-open,.sidebar.open,.sidebar.mobile-open{transform:translateX(0)!important}
+  /* Al abrir el perfil propio en móvil, la navegación se cierra para no tapar el contenido. */
+  body.r17-profile-open .sidebar,html.r17-profile-open .sidebar{transform:translateX(-105%)!important}
   .main{width:100%!important;min-width:0!important;min-height:100vh!important;height:auto!important;overflow-x:hidden!important;overflow-y:visible!important}
   .main>#content{width:100%!important;min-width:0!important}
   .topbar{width:100%!important;min-width:0!important}

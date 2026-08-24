@@ -26,7 +26,7 @@ function injectInstitutionalStyle(){if(document.getElementById('r17-institutiona
 `;
 document.head.appendChild(s)}
 function makeFlat(nav){injectInstitutionalStyle();const raw=unique(items(nav));const byKey=new Map(raw.map(n=>[canonical(n),n]));const out=[];
- const add=(key,label,icon,external=false)=>{let n=byKey.get(key);if(n){n.classList.add('r17-flat-item');n.dataset.view=key;n.innerHTML=`<span>${icon}</span><span>${label}</span>`;byKey.delete(key)}else n=button(key,label,icon,external);if(key==='acreditacion'&&!external){n.onclick=e=>{e.preventDefault();e.stopPropagation();if(typeof window.openAcreditacionDelegados==='function')window.openAcreditacionDelegados();else window.dispatchEvent(new CustomEvent('r17:open-acreditacion'))}}out.push(n)};
+ const add=(key,label,icon,external=false)=>{let n=byKey.get(key);if(n){n.classList.add('r17-flat-item');n.dataset.view=key;n.innerHTML=`<span>${icon}</span><span>${label}</span>`;byKey.delete(key)}else n=button(key,label,icon,external);if(key==='acreditacion'&&!external){n.onclick=e=>{e.preventDefault();e.stopPropagation();if(typeof window.openAcreditacionDelegados==='function')window.openAcreditacionDelegados();else window.dispatchEvent(new CustomEvent('r17:open-acreditacion'))}}if(key==='resultados'&&!external){n.onclick=e=>{e.preventDefault();e.stopPropagation();window.dispatchEvent(new CustomEvent('rv-open-evaluation-results'))}}out.push(n)};
  add('dashboard','Dashboard','⌂');
  add('volunteers','Voluntarios','👥');
  add('acreditacion','Acreditación','🪪');

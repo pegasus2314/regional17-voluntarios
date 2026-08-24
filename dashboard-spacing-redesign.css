@@ -1,0 +1,24 @@
+/* Regional 17 — Dashboard spacing & navigation redesign
+   UI-only. No application logic, routes, handlers or data are changed. */
+:root{--r17-space-line:#e5eaf0}
+.main>#content{padding:34px clamp(24px,3.8vw,52px) 64px!important}
+.topbar{padding:18px clamp(24px,3.8vw,52px)!important;min-height:88px!important}
+.sidebar{padding:22px 16px!important;background:linear-gradient(180deg,#fbfcfe 0%,#f4f6f9 100%)!important;border-right:1px solid #dfe5ec!important}
+.brand{margin:0 3px 18px!important;padding:6px 8px 20px!important}
+.sidebar nav{gap:0!important;padding:2px 2px 20px!important}
+.sidebar nav>.nav-item,.nav-group-body>.nav-item,.nav-subgroup-body>.nav-item{position:relative!important;box-sizing:border-box!important;margin:0 0 7px!important;min-height:48px!important;height:48px!important;padding:0 14px!important;border:1px solid transparent!important;border-radius:14px!important;background:transparent!important;color:#617289!important;gap:12px!important;box-shadow:none!important}
+.sidebar nav>.nav-item:hover,.nav-group-body>.nav-item:hover,.nav-subgroup-body>.nav-item:hover{background:#fff!important;border-color:#e1e7ee!important;color:#173452!important;transform:translateX(3px)!important;box-shadow:0 7px 18px rgba(16,36,59,.055)!important}
+.sidebar nav>.nav-item.active,.nav-group-body>.nav-item.active,.nav-subgroup-body>.nav-item.active{background:linear-gradient(135deg,#102f4d 0%,#1a486c 100%)!important;border-color:#102f4d!important;color:#fff!important;box-shadow:0 10px 24px rgba(16,47,77,.18)!important;transform:none!important}
+.sidebar nav>.nav-item span,.nav-group-body>.nav-item span,.nav-subgroup-body>.nav-item span{flex:0 0 30px!important;width:30px!important;min-width:30px!important;height:30px!important;border-radius:10px!important;display:grid!important;place-items:center!important;background:#eef2f6!important;color:#536b83!important;font-size:15px!important}
+.sidebar nav>.nav-item:hover span,.nav-group-body>.nav-item:hover span,.nav-subgroup-body>.nav-item:hover span{background:#f4ead9!important;color:#95692f!important}
+.sidebar nav>.nav-item.active span,.nav-group-body>.nav-item.active span,.nav-subgroup-body>.nav-item.active span{background:rgba(255,255,255,.12)!important;color:#f3c77f!important}
+.nav-group{margin:10px 0 14px!important;padding:0!important}.nav-group:first-child{margin-top:4px!important}
+.nav-group-head{min-height:34px!important;padding:0 10px 7px!important;margin:0 0 4px!important;border-radius:0!important;color:#9a6b2f!important;font-size:9px!important;letter-spacing:1.35px!important;background:transparent!important}
+.nav-group-head:hover{background:transparent!important;color:#805820!important}.nav-group-head span{background:transparent!important;color:#a47a43!important}.nav-group-head b{color:#9aa7b6!important}.nav-group-body{gap:0!important;padding:0!important}
+.nav-subgroup{gap:5px!important;margin:2px 0 7px!important}.nav-subgroup-head{min-height:38px!important;padding:0 12px 0 30px!important;border-radius:11px!important;color:#718198!important;background:#f0f3f7!important;border:1px solid #e7ebf0!important}.nav-subgroup-head:hover{background:#e8edf3!important;color:#274766!important}
+.nav-subgroup-body{margin-top:6px!important;padding-left:10px!important;border-left:1px solid #e0e6ed!important}.nav-subgroup.is-open .nav-subgroup-body{gap:0!important}.nav-subgroup .nav-item{min-height:42px!important;height:42px!important;margin-bottom:5px!important;padding-left:34px!important;border-radius:11px!important;font-size:11px!important}.nav-subgroup .nav-item span{flex-basis:24px!important;width:24px!important;min-width:24px!important;height:24px!important;border-radius:8px!important;font-size:13px!important}
+.side-bottom{margin-top:16px!important;padding-top:16px!important;border-top:1px solid #e0e6ed!important}.user-mini{margin:0 0 10px!important;padding:11px!important;min-height:54px!important;border-radius:14px!important;box-shadow:0 5px 15px rgba(16,36,59,.035)!important}.side-action{min-height:42px!important;height:42px!important;border-radius:12px!important}
+.stats-grid{gap:14px!important;margin:20px 0!important}.stat-card{min-height:104px!important;padding:17px!important;border-radius:17px!important}.dash-grid{gap:18px!important}.panel{padding:22px!important;border-radius:19px!important}.panel-head{margin-bottom:18px!important}.toolbar{gap:12px!important;margin-bottom:18px!important}
+@media(max-width:1250px){.sidebar{padding:20px 14px!important}.sidebar nav>.nav-item,.nav-group-body>.nav-item{min-height:46px!important;height:46px!important}}
+@media(max-width:980px){.sidebar{padding:22px 16px!important}.sidebar nav{padding-bottom:30px!important}.main>#content{padding:24px 20px 45px!important}}
+@media(max-width:680px){.main>#content{padding:20px 14px 38px!important}.stats-grid{gap:10px!important}.dash-grid{gap:12px!important}.panel{padding:17px!important}}

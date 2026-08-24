@@ -22,7 +22,7 @@ function makeFlat(nav){const raw=unique(items(nav));const byKey=new Map(raw.map(
  add('ranking','Ranking','🏆');
  raw.forEach(n=>{if(byKey.has(keyOf(n))){n.classList.add('r17-flat-item');out.push(n);byKey.delete(keyOf(n))}});
  nav.innerHTML='';out.forEach(n=>nav.appendChild(n));nav.dataset.r17Organized='1';
- const sidebar=nav.closest('.sidebar');if(sidebar){sidebar.querySelectorAll('.r17-sidebar-collapse').forEach(x=>x.remove())}
+ const sidebar=nav.closest('.sidebar');if(sidebar){sidebar.classList.remove('is-collapsed');sidebar.querySelectorAll('.r17-sidebar-collapse').forEach(x=>x.remove())}
 }
 let currentNav=null;function check(){const nav=document.querySelector('.sidebar nav');if(!nav)return;if(nav!==currentNav||nav.dataset.r17Organized!=='1'){currentNav=nav;makeFlat(nav);return}}
 function boot(){check();document.addEventListener('r17:sidebar-rendered',check)}

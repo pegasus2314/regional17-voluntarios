@@ -11,7 +11,9 @@ const debounce=(fn,ms=350)=>{let t;return(...a)=>{clearTimeout(t);t=setTimeout((
 let sb=null,session=null,profile=null,view='dashboard',state={q:'',status:'all',district:'all',role:'all',mapFilter:'all',selected:[]};
 let data={volunteers:[],districts:[],centers:[],events:[],activities:[],roles:[],parts:[],performance:[]};
 let map=null,markers=[];
-
+document.getElementById('quickAdd')?.addEventListener('click',()=>view==='centers'?centerModal():view==='activities'?activityModal():view==='events'?eventModal():volunteerModal());
+document.dispatchEvent(new CustomEvent('r17:sidebar-rendered'));
+}
 function toast(message,type='success'){const el=document.createElement('div');el.className=`toast ${type}`;el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),3500)}
 function modal(title,body,onSubmit){const o=document.createElement('div');o.className='overlay';o.innerHTML=`<div class="modal"><div class="modal-head"><div><h3>${esc(title)}</h3></div><button class="icon-btn" data-close>×</button></div><div class="modal-body">${body}</div></div>`;document.body.appendChild(o);o.querySelector('[data-close]').onclick=()=>o.remove();o.addEventListener('click',e=>{if(e.target===o)o.remove()});if(onSubmit)onSubmit(o);return o}
 function loading(label='Cargando…'){return `<div class="loading"><span class="spinner"></span>${esc(label)}</div>`}

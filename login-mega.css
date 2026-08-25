@@ -1,23 +1,25 @@
-/* Regional 17 — Login limpio, formal y centrado, sin imagen ni identidad visual */
-.login{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;min-height:100vh!important;width:100%!important;height:100vh!important;overflow:auto!important;padding:24px!important;box-sizing:border-box!important;background:#f5f7fa!important;color:#172033!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+/* Regional 17 — Login institucional, limpio y centrado */
+.login{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;min-height:100vh!important;width:100%!important;height:100vh!important;overflow:auto!important;padding:24px!important;box-sizing:border-box!important;background:#eef2f6!important;color:#182638!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important}
+.login::before{content:""!important;position:absolute!important;inset:0!important;background:linear-gradient(180deg,#f7f9fb 0%,#eef2f6 100%)!important;z-index:0!important}
 .login-brand{display:none!important}
-.login-form{position:relative!important;z-index:2!important;display:block!important;width:min(420px,100%)!important;max-width:420px!important;margin:0!important;padding:38px!important;box-sizing:border-box!important;border:1px solid #e1e6ec!important;border-radius:14px!important;background:#fff!important;box-shadow:0 18px 45px rgba(15,35,55,.09)!important;color:#172033!important}
-.login-form .eyebrow{color:#7b8794!important;font-size:9px!important;letter-spacing:1.5px!important;font-weight:800!important;margin:0 0 10px!important}
-.login-form h2{font-size:30px!important;line-height:1.15!important;letter-spacing:-.5px!important;margin:0 0 8px!important;color:#172033!important}
+.login-form{position:relative!important;z-index:2!important;width:min(430px,100%)!important;max-width:430px!important;margin:0!important;padding:40px!important;box-sizing:border-box!important;border:1px solid #d8e0e8!important;border-radius:10px!important;background:#fff!important;box-shadow:0 20px 55px rgba(23,43,64,.12)!important;color:#182638!important}
+.login-form::before{content:"REGIONAL 17"!important;display:block!important;color:#173b63!important;font-size:12px!important;letter-spacing:2px!important;font-weight:800!important;margin-bottom:28px!important;padding-bottom:14px!important;border-bottom:2px solid #173b63!important}
+.login-form .eyebrow{color:#667587!important;font-size:10px!important;letter-spacing:1.4px!important;font-weight:800!important;margin:0 0 9px!important}
+.login-form h2{font-size:29px!important;line-height:1.15!important;letter-spacing:-.4px!important;margin:0 0 8px!important;color:#182638!important;font-weight:750!important}
 .login-form h2::after{content:none!important}
-.login-form>p{font-size:12px!important;line-height:1.6!important;color:#6b7785!important;margin:0 0 26px!important}
+.login-form>p{font-size:12px!important;line-height:1.6!important;color:#69798a!important;margin:0 0 26px!important}
 .login-form field{display:block!important;margin-bottom:17px!important}
-.login-form field label,.login-form label{display:block!important;font-size:11px!important;font-weight:700!important;color:#3f4b5a!important;margin:0 0 7px!important;text-shadow:none!important}
-.login-form input,.login-form select{display:block!important;width:100%!important;min-height:50px!important;height:50px!important;box-sizing:border-box!important;border-radius:8px!important;padding:0 13px!important;background:#fff!important;border:1px solid #cfd7e1!important;color:#172033!important;outline:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:border-color .15s ease,box-shadow .15s ease!important}
-.login-form input:hover{border-color:#aeb9c6!important}
+.login-form field label,.login-form label{display:block!important;font-size:11px!important;font-weight:700!important;color:#344559!important;margin:0 0 7px!important;text-shadow:none!important}
+.login-form input,.login-form select{display:block!important;width:100%!important;min-height:50px!important;height:50px!important;box-sizing:border-box!important;border-radius:6px!important;padding:0 13px!important;background:#fff!important;border:1px solid #c8d2dd!important;color:#182638!important;outline:none!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;transition:border-color .15s ease,box-shadow .15s ease!important}
+.login-form input:hover{border-color:#9eafc1!important}
 .login-form input:focus,.login-form select:focus{border-color:#315c88!important;box-shadow:0 0 0 3px rgba(49,92,136,.10)!important;background:#fff!important}
-.login-form input::placeholder{color:#9aa5b2!important}
-.login-form button[type="submit"],.login-form .btn.full{display:block!important;width:100%!important;min-height:50px!important;height:50px!important;border:0!important;border-radius:8px!important;font-weight:700!important;font-size:13px!important;background:#173b63!important;color:#fff!important;box-shadow:none!important;transition:background .15s ease,transform .15s ease!important}
+.login-form input::placeholder{color:#9aa7b5!important}
+.login-form button[type="submit"],.login-form .btn.full{display:block!important;width:100%!important;min-height:50px!important;height:50px!important;border:0!important;border-radius:6px!important;font-weight:700!important;font-size:13px!important;background:#173b63!important;color:#fff!important;box-shadow:none!important;transition:background .15s ease!important}
 .login-form button[type="submit"]:hover,.login-form .btn.full:hover{background:#102f50!important;transform:none!important;box-shadow:none!important}
 .login-form button[type="submit"]:active,.login-form .btn.full:active{transform:none!important}
 .login-form button:focus-visible,.login-form input:focus-visible,.login-form select:focus-visible{outline:2px solid rgba(49,92,136,.25)!important;outline-offset:2px!important}
-.login-form small{display:block!important;margin-top:18px!important;padding-top:15px!important;border-top:1px solid #edf0f3!important;color:#7d8793!important;font-size:9px!important;line-height:1.55!important}
+.login-form small{display:block!important;margin-top:18px!important;padding-top:15px!important;border-top:1px solid #e7ebef!important;color:#7b8794!important;font-size:9px!important;line-height:1.55!important}
 .login-form a{color:#315c88!important;font-weight:700!important;text-underline-offset:3px!important}
 .login-form .password-toggle,.login-form [aria-label*="contraseña" i]{color:#315c88!important}
-@media(max-width:520px){.login{padding:16px!important;align-items:center!important}.login-form{width:100%!important;padding:30px 22px!important;border-radius:12px!important}.login-form h2{font-size:27px!important}.login-form input,.login-form select,.login-form button[type="submit"],.login-form .btn.full{min-height:50px!important;height:50px!important}}
+@media(max-width:520px){.login{padding:16px!important;align-items:center!important}.login-form{width:100%!important;padding:30px 22px!important;border-radius:8px!important}.login-form h2{font-size:27px!important}.login-form input,.login-form select,.login-form button[type="submit"],.login-form .btn.full{min-height:50px!important;height:50px!important}}
 @media(prefers-reduced-motion:reduce){.login-form input,.login-form button[type="submit"],.login-form .btn.full{transition:none!important}}

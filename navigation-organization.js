@@ -25,30 +25,8 @@ function injectInstitutionalStyle(){if(document.getElementById('r17-institutiona
 @media(max-width:760px){.sidebar{width:280px!important;min-width:280px!important;}.sidebar nav .r17-flat-item{height:44px!important;min-height:44px!important;}}
 `;
 document.head.appendChild(s)}
-function openAcreditacion(e){
- if(e){e.preventDefault();e.stopPropagation();if(typeof e.stopImmediatePropagation==='function')e.stopImmediatePropagation()}
- const fn=window.openAcreditacionDelegados;
- if(typeof fn==='function'){Promise.resolve(fn()).catch(err=>console.error('[Regional17] Acreditación:',err));return true}
- window.dispatchEvent(new CustomEvent('r17:open-acreditacion'));
- return false
-}
+function openAcreditacion(e){if(e){e.preventDefault();e.stopPropagation();if(typeof e.stopImmediatePropagation==='function')e.stopImmediatePropagation()}const fn=window.openAcreditacionDelegados;if(typeof fn==='function'){Promise.resolve(fn()).catch(err=>console.error('[Regional17] Acreditación:',err));return true}window.dispatchEvent(new CustomEvent('r17:open-acreditacion'));return false}
 function installAcreditacionDelegation(){if(window.__r17AcreditacionDelegation)return;window.__r17AcreditacionDelegation=true;document.addEventListener('click',e=>{const b=e.target?.closest?.('.nav-item[data-view="acreditacion"],.nav-item[data-view="accreditation"]');if(!b)return;openAcreditacion(e)},true)}
-function makeFlat(nav){injectInstitutionalStyle();installAcreditacionDelegation();const raw=unique(items(nav));const byKey=new Map(raw.map(n=>[canonical(n),n]));const out=[];
- const add=(key,label,icon,external=false)=>{let n=byKey.get(key);if(n){n.classList.add('r17-flat-item');n.dataset.view=key;n.innerHTML=`<span>${icon}</span><span>${label}</span>`;byKey.delete(key)}else n=button(key,label,icon,external);if(key==='acreditacion'&&!external){n.onclick=e=>openAcreditacion(e)}if(key==='resultados'&&!external){n.onclick=e=>{e.preventDefault();e.stopPropagation();window.dispatchEvent(new CustomEvent('rv-open-evaluation-results'))}}out.push(n)};
- add('dashboard','Dashboard','⌂');
- add('volunteers','Voluntarios','👥');
- add('acreditacion','Acreditación','🪪');
- add('centers','Centros educativos','🏫');
- add('activities','Actividades','✓');
- add('events','Eventos','◷');
- add('map','Mapa','⌖');
- add('stats','Estadísticas','▥');
- add('evaluacion','Evaluaciones','📊',true);
- add('resultados','Resultados','📈');
- nav.innerHTML='';out.forEach(n=>nav.appendChild(n));nav.dataset.r17Organized='1';
- const sidebar=nav.closest('.sidebar');if(sidebar){sidebar.classList.remove('is-collapsed');sidebar.querySelectorAll('.r17-sidebar-collapse').forEach(x=>x.remove())}
-}
-let currentNav=null;function check(){const nav=document.querySelector('.sidebar nav');if(!nav)return;if(nav!==currentNav||nav.dataset.r17Organized!=='1'){currentNav=nav;makeFlat(nav);return}}
-function boot(){installAcreditacionDelegation();check();document.addEventListener('r17:sidebar-rendered',check)}
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+function makeFlat(nav){injectInstitutionalStyle();installAcreditacionDelegation();const raw=unique(items(nav));const byKey=new Map(raw.map(n=>[canonical(n),n]));const out=[];const add=(key,label,icon,external=false)=>{let n=byKey.get(key);if(n){n.classList.add('r17-flat-item');n.dataset.view=key;n.innerHTML=`<span>${icon}</span><span>${label}</span>`;byKey.delete(key)}else n=button(key,label,icon,external);if(key==='acreditacion'&&!external){n.onclick=null;n.removeAttribute('onclick');n.addEventListener('click',openAcreditacion,true)}if(key==='resultados'&&!external)n.onclick=e=>{e.preventDefault();e.stopPropagation();window.dispatchEvent(new CustomEvent('rv-open-evaluation-results'))};out.push(n)};add('dashboard','Dashboard','⌂');add('volunteers','Voluntarios','👥');add('acreditacion','Acreditación','🪪');add('centers','Centros educativos','🏫');add('activities','Actividades','✓');add('events','Eventos','◷');add('map','Mapa','⌖');add('stats','Estadísticas','▥');add('evaluacion','Evaluaciones','📊',true);add('resultados','Resultados','📈');nav.innerHTML='';out.forEach(n=>nav.appendChild(n));nav.dataset.r17Organized='1';const sidebar=nav.closest('.sidebar');if(sidebar){sidebar.classList.remove('is-collapsed');sidebar.querySelectorAll('.r17-sidebar-collapse').forEach(x=>x.remove())}}
+let currentNav=null;function check(){const nav=document.querySelector('.sidebar nav');if(!nav)return;if(nav!==currentNav||nav.dataset.r17Organized!=='1'){currentNav=nav;makeFlat(nav)}}function boot(){installAcreditacionDelegation();check();document.addEventListener('r17:sidebar-rendered',check)}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();

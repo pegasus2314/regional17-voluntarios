@@ -1,0 +1,44 @@
+/* Regional 17 — CSS manifest
+ * Mantiene el orden de precedencia actual mientras centraliza la carga.
+ * Las hojas individuales permanecen separadas hasta una futura consolidación.
+ */
+@import url('/app.css');
+@import url('/evaluation-style.css?v=2');
+@import url('/dashboard-aesthetic.css');
+@import url('/volunteers-aesthetic.css');
+@import url('/events-ui.css');
+@import url('/polish.css');
+@import url('/library-polish.css');
+@import url('/stats-polish.css');
+@import url('/activities-polish.css');
+@import url('/profile.css');
+@import url('/login-banner.css');
+@import url('/login-user-fix.css');
+@import url('/mega-polish.css');
+@import url('/login-mega.css');
+@import url('/experience-upgrade.css');
+@import url('/buttons-system.css');
+@import url('/forms-system.css');
+@import url('/navigation-modals-tables.css');
+@import url('/activities-visual.css?v=3');
+@import url('/sidebar-premium.css');
+@import url('/admin-users.css');
+@import url('/responsive-system.css?v=1');
+@import url('/mobile-fix.css?v=1');
+@import url('/navigation-organization.css?v=10');
+@import url('/regional17-visual-system.css?v=1');
+@import url('/button-customizer.css?v=1');
+@import url('/scroll-cleanup.css?v=1');
+@import url('/centers-renewed.css?v=1');
+@import url('/acreditacion.css?v=1');
+@import url('/evaluaciones-ui.css?v=2');
+@import url('/regional17-institutional-redesign.css?v=1');
+@import url('/dashboard-redesign-v2.css?v=2');
+@import url('/dashboard-spacing-redesign.css?v=1');
+@import url('/sidebar-command-center.css?v=1');
+@import url('/dashboard-compact-fix.css?v=1');
+@import url('/sidebar-institutional.css?v=1');
+@import url('/dashboard-clean-v4.css?v=1');
+@import url('/regional17-final-polish.css?v=1');
+@import url('/assignments.css?v=2');
+@import url('/assignments-dashboard.css?v=1');
